@@ -1,0 +1,77 @@
+<div class="container">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      <%= @instance.workflow.name %>@<%= @instance.id %>
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <% if @instance.created? %>
+        <%= link_to 'Active', active_instance_path(@instance), method: :patch, class: "btn btn-sm btn-primary" %>
+      <% end %>
+    </div>
+  </div>
+
+  <p>
+    <%= @instance.workflow.to_graph(instance: @instance).output(svg: String).html_safe %>
+  </p>
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Status</th>
+      <th>Created at</th>
+      <th>Activated at</th>
+      <th>Finished at</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td><%= @instance.id %></td>
+      <td><%= @instance.stage %></td>
+      <td><%= @instance.created_at %></td>
+      <td><%= time_tag @instance.activated_at if @instance.activated_at %></td>
+      <td><%= time_tag @instance.finished_at if @instance.finished_at %></td>
+    </tr>
+    </tbody>
+  </table>
+
+  <h2>Tasks:</h2>
+
+  <table class="table table-borderless">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Transition</th>
+      <th>Status</th>
+      <th>Created at</th>
+      <th>Enabled at</th>
+      <th>Finished at</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <% @tasks.each do |task| %>
+      <tr>
+        <td><%= task.id %></td>
+        <td><%= task.transition.name %></td>
+        <td>
+          <%= task.stage %>
+          <% if task.terminated? %>
+            <a href="javascript:void(0)" data-toggle="tooltip" data-placement="bottom" title="<%= task.terminate_reason %>">?</a>
+          <% end %>
+        </td>
+        <td><%= time_tag task.created_at %></td>
+        <td><%= time_tag task.enabled_at if task.enabled_at %></td>
+        <td><%= time_tag task.finished_at if task.finished_at %></td>
+        <td>
+          <% if task.enabled? %>
+            <% if task.can_finish? %>
+              <%= link_to 'Finish', finish_instance_task_path(@instance, task), method: :patch %>
+            <% end %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>

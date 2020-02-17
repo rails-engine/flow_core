@@ -1,0 +1,51 @@
+<div class="jumbotron">
+  <div class="container">
+    <h1 class="display-3">FlowCore</h1>
+    <p class="lead">
+      A multi purpose, extendable, Workflow-net-based workflow engine for Rails applications.
+    </p>
+    <p class="lead mb-4">
+      This is the dummy app for FlowCore, it's provides some simple cases for evaluation.
+      Please make sure you have ran `rails db:seed` that import demo data.
+    </p>
+  </div>
+</div>
+
+<div class="container">
+  <!-- Example row of columns -->
+  <div class="row">
+    <div class="col-md-4">
+      <h2>Definition</h2>
+      <p>
+        Workflow composed by ActiveRecord models, CRUD them is same as common Rails-way.
+        On the page, you can see Places, Transitions and a diagram visualization,
+        and try to do some configuration.
+      </p>
+      <p>
+        <%= link_to "Try »", workflows_path, class: "btn btn-secondary" %>
+      </p>
+    </div>
+    <div class="col-md-4">
+      <h2>Instance</h2>
+      <p>
+        Listing all workflow instances that you created (via definition page),
+        showing them internal states to learn how Petri-net workflow works.
+      </p>
+      <p>
+        <%= link_to "Try »", instances_path, class: "btn btn-secondary" %>
+      </p>
+    </div>
+    <div class="col-md-4">
+      <h2>Approval process demo</h2>
+      <p>
+        Workflow is meaningless without business,
+        here's a simple leave approval process to show how to define Transition trigger, callback, Arc guard and custom task,
+        and how to integrate workflow with your app and how workflow engine help you simplify the implementation.
+      </p>
+      <p>
+        <%= link_to "Try »", leaves_path, class: "btn btn-secondary" %>
+      </p>
+    </div>
+  </div>
+  <hr>
+</div>

@@ -1,0 +1,138 @@
+<div class="container">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h2>
+      <%= @workflow.name %>
+    </h2>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <% if @workflow.verified? %>
+        <% unless @workflow.internal? %>
+          <%= link_to 'New instance', workflow_instances_path(@workflow), method: :post, class: "btn btn-sm btn-primary mr-2" %>
+        <% end %>
+      <% else %>
+        <%= link_to "Verify", verify_workflow_path(@workflow), method: :post, class: "btn btn-sm btn-primary mr-2" %>
+      <% end %>
+      <%= link_to 'Edit', edit_workflow_path(@workflow), class: "btn btn-sm btn-primary mr-2" %>
+      <%= link_to 'Back', workflows_path, class: "btn btn-sm btn-primary" %>
+    </div>
+  </div>
+
+  <div>
+    <table class="table table-striped table-borderless">
+      <tbody>
+      <tr>
+        <th scope="row">ID</th>
+        <td><%= @workflow.id %></td>
+      </tr>
+      <tr>
+        <th scope="row">Name</th>
+        <td><%= @workflow.name %></td>
+      </tr>
+      <tr>
+        <th scope="row">Tag</th>
+        <td><%= @workflow.tag %></td>
+      </tr>
+      <tr>
+        <th scope="row">Verify status</th>
+        <td><%= t "flow_core.verify_status.#{@workflow.verify_status}" %></td>
+      </tr>
+      <tr>
+        <th scope="row">Created at</th>
+        <td><%= time_tag @workflow.created_at %></td>
+      </tr>
+      <% if @workflow.verify_status == :invalid %>
+        <% @workflow.verify? %>
+        <tr>
+          <th scope="row">Violations</th>
+          <td>
+            <% @workflow.violations.each do |_, _, _, name, error| %>
+              <%= name %>: <%= error %>
+              <br>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+
+
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h4>
+      Diagram
+    </h4>
+    <div class="btn-toolbar mb-2 mb-md-0">
+    </div>
+  </div>
+
+  <p class="text-center">
+    <%= @workflow.to_graph.output(svg: String).html_safe %>
+  </p>
+
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h4>
+      Places
+    </h4>
+    <div class="btn-toolbar mb-2 mb-md-0">
+    </div>
+  </div>
+
+  <div>
+    <table class="table table-borderless table-hover">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Tag</th>
+        <th>Type</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @workflow.places.each do |place| %>
+        <tr>
+          <td><%= place.id %></td>
+          <td><%= place.name %></td>
+          <td><%= place.tag %></td>
+          <td><%= place.type.present? ? place.class.model_name.human : nil %></td>
+          <td></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h4>
+      Transitions
+    </h4>
+    <div class="btn-toolbar mb-2 mb-md-0">
+    </div>
+  </div>
+
+  <div>
+    <table class="table table-borderless table-hover">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Tag</th>
+        <th>Trigger</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @workflow.transitions.each do |transition| %>
+        <tr>
+          <td><%= transition.id %></td>
+          <td><%= transition.name %></td>
+          <td><%= transition.tag %></td>
+          <td><%= transition.trigger&.class&.model_name&.human %></td>
+          <td>
+            <%= link_to 'Show', workflow_transition_path(@workflow, transition) %>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

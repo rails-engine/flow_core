@@ -1,0 +1,23 @@
+<%= form_with(model: leave, local: true) do |f| %>
+  <div class="form-group">
+    <%= f.label :start_date %>
+    <%= f.date_field :start_date, required: "required", class: "form-control", class_for_error: "is-invalid" %>
+    <%= f.error_message :start_date, class: "invalid-feedback" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :end_date %>
+    <%= f.date_field :end_date, required: "required", class: "form-control", class_for_error: "is-invalid" %>
+    <%= f.error_message :end_date, class: "invalid-feedback" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :reason %>
+    <%= f.text_field :reason, required: "required", class: "form-control", class_for_error: "is-invalid" %>
+    <%= f.error_message :reason, class: "invalid-feedback" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.submit class: "btn btn-primary" %>
+  </div>
+<% end %>

@@ -1,0 +1,5 @@
+<div class="form-group">
+  <%= f.label :countdown_in_seconds %>
+  <%= f.number_field :countdown_in_seconds, min: 0, step: 1, required: "required", class: "form-control", class_for_error: "is-invalid" %>
+  <%= f.error_message :name, class: "invalid-feedback" %>
+</div>

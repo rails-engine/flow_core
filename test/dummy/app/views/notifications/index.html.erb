@@ -1,0 +1,31 @@
+<div class="container">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      Notifications
+    </h1>
+  </div>
+
+  <table class="table table-borderless table-hover">
+    <thead>
+    <tr>
+      <th>Workflow</th>
+      <th>Task</th>
+      <th>Created at</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @notifications.each do |notification| %>
+      <% task = notification.task %>
+      <tr>
+        <td><%= task.workflow.name %></td>
+        <td><%= task.transition.name %></td>
+        <td><%= time_tag task.created_at %></td>
+        <td>
+          <%= link_to "Show", leave_approval_path(task.executable) %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>

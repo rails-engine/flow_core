@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      Workflows
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <%= link_to 'New Workflow', new_workflow_path, class: "btn btn-sm btn-primary" %>
+    </div>
+  </div>
+
+  <table class="table table-borderless table-hover">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Verified?</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @workflows.each do |workflow| %>
+      <tr>
+        <td><%= workflow.id %></td>
+        <td><%= workflow.name %></td>
+        <td><%= workflow.verified? %></td>
+        <td>
+          <%= link_to 'Show', workflow_path(workflow) %> |
+          <%= link_to 'Edit', edit_workflow_path(workflow) %>
+          <%#= link_to 'Destroy', workflow_path(workflow), method: :delete, data: { confirm: 'Are you sure?' } %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>

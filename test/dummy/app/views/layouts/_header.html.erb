@@ -1,0 +1,51 @@
+<header>
+  <nav class="navbar navbar-expand-md fixed-top navbar-light bg-light">
+    <%= link_to t("site.name"), root_path, class: "navbar-brand" %>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="navbar-nav mr-auto">
+        <%= nav_link path: "home#index", html_options: { class: "nav-item" } do %>
+          <% link_to "Home", root_path, class: "nav-link" %>
+        <% end %>
+        <%= nav_link controller: "workflows", html_options: { class: "nav-item" } do %>
+          <% link_to "Workflow", workflows_path, class: "nav-link" %>
+        <% end %>
+        <%= nav_link controller: "instances", html_options: { class: "nav-item" } do %>
+          <% link_to "Instance", instances_path, class: "nav-link" %>
+        <% end %>
+        <%= nav_link controller: %i[leaves leave_approvals], html_options: { class: "nav-item" } do %>
+          <% link_to "Leave Demo", leaves_path, class: "nav-link" %>
+        <% end %>
+      </ul>
+      <ul class="navbar-nav mt-2 mt-md-0">
+        <% if current_user %>
+          <%= nav_link controller: "notifications", html_options: { class: "nav-item" } do %>
+            <% link_to "#{current_user.notifications.size} Notifications", notifications_path, class: "nav-link" %>
+          <% end %>
+        <% end %>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarUserDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <% if current_user %>
+              <%= current_user.name %>
+            <% else %>
+              <%= "Guest" %>
+            <% end %>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarUserDropdown">
+            <% User.all.limit(5).each do |user| %>
+              <%= link_to user.name, sign_in_as_path(user.id), class: "dropdown-item" %>
+            <% end %>
+            <% if current_user %>
+              <div class="dropdown-divider"></div>
+              <%= link_to "Sign out", sign_out_path, method: :delete, class: "dropdown-item" %>
+            <% end %>
+            <div class="dropdown-divider"></div>
+            <%= link_to "Mocking users", users_path, class: "dropdown-item" %>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>

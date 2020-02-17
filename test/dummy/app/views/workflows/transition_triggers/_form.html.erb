@@ -1,0 +1,13 @@
+<% url = transition_trigger.new_record? ? workflow_transition_triggers_path(workflow) : workflow_transition_trigger_path(workflow, transition_trigger) %>
+<% method = transition_trigger.new_record? ? :post : :patch %>
+<%= form_with(model: transition_trigger, scope: :transition_trigger, url: url, method: method, local: true) do |f| %>
+  <% if transition_trigger.configurable? %>
+    <%= f.fields_for :configuration, transition_trigger.configuration do |ff| %>
+      <%= render "workflows/transition_triggers/#{f.object.type_key}", f: ff, workflow: workflow, transition_trigger: transition_trigger %>
+    <% end %>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.submit class: "btn btn-primary" %>
+  </div>
+<% end %>

@@ -1,0 +1,18 @@
+en:
+  site:
+    name: FlowCore
+    description: FlowCore dummy app
+    keywords: []
+    copyright:
+      html: >
+        <strong>
+          <a href="https://github.com/rails-engine/flow_core" target="_blank" rel="nofollow">FlowCore</a>
+        </strong>
+        crafted by <a href="https://github.com/jasl" target="_blank" rel="nofollow">Jun Jiang (jasl)</a>.
+        <br>
+        The source code and the dummy app are licensed under <a href="http://opensource.org/licenses/mit-license.php">MIT license</a>.
+  transition_triggers:
+    user_task:
+      assign_to:
+        instance_creator: "Instance creator"
+        user: "User"

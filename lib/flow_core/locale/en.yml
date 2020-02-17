@@ -1,0 +1,26 @@
+en:
+  activerecord:
+    models:
+      flow_core/workflow: Workflow
+      flow_core/place: Place
+      flow_core/start_place: Start Place
+      flow_core/end_place: End Place
+      flow_core/transition: Workflow
+      flow_core/transition_trigger: Transition Trigger
+      flow_core/transition_callback: Trasition Callback
+      flow_core/arc: Arc
+      flow_core/arc_guard: Arc Guard
+      flow_core/instance: Instance
+      flow_core/token: Token
+      flow_core/task: Task
+  flow_core:
+    verify_status:
+      unverify: Unverify
+      verified: Verified
+      invalid: Invalid
+    violations:
+      format: "%{model} %{name} %{message}"
+      unreachable: "Unreachable from start place"
+      impassable: "Impassable to end place"
+      trigger_unconfigure: "Trigger not configured yet"
+      callback_unconfigure: "Callback not configured yet"
