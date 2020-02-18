@@ -177,7 +177,7 @@ module FlowCore
       name = records[record_key][:name]
 
       defaults = [:"flow_core.violations.format"]
-      defaults << "%{name} %{message}"
+      defaults << "%<name>s %<message>s"
 
       I18n.t(defaults.shift,
              default: defaults, model: model, model_name: model_name, id: id, name: name, message: message)

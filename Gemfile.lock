@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    flow_core (0.0.1)
+    flow_core (0.0.2)
       rails (~> 6.0)
       rgl (~> 0.5)
 
@@ -164,14 +164,16 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    rexml (3.2.4)
     rgl (0.5.6)
       lazy_priority_queue (~> 0.1.0)
       stream (~> 0.5.2)
-    rubocop (0.79.0)
+    rubocop (0.80.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
       parser (>= 2.7.0.1)
       rainbow (>= 2.2.2, < 4.0)
+      rexml
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 1.7)
     rubocop-performance (1.5.2)
