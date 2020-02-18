@@ -156,7 +156,8 @@ and you shall have fully control and without any unnecessary abstraction.
 
 - Document
 - Test
-- Activity-based to Petri-net mapping, see <https://www.researchgate.net/figure/The-mapping-between-BPMN-and-Petri-nets_tbl2_221250389> for example.
+- Activity-based to Petri-net mapping that will possible to integrate to existing visual editors (with some modification),
+  see <https://www.researchgate.net/figure/The-mapping-between-BPMN-and-Petri-nets_tbl2_221250389> for understanding.
 - More efficient and powerful workflow definition checking
 - Grammar and naming correction (I'm not English native-speaker)
 
