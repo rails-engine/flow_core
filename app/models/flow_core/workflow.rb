@@ -8,9 +8,9 @@ module FlowCore
 
     has_many :instances, class_name: "FlowCore::Instance", dependent: :destroy
 
-    has_many :arcs, class_name: "FlowCore::Arc", dependent: :delete_all
+    has_many :arcs, class_name: "FlowCore::Arc", dependent: :destroy
     has_many :places, class_name: "FlowCore::Place", dependent: :delete_all
-    has_many :transitions, class_name: "FlowCore::Transition", dependent: :delete_all
+    has_many :transitions, class_name: "FlowCore::Transition", dependent: :destroy
 
     has_one :start_place, class_name: "FlowCore::StartPlace", dependent: :delete
     has_one :end_place, class_name: "FlowCore::EndPlace", dependent: :delete
@@ -102,6 +102,62 @@ module FlowCore
 
     def reset_workflow_verification!
       update! verified: false, verified_at: nil
+    end
+
+    def fork
+      new_workflow = dup
+      transaction do
+        yield new_workflow if block_given?
+        new_workflow.save!
+
+        new_transitions = transitions.includes(:trigger, :callbacks).map do |t|
+          new_transition = t.dup
+          new_transition.workflow = new_workflow
+          new_transition.save!
+
+          if t.trigger
+            new_trigger = t.trigger.dup
+            new_trigger.workflow = new_workflow
+            new_trigger.transition = new_transition
+            new_trigger.save!
+          end
+
+          t.callbacks.find_each do |cb|
+            new_cb = cb.dup
+            new_cb.workflow = new_workflow
+            new_cb.transition = new_transition
+            new_cb.save!
+          end
+
+          [t.id, new_transition.id]
+        end.to_h
+
+        new_places = places.map do |p|
+          new_place = p.dup
+          new_place.workflow = new_workflow
+          new_place.save!
+
+          [p.id, new_place.id]
+        end.to_h
+
+        arcs.includes(:guards).find_each do |a|
+          new_arc = a.dup
+          new_arc.workflow = new_workflow
+          new_arc.place_id = new_places[a.place_id]
+          new_arc.transition_id = new_transitions[a.transition_id]
+          new_arc.save!
+
+          a.guards.find_each do |g|
+            new_guard = g.dup
+            new_guard.workflow = new_workflow
+            new_guard.arc = new_arc
+            new_guard.save!
+          end
+        end
+
+        new_workflow.verify!
+      end
+      new_workflow
     end
 
     private

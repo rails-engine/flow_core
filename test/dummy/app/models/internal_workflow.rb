@@ -7,7 +7,7 @@ class InternalWorkflow < FlowCore::Workflow
 
   class << self
     def find_or_deploy_leave_flow
-      workflow = FlowCore::Workflow.find_by(tag: "leave")
+      workflow = FlowCore::Workflow.where(tag: "leave").order(created_at: :desc).first
       return workflow if workflow
 
       FlowCore::Definition.new name: "Leave", tag: "leave", type: InternalWorkflow do |net|
