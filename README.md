@@ -131,6 +131,8 @@ Some notable:
     - Require app task finished first (if bind)
 - `terminated` Task killed by instance (e.g Instance cancelled) or other race condition task
 
+![Life cycle of workflow instance](doc/assets/life_cycle_of_workflow_instance.png)
+
 ### FlowKit
 
 Because FlowCore only care about essentials of workflow engine,
