@@ -64,7 +64,7 @@ GEM
       tzinfo (~> 1.1)
       zeitwerk (~> 2.2)
     ast (2.4.0)
-    autoprefixer-rails (9.7.4)
+    autoprefixer-rails (9.7.5)
       execjs
     babel-source (5.8.35)
     babel-transpiler (0.7.0)
@@ -125,7 +125,7 @@ GEM
     nokogiri (1.10.9)
       mini_portile2 (~> 2.4.0)
     parallel (1.19.1)
-    parser (2.7.0.2)
+    parser (2.7.0.5)
       ast (~> 2.4.0)
     popper_js (1.16.0)
     puma (4.3.3)
@@ -168,7 +168,7 @@ GEM
     rgl (0.5.6)
       lazy_priority_queue (~> 0.1.0)
       stream (~> 0.5.2)
-    rubocop (0.80.0)
+    rubocop (0.80.1)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
       parser (>= 2.7.0.1)
@@ -178,10 +178,12 @@ GEM
       unicode-display_width (>= 1.4.0, < 1.7)
     rubocop-performance (1.5.2)
       rubocop (>= 0.71.0)
-    rubocop-rails (2.4.2)
+    rubocop-rails (2.5.0)
+      activesupport
       rack (>= 1.1)
       rubocop (>= 0.72.0)
-    ruby-graphviz (1.2.4)
+    ruby-graphviz (1.2.5)
+      rexml
     ruby-progressbar (1.10.1)
     ruby_dep (1.5.0)
     sassc (2.2.1)
@@ -247,4 +249,4 @@ DEPENDENCIES
   web-console
 
 BUNDLED WITH
-   2.1.2
+   1.17.3
