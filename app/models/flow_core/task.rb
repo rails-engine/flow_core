@@ -7,7 +7,7 @@ module FlowCore
     belongs_to :workflow, class_name: "FlowCore::Workflow"
     belongs_to :transition, class_name: "FlowCore::Transition"
 
-    belongs_to :instance, class_name: "FlowCore::Instance"
+    belongs_to :instance, class_name: "FlowCore::Instance", autosave: true
     belongs_to :created_by_token, class_name: "FlowCore::Token", optional: true
 
     belongs_to :executable, polymorphic: true, optional: true
@@ -80,20 +80,21 @@ module FlowCore
     def enable
       return false unless can_enable?
 
-      transaction do
+      with_transaction_returning_status do
         input_free_tokens.each(&:lock!)
         update! stage: :enabled, enabled_at: Time.zone.now
 
-        transition.on_task_enabled(self)
-      end
+        transition.on_task_enable(self)
+        workflow.on_instance_task_enable(self)
 
-      true
+        true
+      end
     end
 
     def finish
       return false unless can_finish?
 
-      transaction do
+      with_transaction_returning_status do
         # terminate other racing tasks
         instance.tasks.enabled.where(created_by_token: created_by_token).find_each do |task|
           task.terminate! reason: "Same origin task #{id} finished"
@@ -102,23 +103,78 @@ module FlowCore
         input_locked_tokens.each { |token| token.consume! by: self }
         update! stage: :finished, finished_at: Time.zone.now
 
-        transition.on_task_finished(self)
+        transition.on_task_finish(self)
+        workflow.on_instance_task_finish(self)
+
+        true
       end
 
-      create_output_token!
-
-      true
+      create_output_token
     end
 
     def terminate(reason:)
       return false unless can_terminate?
 
-      transaction do
+      with_transaction_returning_status do
         update! stage: :terminated, terminated_at: Time.zone.now, terminate_reason: reason
-        transition.on_task_terminated(self)
+        transition.on_task_terminate(self)
+        workflow.on_instance_task_terminate(self)
+
+        true
       end
+    end
+
+    def error(error)
+      update! errored_at: Time.zone.now, error_reason: error.message
+      instance.update! errored_at: Time.zone.now
+      transition.on_task_errored(self, error)
+      workflow.on_instance_task_errored(self, error)
 
       true
+    end
+
+    def rescue
+      return unless errored?
+
+      with_transaction_returning_status do
+        update! errored_at: nil, rescued_at: Time.zone.now
+        instance.update! errored_at: nil, rescued_at: Time.zone.now
+        transition.on_task_rescue(self)
+        workflow.on_instance_task_rescue(self)
+
+        true
+      end
+    end
+
+    def suspend
+      with_transaction_returning_status do
+        update! suspended_at: Time.zone.now
+        transition.on_task_suspend(self)
+        workflow.on_instance_task_suspend(self)
+
+        true
+      end
+    end
+
+    def resume
+      with_transaction_returning_status do
+        update! suspended_at: nil, resumed_at: Time.zone.now
+        transition.on_task_resume(self)
+        workflow.on_instance_task_resume(self)
+
+        true
+      end
+    end
+
+    def create_output_token
+      return if output_token_created
+
+      with_transaction_returning_status do
+        transition.create_tokens_for_output(task: self)
+        update! output_token_created: true
+
+        true
+      end
     end
 
     def enable!
@@ -133,47 +189,18 @@ module FlowCore
       terminate(reason: reason) || raise(FlowCore::InvalidTransition, "Can't terminate Task##{id}")
     end
 
-    def error!(error)
-      transaction do
-        update! errored_at: Time.zone.now, error_reason: error.message
-        transition.on_task_errored(self, error)
-
-        instance.error!
-      end
-    end
+    alias error! error
 
     def rescue!
-      return unless errored?
-
-      transaction do
-        update! errored_at: nil, rescued_at: Time.zone.now
-        transition.on_task_rescued(self)
-
-        instance.rescue!
-      end
+      self.rescue || raise(FlowCore::InvalidTransition, "Can't rescue Task##{id}")
     end
 
     def suspend!
-      transaction do
-        update! suspended_at: Time.zone.now
-        transition.on_task_suspended(self)
-      end
+      suspend || raise(FlowCore::InvalidTransition, "Can't suspend Task##{id}")
     end
 
     def resume!
-      transaction do
-        update! suspended_at: nil, resumed_at: Time.zone.now
-        transition.on_task_resumed(self)
-      end
-    end
-
-    def create_output_token!
-      return if output_token_created
-
-      transaction do
-        transition.create_tokens_for_output(task: self)
-        update! output_token_created: true
-      end
+      resume || raise(FlowCore::InvalidTransition, "Can't resume Task##{id}")
     end
 
     private

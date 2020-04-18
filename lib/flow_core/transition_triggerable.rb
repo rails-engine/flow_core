@@ -6,22 +6,20 @@ module FlowCore
 
     def on_verify(_transition, _violations); end
 
-    def on_task_created(_task); end
+    def on_task_enable(_task); end
 
-    def on_task_enabled(_task); end
+    def on_task_finish(_task); end
 
-    def on_task_finished(_task); end
+    def on_task_terminate(_task); end
 
-    def on_task_terminated(_task); end
+    def on_task_suspend(_task); end
 
-    def on_task_suspended(_task); end
-
-    def on_task_resumed(_task); end
+    def on_task_resume(_task); end
 
     def on_task_errored(_task, error)
       raise error
     end
 
-    def on_task_rescued(_task); end
+    def on_task_rescue(_task); end
   end
 end

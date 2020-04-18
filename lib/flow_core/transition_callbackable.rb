@@ -19,15 +19,15 @@ module FlowCore
       true
     end
 
-    def _call(_task)
+    def _call(_task, *_args)
       raise NotImplementedError
     end
 
-    def call(task)
+    def call(task, *args)
       return unless on.include? task.stage.to_sym
       return unless callable? task
 
-      _call task
+      _call task, *args
     end
   end
 end

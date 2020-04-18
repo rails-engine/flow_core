@@ -43,11 +43,7 @@ ActiveRecord::Schema.define(version: 2020_02_16_160434) do
     t.datetime "finished_at"
     t.datetime "canceled_at"
     t.datetime "terminated_at"
-    t.string "terminated_reason"
-    t.datetime "errored_at"
-    t.datetime "rescued_at"
-    t.datetime "suspended_at"
-    t.datetime "resumed_at"
+    t.string "terminate_reason"
     t.text "payload"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -158,6 +154,17 @@ ActiveRecord::Schema.define(version: 2020_02_16_160434) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "human_tasks", force: :cascade do |t|
+    t.string "workflow_tag"
+    t.string "transition_tag"
+    t.integer "assignee_id"
+    t.datetime "finished_at"
+    t.string "type"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["assignee_id"], name: "index_human_tasks_on_assignee_id"
+  end
+
   create_table "leaves", force: :cascade do |t|
     t.integer "user_id", null: false
     t.date "start_date"
@@ -178,19 +185,6 @@ ActiveRecord::Schema.define(version: 2020_02_16_160434) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["task_id"], name: "index_notifications_on_task_id"
     t.index ["user_id"], name: "index_notifications_on_user_id"
-  end
-
-  create_table "user_tasks", force: :cascade do |t|
-    t.string "workflow_tag"
-    t.string "transition_tag"
-    t.integer "assignee_id"
-    t.boolean "approved"
-    t.text "comment"
-    t.boolean "finished", default: false, null: false
-    t.string "type"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["assignee_id"], name: "index_user_tasks_on_assignee_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -221,8 +215,8 @@ ActiveRecord::Schema.define(version: 2020_02_16_160434) do
   add_foreign_key "flow_core_transition_triggers", "flow_core_transitions", column: "transition_id"
   add_foreign_key "flow_core_transition_triggers", "flow_core_workflows", column: "workflow_id"
   add_foreign_key "flow_core_transitions", "flow_core_workflows", column: "workflow_id"
+  add_foreign_key "human_tasks", "users", column: "assignee_id"
   add_foreign_key "leaves", "flow_core_instances", column: "workflow_instance_id"
   add_foreign_key "leaves", "users"
   add_foreign_key "notifications", "users"
-  add_foreign_key "user_tasks", "users", column: "assignee_id"
 end

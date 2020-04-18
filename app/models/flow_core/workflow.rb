@@ -15,12 +15,34 @@ module FlowCore
     has_one :start_place, class_name: "FlowCore::StartPlace", dependent: :delete
     has_one :end_place, class_name: "FlowCore::EndPlace", dependent: :delete
 
-    def create_instance!(attributes = {})
-      unless verified?
+    class_attribute :force_workflow_verified_on_create_instance, default: false
+
+    include FlowCore::WorkflowCallbacks
+
+    def build_instance(attributes = {})
+      if force_workflow_verified_on_create_instance && invalid?
         raise FlowCore::UnverifiedWorkflow, "Workflow##{id} didn't do soundness check yet."
       end
 
-      instances.create! attributes.with_indifferent_access.except(FlowCore::Instance::FORBIDDEN_ATTRIBUTES)
+      instances.build attributes.with_indifferent_access.except(FlowCore::Instance::FORBIDDEN_ATTRIBUTES)
+    end
+
+    def create_instance(attributes = {})
+      instance = build_instance(attributes)
+      return unless instance
+
+      instance.save
+      instance
+    end
+
+    def create_instance!(attributes = {})
+      instance = build_instance(attributes)
+      unless instance
+        raise RecordNotSaved.new("Failed to create workflow instance", instance)
+      end
+
+      instance.save!
+      instance
     end
 
     def invalid?

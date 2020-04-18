@@ -4,6 +4,7 @@ class Leave < ApplicationRecord
   belongs_to :user
 
   belongs_to :workflow_instance, class_name: "FlowCore::Instance", optional: true
+  has_many :approval_tasks, as: :attachable, class_name: "ApprovalTask"
 
   enum stage: {
     created: "created",

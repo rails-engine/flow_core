@@ -5,8 +5,8 @@ module FlowCore
     self.table_name = "flow_core_instances"
 
     FORBIDDEN_ATTRIBUTES = %i[
-      workflow_id stage activated_at finished_at canceled_at terminated_at terminated_reason
-      errored_at rescued_at suspended_at resumed_at created_at updated_at
+      workflow_id stage activated_at finished_at canceled_at terminated_at terminate_reason
+      created_at updated_at
     ].freeze
 
     belongs_to :workflow, class_name: "FlowCore::Workflow"
@@ -32,14 +32,14 @@ module FlowCore
     end
 
     def errored?
-      errored_at.present?
+      tasks.where.not(errored_at: nil).exists?
     end
 
-    def suspended?
-      suspended_at.present?
+    def can_cancel?
+      created?
     end
 
-    def can_active?
+    def can_activate?
       created?
     end
 
@@ -47,69 +47,75 @@ module FlowCore
       activated?
     end
 
-    def active
-      return false unless can_active?
+    def can_terminate?
+      true
+    end
 
-      transaction do
+    def cancel
+      return false unless can_cancel?
+
+      with_transaction_returning_status do
+        update! stage: :canceled, canceled_at: Time.zone.now
+        workflow.on_instance_cancel(self)
+
+        true
+      end
+    end
+
+    def activate
+      return false unless can_activate?
+
+      with_transaction_returning_status do
         tokens.create! place: workflow.start_place
         update! stage: :activated, activated_at: Time.zone.now
-      end
+        workflow.on_instance_activate(self)
 
-      true
+        true
+      end
     end
 
     def finish
       return false unless can_finish?
 
-      transaction do
+      with_transaction_returning_status do
         update! stage: :finished, finished_at: Time.zone.now
 
         tasks.where(stage: %i[created enabled]).find_each do |task|
           task.terminate! reason: "Instance finished"
         end
         tokens.where(stage: %i[free locked]).find_each(&:terminate!)
-      end
+        workflow.on_instance_finish(self)
 
-      true
+        true
+      end
     end
 
-    def active!
-      active || raise(FlowCore::InvalidTransition, "Can't active Instance##{id}")
+    def terminate(reason:)
+      return unless can_terminate?
+
+      with_transaction_returning_status do
+        tasks.enabled.each { |task| task.terminate! reason: "Instance terminated" }
+        update! stage: :terminated, terminated_at: Time.zone.now, terminate_reason: reason
+        workflow.on_instance_terminate(self)
+
+        true
+      end
+    end
+
+    def cancel!
+      cancel || raise(FlowCore::InvalidTransition, "Can't cancel Instance##{id}")
+    end
+
+    def activate!
+      activate || raise(FlowCore::InvalidTransition, "Can't activate Instance##{id}")
     end
 
     def finish!
       finish || raise(FlowCore::InvalidTransition, "Can't finish Instance##{id}")
     end
 
-    def error!
-      return if errored?
-
-      update! errored_at: Time.zone.now
-    end
-
-    def rescue!
-      return unless errored?
-      return unless tasks.errored.any?
-
-      update! errored_at: nil, rescued_at: Time.zone.now
-    end
-
-    def suspend!
-      return if suspended?
-
-      transaction do
-        tasks.enabled.each(&:suspend!)
-        update! suspended_at: Time.zone.now
-      end
-    end
-
-    def resume!
-      return unless suspended?
-
-      transaction do
-        tasks.enabled.each(&:resume!)
-        update! suspended_at: nil, resumed_at: Time.zone.now
-      end
+    def terminate!(reason:)
+      terminate(reason: reason) || raise(FlowCore::InvalidTransition, "Can't terminate Instance##{id}")
     end
   end
 end

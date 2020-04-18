@@ -69,7 +69,7 @@
         <td><%= approval.id %></td>
         <td><%= approval.transition.name %></td>
         <td><%= approval.assignee&.name %></td>
-        <td><%= approval.finished? %></td>
+        <td><%= approval.finished_at.present? ? time_tag(approval.finished_at) : nil %></td>
         <td>
           <%= link_to "Show", leave_approval_path(approval) %>
         </td>

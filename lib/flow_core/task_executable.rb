@@ -5,8 +5,7 @@ module FlowCore
     extend ActiveSupport::Concern
 
     included do
-      has_one :task, as: :executable, required: true, class_name: "FlowCore::Task"
-      has_one :instance, through: :task, class_name: "FlowCore::Instance"
+      has_one :task, as: :executable, class_name: "FlowCore::Task", autosave: true, required: true
       has_one :transition, -> { readonly }, through: :task, class_name: "FlowCore::Transition"
 
       after_save :notify_workflow_task_finished!, if: :implicit_notify_workflow_task_finished

@@ -1,0 +1,37 @@
+<div class="container">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h2>
+      Request
+    </h2>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <%= link_to "Back", leave_path(task.leave), class: "btn btn-sm btn-primary" %>
+    </div>
+  </div>
+
+  <%= form_with(model: task, scope: :approval, url: leave_approval_path(task), method: :patch, local: true) do |f| %>
+    <div class="form-group">
+      <%= f.label :start_date %>
+      <%= f.date_field :start_date, required: "required", class: "form-control", class_for_error: "is-invalid", disabled: task.finished? %>
+      <%= f.error_message :start_date, class: "invalid-feedback" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :end_date %>
+      <%= f.date_field :end_date, required: "required", class: "form-control", class_for_error: "is-invalid", disabled: task.finished? %>
+      <%= f.error_message :end_date, class: "invalid-feedback" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :reason %>
+      <%= f.text_field :reason, required: "required", class: "form-control", class_for_error: "is-invalid", disabled: task.finished? %>
+      <%= f.error_message :reason, class: "invalid-feedback" %>
+    </div>
+
+    <% unless task.finished? %>
+      <div class="form-group">
+        <%= f.submit class: "btn btn-primary mr-2" %>
+        <%= link_to "Discard", leave_approval_path(task, approval: { discard: 1 }), method: :patch, class: "btn btn-danger" %>
+      </div>
+    <% end %>
+  <% end %>
+</div>

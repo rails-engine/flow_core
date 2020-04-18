@@ -1,25 +1,25 @@
 <div class="container">
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h2>
-      Leader Evaluate
+      Evaluate
     </h2>
     <div class="btn-toolbar mb-2 mb-md-0">
-      <%= link_to "Back", leave_path(@leave), class: "btn btn-sm btn-primary" %>
+      <%= link_to "Back", leave_path(task), class: "btn btn-sm btn-primary" %>
     </div>
   </div>
 
-  <%= form_with(model: @approval, scope: :approval, url: leave_approval_path(@approval), method: :patch, local: true) do |f| %>
+  <%= form_with(model: task, scope: :approval, url: leave_approval_path(task), method: :patch, local: true) do |f| %>
     <div class="form-group">
       <label>Start date</label>
-      <input type="text" readonly class="form-control-plaintext" value="<%= l @leave.start_date %>">
+      <input type="text" readonly class="form-control-plaintext" value="<%= l task.leave.start_date %>">
     </div>
     <div class="form-group">
       <label>End date</label>
-      <input type="text" readonly class="form-control-plaintext" value="<%= l @leave.end_date %>">
+      <input type="text" readonly class="form-control-plaintext" value="<%= l task.leave.end_date %>">
     </div>
     <div class="form-group">
       <label>Reason</label>
-      <input type="text" readonly class="form-control-plaintext" value="<%= @leave.reason %>">
+      <input type="text" readonly class="form-control-plaintext" value="<%= task.leave.reason %>">
     </div>
 
     <hr>
@@ -28,11 +28,11 @@
       <%= f.label :approved %>
       <div class="form-group">
         <div class="form-check form-check-inline">
-          <%= f.radio_button :approved, true, class: "form-check-input", id: "approval_approve", required: true, disabled: @approval.finished? %>
+          <%= f.radio_button :approved, true, class: "form-check-input", id: "approval_approve", required: true, disabled: task.finished? %>
           <%= f.label :approved, "Approved", class: "form-check-label", for: "approval_approve" %>
         </div>
         <div class="form-check form-check-inline">
-          <%= f.radio_button :approved, false, class: "form-check-input", id: "approval_reject", required: true, disabled: @approval.finished? %>
+          <%= f.radio_button :approved, false, class: "form-check-input", id: "approval_reject", required: true, disabled: task.finished? %>
           <%= f.label :approved, "Reject", class: "form-check-label", for: "approval_reject" %>
         </div>
       </div>
@@ -40,11 +40,11 @@
 
     <div class="form-group">
       <%= f.label :comment %>
-      <%= f.text_field :comment, class: "form-control", class_for_error: "is-invalid", disabled: @approval.finished? %>
+      <%= f.text_field :comment, class: "form-control", class_for_error: "is-invalid", disabled: task.finished? %>
       <%= f.error_message :comment, class: "invalid-feedback" %>
     </div>
 
-    <% unless @approval.finished? %>
+    <% unless task.finished? %>
       <div class="form-group">
         <%= f.submit class: "btn btn-primary" %>
       </div>

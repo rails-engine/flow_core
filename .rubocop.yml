@@ -192,7 +192,7 @@ Style/StringLiterals:
   EnforcedStyle: double_quotes
 
 # Detect hard tabs, no hard tabs.
-Layout/Tab:
+Layout/IndentationStyle:
   Enabled: true
 
 # Blank lines should not have any spaces.
@@ -201,6 +201,9 @@ Layout/TrailingEmptyLines:
 
 # No trailing whitespace.
 Layout/TrailingWhitespace:
+  Enabled: true
+
+Layout/SpaceAroundMethodCallOperator:
   Enabled: true
 
 # Use quotes for string literals when they are enough.
@@ -237,6 +240,15 @@ Lint/DeprecatedClassMethods:
 
 Lint/AssignmentInCondition:
   Enabled: false
+
+Lint/RaiseException:
+  Enabled: true
+
+Lint/StructNewOverride:
+  Enabled: true
+
+Style/ExponentialNotation:
+  Enabled: true
 
 Style/ParenthesesAroundCondition:
   Enabled: true

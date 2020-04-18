@@ -30,11 +30,11 @@ FlowCore::Definition.new name: "Timed split" do |net|
   end
 end.deploy!
 
-InternalWorkflow.find_or_deploy_leave_flow
+LeaveWorkflow.find_or_deploy_leave_flow
 
 w = FlowCore::Workflow.first
 i = w.create_instance!
-i.active!
+i.activate!
 t = i.tasks.enabled.first
 t.finish!
 t = i.tasks.enabled.first

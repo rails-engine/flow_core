@@ -85,13 +85,7 @@ class CreateFlowCoreTables < ActiveRecord::Migration[6.0]
       t.datetime :canceled_at
       t.datetime :terminated_at
 
-      t.string :terminated_reason
-
-      t.datetime :errored_at
-      t.datetime :rescued_at
-
-      t.datetime :suspended_at
-      t.datetime :resumed_at
+      t.string :terminate_reason
 
       t.text :payload
 
@@ -128,8 +122,8 @@ class CreateFlowCoreTables < ActiveRecord::Migration[6.0]
       t.integer :stage, default: 0, comment: "0-created, 1-enabled, 11-finished, 12-terminated"
       t.datetime :enabled_at
       t.datetime :finished_at
-      t.datetime :terminated_at
 
+      t.datetime :terminated_at
       t.string :terminate_reason
 
       t.datetime :errored_at

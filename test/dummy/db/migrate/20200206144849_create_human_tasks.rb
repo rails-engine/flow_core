@@ -1,15 +1,13 @@
 # frozen_string_literal: true
 
-class CreateUserTasks < ActiveRecord::Migration[6.0]
+class CreateHumanTasks < ActiveRecord::Migration[6.0]
   def change
-    create_table :user_tasks do |t|
+    create_table :human_tasks do |t|
       t.string :workflow_tag
       t.string :transition_tag
 
       t.references :assignee, foreign_key: { to_table: "users" }
-      t.boolean :approved
-      t.text :comment
-      t.boolean :finished, null: false, default: false
+      t.datetime :finished_at
 
       t.string :type
 

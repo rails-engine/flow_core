@@ -76,7 +76,9 @@ module FlowCore
       end
 
       if candidate_arcs.empty?
-        trigger&.on_error(task, FlowCore::NoNewTokenCreated.new)
+        # TODO: find a better way
+        on_task_errored task, FlowCore::NoNewTokenCreated.new
+        return
       end
 
       candidate_arcs.each do |arc|
@@ -84,43 +86,38 @@ module FlowCore
       end
     end
 
-    def on_task_created(task)
-      trigger&.on_task_created(task)
+    def on_task_enable(task)
+      trigger&.on_task_enable(task)
       callbacks.each { |callback| callback.call task }
     end
 
-    def on_task_enabled(task)
-      trigger&.on_task_enabled(task)
+    def on_task_finish(task)
+      trigger&.on_task_finish(task)
       callbacks.each { |callback| callback.call task }
     end
 
-    def on_task_finished(task)
-      trigger&.on_task_finished(task)
-      callbacks.each { |callback| callback.call task }
-    end
-
-    def on_task_terminated(task)
-      trigger&.on_task_terminated(task)
+    def on_task_terminate(task)
+      trigger&.on_task_terminate(task)
       callbacks.each { |callback| callback.call task }
     end
 
     def on_task_errored(task, error)
       trigger&.on_task_errored(task, error)
+      callbacks.each { |callback| callback.call task, error }
+    end
+
+    def on_task_rescue(task)
+      trigger&.on_task_rescue(task)
       callbacks.each { |callback| callback.call task }
     end
 
-    def on_task_rescued(task)
-      trigger&.on_task_rescued(task)
+    def on_task_suspend(task)
+      trigger&.on_task_suspend(task)
       callbacks.each { |callback| callback.call task }
     end
 
-    def on_task_suspended(task)
-      trigger&.on_task_suspended(task)
-      callbacks.each { |callback| callback.call task }
-    end
-
-    def on_task_resumed(task)
-      trigger&.on_task_resumed(task)
+    def on_task_resume(task)
+      trigger&.on_task_resume(task)
       callbacks.each { |callback| callback.call task }
     end
 

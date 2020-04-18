@@ -1,10 +1,10 @@
 <div class="form-group">
   <%= f.label :assign_to %>
   <div class="form-group">
-    <% TransitionTriggers::UserTask::Configuration::ASSIGN_TO_ENUM.each do |k, v| %>
+    <% TransitionTriggers::HumanTask::Configuration::ASSIGN_TO_ENUM.each do |k, v| %>
       <div class="form-check form-check-inline">
         <%= f.radio_button :assign_to, v, class: "form-check-input", id: "assign_to_#{k}" %>
-        <%= f.label :assign_to, t("transition_triggers.user_task.assign_to.#{k}"), class: "form-check-label", for: "assign_to_#{k}" %>
+        <%= f.label :assign_to, t("transition_triggers.human_task.assign_to.#{k}"), class: "form-check-label", for: "assign_to_#{k}" %>
       </div>
     <% end %>
   </div>

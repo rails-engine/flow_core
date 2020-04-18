@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module TransitionTriggers
-  class UserTask
+  class HumanTask
     class Configuration < SerializableConfiguration
       ASSIGN_TO_ENUM = {
         instance_creator: "instance_creator",

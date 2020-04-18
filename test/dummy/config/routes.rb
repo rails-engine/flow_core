@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   end
   resources :instances, only: %i[index show] do
     member do
-      patch "active"
+      patch "activate"
     end
 
     scope module: :instances do

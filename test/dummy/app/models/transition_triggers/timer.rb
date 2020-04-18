@@ -8,7 +8,7 @@ module TransitionTriggers
       true
     end
 
-    def on_task_enabled(task)
+    def on_task_enable(task)
       TimerTaskJob.set(wait: configuration.countdown_in_seconds.seconds).perform_later(task.id)
     end
   end

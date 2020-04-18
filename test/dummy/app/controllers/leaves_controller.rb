@@ -49,9 +49,10 @@ class LeavesController < ApplicationController
   end
 
   def initiate
-    workflow = InternalWorkflow.find_or_deploy_leave_flow
-    instance = workflow.create_instance! creator: current_user, payload: { leave_id: @leave.id }
-    instance.active!
+    workflow = LeaveWorkflow.find_or_deploy_leave_flow
+    instance = workflow.build_instance creator: current_user, leave: @leave
+    instance.save!
+    instance.activate!
     @leave.update! workflow_instance: instance, stage: :evaluating
 
     redirect_to leave_url(@leave), notice: "Leave workflow activated."

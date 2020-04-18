@@ -12,7 +12,7 @@ en:
         <br>
         The source code and the dummy app are licensed under <a href="http://opensource.org/licenses/mit-license.php">MIT license</a>.
   transition_triggers:
-    user_task:
+    human_task:
       assign_to:
         instance_creator: "Instance creator"
         user: "User"

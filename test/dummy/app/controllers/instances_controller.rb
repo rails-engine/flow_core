@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class InstancesController < ApplicationController
-  before_action :set_instance, only: %i[show active]
+  before_action :set_instance, only: %i[show activate]
 
   def index
     @instances = FlowCore::Instance.all.includes(:workflow)
@@ -11,13 +11,13 @@ class InstancesController < ApplicationController
     @tasks = @instance.tasks.includes(:transition)
   end
 
-  def active
-    unless @instance.can_active?
-      redirect_to instance_url(@instance), notice: "Instance can not active."
+  def activate
+    unless @instance.can_activate?
+      redirect_to instance_url(@instance), notice: "Instance can not activate."
       return
     end
 
-    @instance.active!
+    @instance.activate!
 
     redirect_to instance_url(@instance), notice: "Instance activated."
   end

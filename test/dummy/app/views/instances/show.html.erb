@@ -5,7 +5,7 @@
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
       <% if @instance.created? %>
-        <%= link_to 'Active', active_instance_path(@instance), method: :patch, class: "btn btn-sm btn-primary" %>
+        <%= link_to "Activate", activate_instance_path(@instance), method: :patch, class: "btn btn-sm btn-primary" %>
       <% end %>
     </div>
   </div>
