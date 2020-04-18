@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    flow_core (0.0.2)
+    flow_core (0.0.3)
       rails (~> 6.0)
       rgl (~> 0.5)
 
