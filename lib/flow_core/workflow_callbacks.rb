@@ -4,6 +4,8 @@ module FlowCore
   module WorkflowCallbacks
     extend ActiveSupport::Concern
 
+    def on_instance_create_validation(_instance); end
+
     def on_instance_cancel(_instance); end
 
     def on_instance_activate(_instance); end

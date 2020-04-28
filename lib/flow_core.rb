@@ -18,9 +18,5 @@ require "flow_core/workflow_callbacks"
 require "flow_core/definition"
 require "flow_core/violations"
 
-ActiveSupport.on_load(:i18n) do
-  I18n.load_path << File.expand_path("flow_core/locale/en.yml", __dir__)
-end
-
 module FlowCore
 end

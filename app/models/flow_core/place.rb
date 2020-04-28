@@ -14,6 +14,7 @@ module FlowCore
     has_many :output_arcs, -> { where direction: :in },
              class_name: "FlowCore::Arc", inverse_of: :place, dependent: :delete_all
 
+    has_many :input_transitions, through: :input_arcs, class_name: "FlowCore::Transition", source: :transition
     has_many :output_transitions, through: :output_arcs, class_name: "FlowCore::Transition", source: :transition
 
     before_destroy :prevent_destroy

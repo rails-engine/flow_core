@@ -27,6 +27,8 @@ module FlowCore
     scope :errored, -> { where.not(errored_at: nil) }
     scope :suspended, -> { where.not(suspended_at: nil) }
 
+    validate :on_create_validation, on: :create
+
     after_initialize do
       self.payload ||= {}
     end
@@ -117,5 +119,11 @@ module FlowCore
     def terminate!(reason:)
       terminate(reason: reason) || raise(FlowCore::InvalidTransition, "Can't terminate Instance##{id}")
     end
+
+    private
+
+      def on_create_validation
+        workflow.on_instance_create_validation(self)
+      end
   end
 end

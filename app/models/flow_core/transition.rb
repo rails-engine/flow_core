@@ -15,9 +15,12 @@ module FlowCore
              class_name: "FlowCore::Arc", inverse_of: :transition, dependent: :destroy
 
     has_many :input_places, through: :input_arcs, class_name: "FlowCore::Place", source: :place
+    has_many :output_places, through: :output_arcs, class_name: "FlowCore::Place", source: :place
 
     has_one :trigger, class_name: "FlowCore::TransitionTrigger", dependent: :delete
     has_many :callbacks, class_name: "FlowCore::TransitionCallback", dependent: :delete_all
+
+    accepts_nested_attributes_for :trigger
 
     before_destroy :prevent_destroy
     after_create :reset_workflow_verification

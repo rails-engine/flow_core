@@ -5,9 +5,9 @@ en:
       flow_core/place: Place
       flow_core/start_place: Start Place
       flow_core/end_place: End Place
-      flow_core/transition: Workflow
-      flow_core/transition_trigger: Transition Trigger
-      flow_core/transition_callback: Trasition Callback
+      flow_core/transition: Transition
+      # flow_core/transition_trigger: Transition Trigger
+      # flow_core/transition_callback: Transition Callback
       flow_core/arc: Arc
       flow_core/arc_guard: Arc Guard
       flow_core/instance: Instance
@@ -19,6 +19,8 @@ en:
       verified: Verified
       invalid: Invalid
     violations:
+      no_start_place: "No start place"
+      no_end_place: "No end place"
       format: "%{model} %{name} %{message}"
       unreachable: "Unreachable from start place"
       impassable: "Impassable to end place"

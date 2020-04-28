@@ -16,6 +16,8 @@ module FlowCore
     has_one :end_place, class_name: "FlowCore::EndPlace", dependent: :delete
 
     class_attribute :force_workflow_verified_on_create_instance, default: false
+    attr_accessor :disable_auto_create
+    alias disable_auto_create? disable_auto_create
 
     include FlowCore::WorkflowCallbacks
 
@@ -53,10 +55,10 @@ module FlowCore
       violations.clear
 
       unless start_place
-        violations.add(:start_place, :presence)
+        violations.add(self, :no_start_place)
       end
       unless end_place
-        violations.add(:end_place, :presence)
+        violations.add(self, :no_end_place)
       end
 
       return false unless start_place && end_place
@@ -69,7 +71,7 @@ module FlowCore
       end_place_code = "P_#{end_place.id}"
 
       unless rgl.path?(start_place_code, end_place_code)
-        violations.add :end_place, :unreachable
+        violations.add end_place, :unreachable
       end
 
       places.find_each do |p|
@@ -119,7 +121,7 @@ module FlowCore
 
     def verify!
       update! verified: verify?, verified_at: Time.zone.now
-      violations.empty?
+      verified
     end
 
     def reset_workflow_verification!
@@ -128,6 +130,8 @@ module FlowCore
 
     def fork
       new_workflow = dup
+      new_workflow.disable_auto_create = true
+
       transaction do
         yield new_workflow if block_given?
         new_workflow.save!

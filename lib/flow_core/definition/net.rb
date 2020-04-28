@@ -67,7 +67,9 @@ module FlowCore::Definition
 
       workflow = nil
       FlowCore::ApplicationRecord.transaction do
-        workflow = FlowCore::Workflow.create! attributes
+        workflow = FlowCore::Workflow.new attributes
+        workflow.disable_auto_create = true
+        workflow.save!
 
         # Places
         place_records = {}
