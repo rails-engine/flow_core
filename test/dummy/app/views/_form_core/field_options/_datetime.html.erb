@@ -1,0 +1,101 @@
+<h4>Begin from</h4>
+
+<div class="form-row align-items-center mb-2">
+  <div class="col-auto">
+    <div class="form-check">
+      <%= f.radio_button :begin_from, "unlimited", id: "begin_from_unlimited", class: "form-check-input" %>
+      <%= f.label :begin_from, "Unlimited", for: "begin_from_unlimited", class: "form-check-label" %>
+    </div>
+  </div>
+</div>
+
+<div class="form-row align-items-center mb-2">
+  <div class="col-auto">
+    <div class="form-check">
+      <%= f.radio_button :begin_from, "now", id: "begin_from_now", class: "form-check-input" %>
+      <%= f.label :begin_from, "Now with offset", for: "begin_from_now", class: "form-check-label" %>
+    </div>
+  </div>
+  <div class="col-auto">
+    <%= f.number_field :begin_from_now_minutes_offset, class: "form-control", step: 1, class_for_error: "is-invalid" %>
+    <%= f.error_message :begin_from_now_minutes_offset, class: "invalid-feedback" %>
+  </div>
+</div>
+
+<div class="form-row align-items-center mb-2">
+  <div class="col-auto">
+    <div class="form-check mb-2">
+      <%= f.radio_button :begin_from, "time", id: "begin_from_time", class: "form-check-input" %>
+      <%= f.label :begin_from, "Time", for: "begin_from_time", class: "form-check-label" %>
+    </div>
+  </div>
+  <div class="col-auto">
+    <%= f.datetime_field :begin, class: "form-control", class_for_error: "is-invalid" %>
+    <%= f.error_message :begin, class: "invalid-feedback" %>
+  </div>
+</div>
+
+<div class="form-row align-items-center mb-2">
+  <div class="col-auto">
+    <div class="form-check mb-2">
+      <%= f.radio_button :begin_from, "minutes_before_end", id: "begin_from_minutes_before_end", class: "form-check-input" %>
+      <%= f.label :begin_from, "Minutes before end", for: "begin_from_minutes_before_end", class: "form-check-label" %>
+    </div>
+  </div>
+  <div class="col-auto">
+    <%= f.number_field :minutes_before_end, class: "form-control", class_for_error: "is-invalid", min: 1, step: 1 %>
+    <%= f.error_message :minutes_before_end, class: "invalid-feedback" %>
+  </div>
+</div>
+
+<h4>
+  End to
+</h4>
+
+<div class="form-row align-items-center mb-2">
+  <div class="col-auto">
+    <div class="form-check mb-2">
+      <%= f.radio_button :end_to, "unlimited", id: "end_to_unlimited", class: "form-check-input" %>
+      <%= f.label :end_to, "Unlimited", for: "end_to_unlimited", class: "form-check-label" %>
+    </div>
+  </div>
+</div>
+
+<div class="form-row align-items-center mb-2">
+  <div class="col-auto">
+    <div class="form-check">
+      <%= f.radio_button :end_to, "now", id: "end_to_now", class: "form-check-input" %>
+      <%= f.label :end_to, "Now with offset", for: "end_to_now", class: "form-check-label" %>
+    </div>
+  </div>
+  <div class="col-auto">
+    <%= f.number_field :end_to_now_minutes_offset, class: "form-control", step: 1, class_for_error: "is-invalid" %>
+    <%= f.error_message :end_to_now_minutes_offset, class: "invalid-feedback" %>
+  </div>
+</div>
+
+<div class="form-row align-items-center mb-2">
+  <div class="col-auto">
+    <div class="form-check mb-2">
+      <%= f.radio_button :end_to, "time", id: "end_to_time", class: "form-check-input" %>
+      <%= f.label :end_to, "Time", for: "end_to_time", class: "form-check-label" %>
+    </div>
+  </div>
+  <div class="col-auto">
+    <%= f.datetime_field :end, class: "form-control", step: 1, class_for_error: "is-invalid" %>
+    <%= f.error_message :end, class: "invalid-feedback" %>
+  </div>
+</div>
+
+<div class="form-row align-items-center mb-2">
+  <div class="col-auto">
+    <div class="form-check mb-2">
+      <%= f.radio_button :end_to, "minutes_since_begin", id: "minutes_since_begin", class: "form-check-input" %>
+      <%= f.label :end_to, "Minutes since begin", for: "minutes_since_begin", class: "form-check-label" %>
+    </div>
+  </div>
+  <div class="col-auto">
+    <%= f.number_field :minutes_since_begin, class: "form-control", class_for_error: "is-invalid", min: 1, step: 1 %>
+    <%= f.error_message :minutes_since_begin, class: "invalid-feedback" %>
+  </div>
+</div>

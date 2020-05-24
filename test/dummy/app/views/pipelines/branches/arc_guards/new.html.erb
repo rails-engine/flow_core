@@ -1,0 +1,24 @@
+<div class="container">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      New trigger
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <%= link_to "<<", pipeline_path(@pipeline), class: "btn btn-primary mr-2" %>
+      <%= link_to "Back", edit_pipeline_branch_path(@pipeline, @branch), class: "btn btn-primary" %>
+    </div>
+  </div>
+
+  <% if @arc_guard %>
+    <%= render "form", pipeline: @pipeline, branch: @branch, arc_guard: @arc_guard %>
+  <% else %>
+    <%= form_with url: new_pipeline_branch_arc_guard_path(@pipeline, @branch), method: :get, local: true do |f| %>
+      <div class="form-group">
+        <%= f.label :type %>
+        <%= f.select :type, guard_types_options_for_select, {}, class: "form-control" %>
+      </div>
+
+      <%= f.submit "Next", class: "btn btn-block btn-primary" %>
+    <% end %>
+  <% end %>
+</div>

@@ -1,0 +1,59 @@
+<div class="container">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h4>
+      Steps
+    </h4>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <%= link_to "<<", pipeline_path(@pipeline), class: "btn btn-primary mr-2" %>
+      <%= link_to 'Back', edit_pipeline_step_path(@pipeline, @branch.step), class: "btn btn-primary mr-2" %>
+      <%= link_to 'New Step', new_pipeline_branch_step_path(@pipeline, @branch), class: "btn btn-primary" %>
+    </div>
+  </div>
+
+  <div>
+    <table class="table table-borderless table-hover" id="steps-table">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Trigger</th>
+        <th>Position</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @branch.steps.includes(:transition_trigger).each do |step| %>
+        <tr class="ui-state-default" data-id="<%= step.id %>">
+          <td><%= step.id %></td>
+          <td><%= step.name %></td>
+          <td><%= step.type.present? ? step.model_name.human : nil %></td>
+          <td><%= step.transition_trigger ? step.transition_trigger.model_name.human : nil %></td>
+          <td><%= step.position %></td>
+          <td>
+            <%= link_to "Edit", edit_pipeline_step_path(@pipeline, step) %> |
+            <%= link_to "Destroy", pipeline_step_path(@pipeline, step), method: :delete, data: { confirm: "Are you sure?" } %>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("turbolinks:load", function() {
+    $("#steps-table > tbody").sortable({
+      axis: "y",
+      update: function(e, ui) {
+        const id = ui.item.attr("data-id");
+        const position = ui.item.index() + 1;
+        Rails.ajax({
+          url: '<%= move_pipeline_branch_steps_path(@pipeline, @branch) %>',
+          type: "PUT",
+          data: "step_id=" + id + "&" + "position=" + position,
+        });
+      }
+    });
+  });
+</script>

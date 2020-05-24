@@ -10,7 +10,7 @@ module FlowCore
 
     # NOTE: Place - out -> Transition - in -> Place
     has_many :input_arcs, -> { where direction: :out },
-             class_name: "FlowCore::Arc", inverse_of: :place, dependent: :delete_all
+             class_name: "FlowCore::Arc", inverse_of: :place, dependent: :destroy
     has_many :output_arcs, -> { where direction: :in },
              class_name: "FlowCore::Arc", inverse_of: :place, dependent: :delete_all
 

@@ -25,12 +25,9 @@ FlowCore::Definition.new name: "Timed split" do |net|
   net.transition :t1, input: :start, output: :p
   net.transition :t2, input: :p, output: :end
   net.transition :t3, input: :start, output: :end do |t|
-    t.with_trigger TransitionTriggers::Timer,
-                   countdown_in_seconds: 5
+    t.with_trigger FlowKit::TransitionTriggers::Timer, countdown_in_seconds: 5
   end
 end.deploy!
-
-LeaveWorkflow.find_or_deploy_leave_flow
 
 w = FlowCore::Workflow.first
 i = w.create_instance!

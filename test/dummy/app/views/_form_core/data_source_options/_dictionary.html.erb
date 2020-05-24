@@ -1,0 +1,8 @@
+<div class="form-group">
+  <%= f.label :scope %>
+  <%= f.text_field :scope, required: "required", class: "form-control", class_for_error: "is-invalid" %>
+  <%= f.error_message :scope, class: "invalid-feedback" %>
+  <span class="form-text text-muted">
+    The dictionary's scope you've created, go to <%= link_to "Dictionaries", tenant_admin_dictionaries_path(@tenant), target: "_blank" %> to check this out.
+  </span>
+</div>

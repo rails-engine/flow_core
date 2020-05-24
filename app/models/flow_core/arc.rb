@@ -19,6 +19,14 @@ module FlowCore
               uniqueness: {
                 scope: %i[workflow transition direction]
               }
+    validates :fallback_arc,
+              uniqueness: {
+                scope: %i[workflow transition direction]
+              }, if: :fallback_arc?
+
+    before_validation on: :create do
+      self.workflow ||= place&.workflow || transition&.workflow
+    end
 
     before_destroy :prevent_destroy
     after_create :reset_workflow_verification

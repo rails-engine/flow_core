@@ -4,12 +4,12 @@
       <%= @transition.name %>
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
-      <%= link_to 'Back', workflow_path(@workflow), class: "btn btn-sm btn-primary" %>
+      <%= link_to 'Back', workflow_path(@workflow), class: "btn btn-primary" %>
     </div>
   </div>
 
   <p>
-    <%= @workflow.to_graph.output(svg: String).html_safe %>
+    <%= Graphviz::output(@workflow.to_graphviz, format: "svg").html_safe %>
   </p>
 
   <%= render "form", workflow: @workflow, transition: @transition %>
@@ -17,12 +17,12 @@
   <hr>
 
   <% if @transition.trigger %>
-    <%= render "workflows/transition_triggers/form", workflow: @workflow, transition_trigger: @transition.trigger %>
+    <%= render "workflows/transitions/triggers/form", workflow: @workflow, transition: @transition, trigger: @transition.trigger %>
   <% end %>
 
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h4>
-      callbacks
+      Callbacks
     </h4>
     <div class="btn-toolbar mb-2 mb-md-0">
     </div>

@@ -1,0 +1,51 @@
+<div class="container">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      Editing Branch
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <%= link_to "<<", pipeline_path(@pipeline), class: "btn btn-primary mr-2" %>
+      <%= link_to "Back", edit_pipeline_step_path(@pipeline, @branch.step), class: "btn btn-primary mr-2" %>
+      <% if @branch.user_destroyable? %>
+        <%= link_to "Destroy", pipeline_branch_path(@pipeline, @branch), method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure?" } %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <%= render "form", pipeline: @pipeline, branch: @branch %>
+  </div>
+
+  <% if @branch.arc_guard_attachable? %>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <h4>
+        Guards
+      </h4>
+      <div class="btn-toolbar mb-2 mb-md-0">
+        <%= link_to "New", new_pipeline_branch_arc_guard_path(@pipeline, @branch), class: "btn btn-primary" %>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <table class="table table-borderless table-hover">
+        <thead>
+        <tr>
+          <th>Type</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <% @branch.arc_guards.each do |guard| %>
+          <tr>
+            <td><%= guard.model_name.human %></td>
+            <td>
+              <%= link_to "Edit", edit_pipeline_branch_arc_guard_path(@pipeline, @branch, guard) %> |
+              <%= link_to "Destroy", pipeline_branch_arc_guard_path(@pipeline, @branch, guard), method: :delete, data: { confirm: "Are you sure?" } %>
+            </td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</div>

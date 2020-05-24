@@ -3,6 +3,7 @@
 module FlowCore::Definition
   class Transition
     attr_reader :net, :tag, :attributes, :trigger, :callbacks, :input_tags, :output_tags
+
     private :net
 
     def initialize(net, tag, attributes = {}, &block)
@@ -19,8 +20,8 @@ module FlowCore::Definition
       output = attributes.delete(:output)
       raise ArgumentError, "Require `input`" unless input
 
-      self.input input
-      self.output output if output
+      inputs(*input)
+      outputs(*output) if output
 
       trigger = attributes.delete :with_trigger
       @trigger =
@@ -31,7 +32,7 @@ module FlowCore::Definition
       callbacks = []
       callbacks.concat Array.wrap(attributes.delete(:with_callbacks))
       callbacks.concat Array.wrap(attributes.delete(:with_callback))
-      @callbacks = callbacks.map { |cb| FlowCore::Definition::Callback.new cb }
+      @callbacks = callbacks.compact.map { |cb| FlowCore::Definition::Callback.new cb }
 
       @attributes = attributes.with_indifferent_access.except(FlowCore::Transition::FORBIDDEN_ATTRIBUTES)
       @attributes[:name] ||= tag.to_s
@@ -54,42 +55,53 @@ module FlowCore::Definition
       end
     end
 
-    def input(tag)
-      places = Array.wrap(tag)
-      places.each do |place|
-        case place
+    def input(tag, attributes = {})
+      unless net.places.find { |place| place.tag == tag }
+        net.add_place(tag, attributes)
+      end
+
+      @input_tags << tag
+    end
+
+    def inputs(*tags)
+      tags.each do |tag|
+        case tag
         when Symbol
-          net.add_place(place)
-          tag = place
+          input(tag)
         when Array # Expect `[:p1, {name: "Place 1"}]`
-          net.add_place(*place)
-          tag = place.first
+          input(*tag)
         else
           raise TypeError, "Unknown pattern - #{place}"
         end
-
-        @input_tags << tag
       end
     end
 
     def output(tag, attributes = {})
-      guard = attributes.delete :with_guard
-      guard = FlowCore::Definition::Guard.new(guard) if guard&.is_a?(Hash)
+      guards = []
+      guards.concat Array.wrap(attributes.delete(:with_guards))
+      guards.concat Array.wrap(attributes.delete(:with_guard))
+      guards.compact!
+      guards.map! { |guard| FlowCore::Definition::Guard.new guard }
 
-      places = Array.wrap(tag)
-      places.each do |place|
-        case place
+      fallback = attributes.delete(:fallback) || false
+
+      unless net.places.find { |place| place.tag == tag }
+        net.add_place(tag, attributes)
+      end
+
+      @output_tags << { tag: tag, guards: guards, fallback: fallback }
+    end
+
+    def outputs(*tags)
+      tags.each do |tag|
+        case tag
         when Symbol
-          net.add_place(place)
-          tag = place
+          output(tag)
         when Array # Expect `[:p1, {name: "Place 1"}]`
-          net.add_place(*place)
-          tag = place.first
+          output(*tag)
         else
           raise TypeError, "Unknown pattern - #{place}"
         end
-
-        @output_tags << { tag: tag, guard: guard }
       end
     end
 
@@ -100,7 +112,7 @@ module FlowCore::Definition
         trigger: @trigger&.compile,
         callbacks: @callbacks.map(&:compile),
         input_tags: @input_tags,
-        output_tags: @output_tags.map { |output| { tag: output[:tag], guard: output[:guard]&.compile } }
+        output_tags: @output_tags.map { |output| { tag: output[:tag], guards: output[:guards].map(&:compile) } }
       }
     end
   end

@@ -68,9 +68,10 @@ module FlowCore
       return false unless can_activate?
 
       with_transaction_returning_status do
-        tokens.create! place: workflow.start_place
         update! stage: :activated, activated_at: Time.zone.now
         workflow.on_instance_activate(self)
+
+        tokens.create! place: workflow.start_place
 
         true
       end

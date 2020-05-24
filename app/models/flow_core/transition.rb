@@ -6,6 +6,10 @@ module FlowCore
 
     FORBIDDEN_ATTRIBUTES = %i[workflow_id created_at updated_at].freeze
 
+    belongs_to :generated_by,
+               class_name: "FlowCore::Step", foreign_key: :generated_by_step_id,
+               inverse_of: :generated_transitions, optional: true
+
     belongs_to :workflow, class_name: "FlowCore::Workflow"
 
     # NOTE: Place - out -> Transition - in -> Place
@@ -19,6 +23,16 @@ module FlowCore
 
     has_one :trigger, class_name: "FlowCore::TransitionTrigger", dependent: :delete
     has_many :callbacks, class_name: "FlowCore::TransitionCallback", dependent: :delete_all
+
+    enum output_token_create_strategy: {
+      petri_net: 0,
+      match_one_or_fallback: 1
+    }, _suffix: :strategy
+
+    enum auto_finish_strategy: {
+      disabled: 0,
+      synchronously: 1
+    }, _prefix: :auto_finish
 
     accepts_nested_attributes_for :trigger
 
@@ -60,9 +74,9 @@ module FlowCore
       end
     end
 
-    def create_tokens_for_output(task:)
+    def create_output_tokens_for(task)
       instance = task.instance
-      arcs = output_arcs.includes(:place, :guards).to_a
+      arcs = output_arcs.includes(:place, :guards)
 
       end_arc = arcs.find { |arc| arc.place.is_a? EndPlace }
       if end_arc
@@ -71,12 +85,18 @@ module FlowCore
           return
         end
 
-        arcs.delete(end_arc)
+        unless end_arc.fallback_arc?
+          arcs.delete(end_arc)
+        end
       end
 
-      candidate_arcs = arcs.select do |arc|
-        arc.guards.empty? || arc.guards.map { |guard| guard.permit? task }.reduce(&:&)
-      end
+      candidate_arcs =
+        case output_token_create_strategy
+        when "match_one_or_fallback"
+          find_output_arcs_with_match_one_or_fallback_strategy(arcs, task)
+        else
+          find_output_arcs_with_petri_net_strategy(arcs, task)
+        end
 
       if candidate_arcs.empty?
         # TODO: find a better way
@@ -129,6 +149,21 @@ module FlowCore
     end
 
     private
+
+      def find_output_arcs_with_petri_net_strategy(arcs, task)
+        arcs.select do |arc|
+          arc.guards.empty? || arc.guards.map { |guard| guard.permit? task }.reduce(&:&)
+        end
+      end
+
+      def find_output_arcs_with_match_one_or_fallback_strategy(arcs, task)
+        fallback_arc = arcs.find(&:fallback_arc?)
+        candidate_arcs = arcs.select do |arc|
+          !arc.fallback_arc? && (arc.guards.empty? || arc.guards.map { |guard| guard.permit? task }.reduce(&:&))
+        end
+
+        [candidate_arcs.first || fallback_arc]
+      end
 
       def reset_workflow_verification
         workflow.reset_workflow_verification!

@@ -22,7 +22,7 @@
         <td><%= task.transition.name %></td>
         <td><%= time_tag task.created_at %></td>
         <td>
-          <%= link_to "Show", leave_approval_path(task.executable) %>
+          <%= link_to "Show", human_task_path(task.executable) %>
         </td>
       </tr>
     <% end %>

@@ -1,0 +1,123 @@
+<div class="form-group">
+  <%= f.label :step %>
+  <%= f.number_field :step, min: 0, step: 1, class: "form-control", class_for_error: "is-invalid" %>
+  <%= f.error_message :step, class: "invalid-feedback" %>
+</div>
+
+<h4>Begin from</h4>
+
+<div class="form-row align-items-center mb-2">
+  <div class="col-auto">
+    <div class="form-check">
+      <%= f.radio_button :begin_from, "unlimited", id: "begin_from_unlimited", class: "form-check-input" %>
+      <%= f.label :begin_from, "Unlimited", for: "begin_from_unlimited", class: "form-check-label" %>
+    </div>
+  </div>
+</div>
+
+<div class="form-row align-items-center mb-2">
+  <div class="col-auto">
+    <div class="form-check">
+      <%= f.radio_button :begin_from, "value", id: "begin_from_value", class: "form-check-input" %>
+      <%= f.label :begin_from, "Value", for: "begin_from_value", class: "form-check-label" %>
+    </div>
+  </div>
+  <div class="col-auto">
+    <%= f.number_field :begin_value, step: 1, class: "form-control", class_for_error: "is-invalid" %>
+    <%= f.error_message :begin_value, class: "invalid-feedback" %>
+  </div>
+</div>
+
+<div class="form-row align-items-center mb-2">
+  <div class="col-auto">
+    <div class="form-check mb-2">
+      <%= f.radio_button :begin_from, "offsets_before_end", id: "begin_from_offsets_before_end", class: "form-check-input" %>
+      <%= f.label :begin_from, "Offsets before end", for: "begin_from_offsets_before_end", class: "form-check-label" %>
+    </div>
+  </div>
+  <div class="col-auto">
+    <%= f.number_field :offsets_before_end, min: 1, step: 1, class: "form-control", class_for_error: "is-invalid" %>
+    <%= f.error_message :offsets_before_end, class: "invalid-feedback" %>
+  </div>
+</div>
+
+<div class="form-group">
+  <%= f.label :fixed_begin %>
+  <div class="form-group">
+    <div class="form-check form-check-inline">
+      <%= f.check_box :fixed_begin, class: "form-check-input", id: "fixed_begin" %>
+      <%= f.label :fixed_begin, "Fixed begin?", class: "form-check-label", for: "fixed_begin" %>
+    </div>
+  </div>
+</div>
+
+<h4>
+  End to
+</h4>
+
+<div class="form-row align-items-center mb-2">
+  <div class="col-auto">
+    <div class="form-check mb-2">
+      <%= f.radio_button :end_to, "unlimited", id: "end_to_unlimited", class: "form-check-input" %>
+      <%= f.label :end_to, "Unlimited", for: "end_to_unlimited", class: "form-check-label" %>
+    </div>
+  </div>
+</div>
+
+<div class="form-row align-items-center mb-2">
+  <div class="col-auto">
+    <div class="form-check">
+      <%= f.radio_button :end_to, "value", id: "end_to_value", class: "form-check-input" %>
+      <%= f.label :end_to, "Value", for: "end_to_value", class: "form-check-label" %>
+    </div>
+  </div>
+  <div class="col-auto">
+    <%= f.number_field :end_value, class: "form-control", step: 1, class_for_error: "is-invalid" %>
+    <%= f.error_message :end_value, class: "invalid-feedback" %>
+  </div>
+</div>
+
+<div class="form-row align-items-center mb-2">
+  <div class="col-auto">
+    <div class="form-check mb-2">
+      <%= f.radio_button :end_to, "offsets_since_begin", id: "end_to_offsets_since_begin", class: "form-check-input" %>
+      <%= f.label :end_to, "Offsets since begin", for: "end_to_offsets_since_begin", class: "form-check-label" %>
+    </div>
+  </div>
+  <div class="col-auto">
+    <%= f.number_field :offsets_since_begin, min: 1, step: 1, class: "form-control", class_for_error: "is-invalid" %>
+    <%= f.error_message :minutes_since_begin, class: "invalid-feedback" %>
+  </div>
+</div>
+
+<div class="form-group">
+  <%= f.label :fixed_end %>
+  <div class="form-group">
+    <div class="form-check form-check-inline">
+      <%= f.check_box :fixed_end, class: "form-check-input", id: "fixed_end" %>
+      <%= f.label :fixed_end, "Fixed end?", class: "form-check-label", for: "fixed_end" %>
+    </div>
+  </div>
+</div>
+
+<div class="form-group">
+  <%= f.label :minimum_gap_check, class: "label" %>
+  <div class="input-group">
+    <div class="input-group-prepend">
+      <%= f.select :minimum_gap_check, options_for_enum_select(options.class, :minimum_gap_check, options.minimum_gap_check), {}, class: "form-control", class_for_error: "is-invalid" %>
+    </div>
+    <%= f.number_field :minimum_gap_value, min: 0, step: 1, class: "form-control", class_for_error: "is-invalid" %>
+    <%= f.error_message :minimum_gap_value, class: "invalid-feedback" %>
+  </div>
+</div>
+
+<div class="form-group">
+  <%= f.label :maximum_gap_check, class: "label" %>
+  <div class="input-group">
+    <div class="input-group-prepend">
+      <%= f.select :maximum_gap_check, options_for_enum_select(options.class, :maximum_gap_check, options.maximum_gap_check), {}, class: "form-control", class_for_error: "is-invalid" %>
+    </div>
+    <%= f.number_field :maximum_gap_value, min: 0, step: 1, class: "form-control", class_for_error: "is-invalid" %>
+    <%= f.error_message :maximum_gap_value, class: "invalid-feedback" %>
+  </div>
+</div>

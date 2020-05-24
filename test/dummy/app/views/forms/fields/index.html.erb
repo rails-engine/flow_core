@@ -1,0 +1,66 @@
+<% content_for :actions do %>
+  <%= link_to "New field", new_form_field_path(@form), class: "btn btn-primary mr-2" %>
+  <%= link_to "Back", forms_path, class: "btn btn-primary" %>
+<% end %>
+
+<div class="container">
+  <%= render "forms/tabs" %>
+</div>
+
+<div class="container">
+  <table class="table table-borderless table-striped fields">
+    <thead>
+    <tr>
+      <th>Key</th>
+      <th>Name</th>
+      <th>Type</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @fields.each do |field| %>
+      <tr class="ui-state-default" data-id="<%= field.id %>">
+        <td><%= field.key %></td>
+        <td><%= field.name %></td>
+        <td><%= field.class.model_name.human %></td>
+        <td>
+          <% if field.attached_choices? %>
+            <%= link_to "Choices", field_choices_path(field) %> |
+          <% end %>
+          <% if field.validations_configurable? %>
+            <%= link_to "Validations", edit_field_validations_path(field) %> |
+          <% end %>
+          <% if field.options_configurable? %>
+            <%= link_to "Options", edit_field_options_path(field) %> |
+          <% end %>
+          <% if field.attached_data_source? %>
+            <%= link_to "Data source", edit_field_data_source_options_path(field) %> |
+          <% end %>
+          <% if field.attached_nested_form? %>
+            <%= link_to "Fields", nested_form_fields_path(field.nested_form) %> |
+          <% end %>
+          <%= link_to "Edit", edit_form_field_path(@form, field) %> |
+          <%= link_to "Destroy", form_field_path(@form, field), method: :delete, data: { confirm: "Are you sure?" } %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+
+  <script>
+    document.addEventListener("turbolinks:load", function() {
+      $(".fields > tbody").sortable({
+        axis: "y",
+        update: function(e, ui) {
+          const id = ui.item.attr("data-id");
+          const position = ui.item.index() + 1;
+          Rails.ajax({
+            url: '<%= move_form_fields_path(@form) %>',
+            type: "PUT",
+            data: "field_id=" + id + "&" + "position=" + position,
+          });
+        }
+      });
+    });
+  </script>
+</div>

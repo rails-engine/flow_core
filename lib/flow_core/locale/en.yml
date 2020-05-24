@@ -9,7 +9,7 @@ en:
       # flow_core/transition_trigger: Transition Trigger
       # flow_core/transition_callback: Transition Callback
       flow_core/arc: Arc
-      flow_core/arc_guard: Arc Guard
+      # flow_core/arc_guard: Arc Guard
       flow_core/instance: Instance
       flow_core/token: Token
       flow_core/task: Task
@@ -26,3 +26,6 @@ en:
       impassable: "Impassable to end place"
       trigger_unconfigure: "Trigger not configured yet"
       callback_unconfigure: "Callback not configured yet"
+    pipeline:
+      synchronization_transition_name: "Synchronization"
+      fallback_branch_name: "Default branch"

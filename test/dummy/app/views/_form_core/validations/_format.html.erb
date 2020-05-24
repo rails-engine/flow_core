@@ -1,0 +1,20 @@
+<% validations.build_format unless validations.format %>
+<% format = validations.format %>
+
+<h3>Format</h3>
+
+<%= f.fields_for :format, format do |ff| %>
+  <div class="form-group">
+    <%= ff.label :with %>
+    <%= ff.text_field :with, class: "form-control", class_for_error: "is-invalid" %>
+    <%= ff.error_message :with, class: "invalid-feedback" %>
+  </div>
+
+  <div class="form-group">
+    <%= ff.label :message %>
+    <%= ff.text_field :message, class: "form-control", class_for_error: "is-invalid" %>
+    <%= ff.error_message :message, class: "invalid-feedback" %>
+  </div>
+<% end %>
+
+<hr>

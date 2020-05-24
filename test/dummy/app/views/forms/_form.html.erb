@@ -1,0 +1,11 @@
+<% url = form.new_record? ? forms_path : form_path(form) %>
+<% method = form.new_record? ? :post : :patch %>
+<%= form_with(model: form, scope: :form, url: url, method: method, local: true) do |f| %>
+  <div class="form-group">
+    <%= f.label :name %>
+    <%= f.text_field :name, required: "required", class: "form-control", class_for_error: "is-invalid" %>
+    <%= f.error_message :name, class: "invalid-feedback" %>
+  </div>
+
+  <%= f.submit class: "btn btn-primary" %>
+<% end %>

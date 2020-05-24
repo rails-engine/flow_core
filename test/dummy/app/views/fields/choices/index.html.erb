@@ -1,0 +1,31 @@
+<div class="container">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h2>
+      Field choices
+    </h2>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <%= link_to "New choice", new_field_choice_path(@field), class: "btn btn-primary mr-2" %>
+      <%= link_to 'Back', smart_form_fields_path(@field.form), class: "btn btn-primary" %>
+    </div>
+  </div>
+
+  <table class="table table-borderless table-striped fields">
+    <thead>
+    <tr>
+      <th>Label</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @field.choices.each do |choice| %>
+      <tr>
+        <td><%= choice.label %></td>
+        <td>
+          <%= link_to "Edit", edit_field_choice_path(@field, choice) %> |
+          <%= link_to "Destroy", field_choice_path(@field, choice), method: :delete, data: {confirm: "Are you sure?"} %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>

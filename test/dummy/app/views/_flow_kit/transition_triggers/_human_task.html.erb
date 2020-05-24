@@ -1,0 +1,19 @@
+<%= f.fields_for :configuration, trigger.configuration do |ff| %>
+  <div class="form-group">
+    <%= ff.label :assign_to %>
+    <div class="form-group">
+      <% FlowKit::TransitionTriggers::HumanTask::Configuration::ASSIGN_TO_ENUM.each do |k, v| %>
+        <div class="form-check form-check-inline">
+          <%= ff.radio_button :assign_to, v, class: "form-check-input", id: "assign_to_#{k}" %>
+          <%= ff.label :assign_to, t("transition_triggers.human_task.assign_to.#{k}"), class: "form-check-label", for: "assign_to_#{k}" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<div class="form-group">
+  <%= f.label :assignee_candidate_user_ids %>
+  <%= f.collection_select :assignee_candidate_user_ids, User.all, :id, :name, {}, class_for_error: "is-invalid", ref_method: :assignee_candidates, multiple: true, class: "form-control" %>
+  <%= f.error_message :assignee_candidates, ref_method: :assignee_candidates, class: "invalid-feedback" %>
+</div>

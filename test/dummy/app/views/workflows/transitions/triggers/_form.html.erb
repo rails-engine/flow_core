@@ -1,0 +1,12 @@
+<% url = workflow_transition_trigger_path(workflow, transition) %>
+<%= form_with(model: trigger, scope: :trigger, url: url, local: true) do |f| %>
+  <%= f.hidden_field :type %>
+
+  <% if trigger.configurable? %>
+    <%= render partial: "_flow_kit/transition_triggers/#{trigger.type_key}", locals: { f: f, trigger: trigger } %>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.submit class: "btn btn-primary" %>
+  </div>
+<% end %>

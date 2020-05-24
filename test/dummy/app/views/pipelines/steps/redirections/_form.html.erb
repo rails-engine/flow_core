@@ -1,0 +1,11 @@
+<%= form_with(model: step, scope: :step, url: pipeline_step_redirection_path(pipeline, step), local: true) do |f| %>
+  <div class="form-group">
+    <%= f.label :redirect_to_step_id %>
+    <%= f.select :redirect_to_step_id, redirectable_steps_options_for_select(step), { include_blank: true }, ref_method: :redirect_to_step, class: "form-control", class_for_error: "is-invalid" %>
+    <%= f.error_message :redirect_to_step_id, ref_method: :redirect_to_step, class: "invalid-feedback" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.submit class: "btn btn-primary" %>
+  </div>
+<% end %>

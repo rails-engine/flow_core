@@ -1,0 +1,7 @@
+<%= f.fields_for :configuration, trigger.configuration do |ff| %>
+  <div class="form-group">
+    <%= ff.label :countdown_in_seconds %>
+    <%= ff.number_field :countdown_in_seconds, min: 0, step: 1, required: "required", class: "form-control", class_for_error: "is-invalid" %>
+    <%= ff.error_message :name, class: "invalid-feedback" %>
+  </div>
+<% end %>

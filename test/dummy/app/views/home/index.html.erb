@@ -15,7 +15,7 @@
   <!-- Example row of columns -->
   <div class="row">
     <div class="col-md-4">
-      <h2>Definition</h2>
+      <h2>PetriNet Definition</h2>
       <p>
         Workflow composed by ActiveRecord models, CRUD them is same as common Rails-way.
         On the page, you can see Places, Transitions and a diagram visualization,
@@ -26,6 +26,18 @@
       </p>
     </div>
     <div class="col-md-4">
+      <h2>Pipeline Definition</h2>
+      <p>
+        PetriNet are not easy to understanding and verification,
+        Pipeline is a high-level workflow definition abstraction that aim to easy to understanding for humans, easy to implement visual designer and easy to verification.
+        Pipeline can be compiled to PetriNet,
+        the relation between Pipeline and PetriNet is like ActiveRecord and Arel.
+      </p>
+      <p>
+        <%= link_to "Try »", pipelines_path, class: "btn btn-secondary" %>
+      </p>
+    </div>
+    <div class="col-md-4">
       <h2>Instance</h2>
       <p>
         Listing all workflow instances that you created (via definition page),
@@ -33,17 +45,6 @@
       </p>
       <p>
         <%= link_to "Try »", instances_path, class: "btn btn-secondary" %>
-      </p>
-    </div>
-    <div class="col-md-4">
-      <h2>Approval process demo</h2>
-      <p>
-        Workflow is meaningless without business,
-        here's a simple leave approval process to show how to define Transition trigger, callback, Arc guard and custom task,
-        and how to integrate workflow with your app and how workflow engine help you simplify the implementation.
-      </p>
-      <p>
-        <%= link_to "Try »", leaves_path, class: "btn btn-secondary" %>
       </p>
     </div>
   </div>

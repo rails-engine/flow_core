@@ -24,6 +24,10 @@ module FlowCore
       true
     end
 
+    def auto_finishable?
+      false
+    end
+
     protected
 
       def notify_workflow_task_finished!

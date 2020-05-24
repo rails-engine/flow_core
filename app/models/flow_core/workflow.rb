@@ -6,6 +6,10 @@ module FlowCore
 
     FORBIDDEN_ATTRIBUTES = %i[verified verified_at created_at updated_at].freeze
 
+    belongs_to :generated_by,
+               class_name: "FlowCore::Pipeline", foreign_key: :generated_by_pipeline_id,
+               inverse_of: :generated_workflows, optional: true
+
     has_many :instances, class_name: "FlowCore::Instance", dependent: :destroy
 
     has_many :arcs, class_name: "FlowCore::Arc", dependent: :destroy
@@ -16,8 +20,6 @@ module FlowCore
     has_one :end_place, class_name: "FlowCore::EndPlace", dependent: :delete
 
     class_attribute :force_workflow_verified_on_create_instance, default: false
-    attr_accessor :disable_auto_create
-    alias disable_auto_create? disable_auto_create
 
     include FlowCore::WorkflowCallbacks
 
@@ -125,12 +127,13 @@ module FlowCore
     end
 
     def reset_workflow_verification!
+      return unless verified?
+
       update! verified: false, verified_at: nil
     end
 
     def fork
       new_workflow = dup
-      new_workflow.disable_auto_create = true
 
       transaction do
         yield new_workflow if block_given?

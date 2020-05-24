@@ -1,0 +1,10 @@
+<%= form_with(model: validations, scope: :validations, url: field_validations_path(field), method: :patch, local: true) do |f| %>
+  <% validations.class.attribute_names.each do |attribute_name| %>
+    <%= render "_form_core/validations/#{attribute_name}", f: f, validations: validations %>
+  <% end %>
+  <% validations.class.reflections.keys.each do |attribute_name| %>
+    <%= render "_form_core/validations/#{attribute_name}", f: f, validations: validations %>
+  <% end %>
+
+  <%= f.submit class: "btn btn-block btn-primary" %>
+<% end %>

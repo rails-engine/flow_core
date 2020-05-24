@@ -8,6 +8,7 @@ class InstancesController < ApplicationController
   end
 
   def show
+    @human_tasks = FlowKit::HumanTask.where(instance: @instance).includes(:assignable)
     @tasks = @instance.tasks.includes(:transition)
   end
 

@@ -68,7 +68,6 @@ module FlowCore::Definition
       workflow = nil
       FlowCore::ApplicationRecord.transaction do
         workflow = FlowCore::Workflow.new attributes
-        workflow.disable_auto_create = true
         workflow.save!
 
         # Places
@@ -99,9 +98,10 @@ module FlowCore::Definition
 
           td.output_tags.each do |output|
             arc = workflow.arcs.out.create! transition: transition_records[td.tag],
-                                            place: place_records[output[:tag]]
-            if output[:guard]
-              arc.guards.create! output[:guard].compile
+                                            place: place_records[output[:tag]],
+                                            fallback_arc: output[:fallback]
+            output[:guards].each do |guard|
+              arc.guards.create! guard.compile
             end
           end
         end

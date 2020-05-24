@@ -1,0 +1,9 @@
+<div class="container">
+  <%= render "forms/tabs" %>
+</div>
+
+<div class="container">
+  <%= render "_form_core/render/form",
+             form: @form, instance: @instance,
+             options: {scope: :preview, url: form_preview_path(@form), local: true} %>
+</div>

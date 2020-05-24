@@ -8,6 +8,7 @@ AllCops:
     - bin/**/*
     - test/dummy/bin/**/*
     - test/dummy/db/schema.rb
+    - test/dummy/config/routes.rb
 
 Rails:
   Enabled: true
@@ -95,6 +96,9 @@ Layout/EmptyLineAfterMagicComment:
   Enabled: true
 
 Layout/EmptyLinesAroundBlockBody:
+  Enabled: true
+
+Layout/EmptyLinesAroundAttributeAccessor:
   Enabled: true
 
 # In a regular class definition, no empty lines around the body.
@@ -210,6 +214,9 @@ Layout/SpaceAroundMethodCallOperator:
 Style/RedundantPercentQ:
   Enabled: true
 
+Lint/DeprecatedOpenSSLConstant:
+  Enabled: true
+
 Lint/AmbiguousOperator:
   Enabled: true
 
@@ -263,6 +270,9 @@ Style/RedundantReturn:
 Style/Semicolon:
   Enabled: true
   AllowAsExpressionSeparator: true
+
+Style/SlicingWithRange:
+  Enabled: true
 
 # Prefer Foo.method over Foo::method
 Style/ColonMethodCall:

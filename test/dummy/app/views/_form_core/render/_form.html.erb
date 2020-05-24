@@ -1,0 +1,10 @@
+<% options ||= {} %>
+<%= form_with(model: instance, **options, local: true) do |f| %>
+  <% fields = form.fields.map { |field| present(field, target: instance) }.reject(&:access_hidden?) %>
+
+  <% fields.each do |field| %>
+    <%= render "_form_core/fields/#{field.type_key}", f: f, field: field %>
+  <% end %>
+
+  <%= f.submit "Submit", class: "btn btn-primary" %>
+<% end %>

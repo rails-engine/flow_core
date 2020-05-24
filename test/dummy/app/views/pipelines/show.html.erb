@@ -1,0 +1,121 @@
+<div class="container">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h2>
+      <%= @pipeline.name %>
+    </h2>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <%= link_to 'Edit', edit_pipeline_path(@pipeline), class: "btn btn-primary mr-2" %>
+      <%= link_to 'Deploy', deploy_pipeline_path(@pipeline), method: "Deploy", class: "btn btn-primary mr-2" %>
+      <%= link_to 'Back', pipelines_path, class: "btn btn-primary" %>
+    </div>
+  </div>
+
+  <div>
+    <table class="table table-striped table-borderless">
+      <tbody>
+      <tr>
+        <th scope="row">ID</th>
+        <td><%= @pipeline.id %></td>
+      </tr>
+      <tr>
+        <th scope="row">Name</th>
+        <td><%= @pipeline.name %></td>
+      </tr>
+      <tr>
+        <th scope="row">Created at</th>
+        <td><%= time_tag @pipeline.created_at %></td>
+      </tr>
+      <tr>
+        <th scope="row">Form</th>
+        <td>
+          <% if @pipeline.form %>
+            <%= link_to @pipeline.form.name, form_fields_path(@pipeline.form) %>
+          <% end %>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h4>
+      Designer
+    </h4>
+    <div class="btn-toolbar mb-2 mb-md-0">
+    </div>
+  </div>
+
+  <p class="text-center">
+    <%#= io = StringIO.new; @pipeline.to_graphviz.dump_graph(io); io.string %>
+    <%= Graphviz::output(@pipeline.to_designer_graphviz, format: "svg").html_safe %>
+  </p>
+
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h4>
+      Diagram
+    </h4>
+    <div class="btn-toolbar mb-2 mb-md-0">
+    </div>
+  </div>
+
+  <p class="text-center">
+    <%#= io = StringIO.new; @pipeline.to_graphviz.dump_graph(io); io.string %>
+    <%= Graphviz::output(@pipeline.to_graphviz, format: "svg").html_safe %>
+  </p>
+
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h4>
+      Steps
+    </h4>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <%= link_to 'New Step', new_pipeline_step_path(@pipeline), class: "btn btn-primary" %>
+    </div>
+  </div>
+
+  <div>
+    <table class="table table-borderless table-hover" id="steps-table">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Trigger</th>
+        <th>Position</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @pipeline.steps.includes(:transition_trigger).each do |step| %>
+        <tr class="ui-state-default" data-id="<%= step.id %>">
+          <td><%= step.id %></td>
+          <td><%= step.name %></td>
+          <td><%= step.type.present? ? step.model_name.human : nil %></td>
+          <td><%= step.transition_trigger ? step.transition_trigger.model_name.human : nil %></td>
+          <td><%= step.position %></td>
+          <td>
+            <%= link_to "Edit", edit_pipeline_step_path(@pipeline, step) %> |
+            <%= link_to "Destroy", pipeline_step_path(@pipeline, step), method: :delete, data: { confirm: "Are you sure?" } %>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("turbolinks:load", function() {
+    $("#steps-table > tbody").sortable({
+      axis: "y",
+      update: function(e, ui) {
+        const id = ui.item.attr("data-id");
+        const position = ui.item.index() + 1;
+        Rails.ajax({
+          url: '<%= move_pipeline_steps_path(@pipeline) %>',
+          type: "PUT",
+          data: "step_id=" + id + "&" + "position=" + position,
+        });
+      }
+    });
+  });
+</script>

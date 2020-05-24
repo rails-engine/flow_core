@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      Pipelines
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <%= link_to 'New Pipeline', new_pipeline_path, class: "btn btn-primary" %>
+    </div>
+  </div>
+
+  <table class="table table-borderless table-hover">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Type</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @pipelines.each do |pipeline| %>
+      <tr>
+        <td><%= pipeline.id %></td>
+        <td><%= pipeline.name %></td>
+        <td><%= pipeline.type %></td>
+        <td>
+          <%= link_to 'Show', pipeline_path(pipeline) %> |
+          <%= link_to 'Edit', edit_pipeline_path(pipeline) %> |
+          <%= link_to 'Destroy', pipeline_path(pipeline), method: :delete, data: { confirm: 'Are you sure?' } %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>

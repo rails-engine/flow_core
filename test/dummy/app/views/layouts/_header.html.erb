@@ -9,14 +9,17 @@
         <%= nav_link path: "home#index", html_options: { class: "nav-item" } do %>
           <% link_to "Home", root_path, class: "nav-link" %>
         <% end %>
+        <%= nav_link controller: %w[forms fields nested_forms], html_options: { class: "nav-item" } do %>
+          <% link_to "Forms", forms_path, class: "nav-link" %>
+        <% end %>
+        <%= nav_link controller: "pipelines", html_options: { class: "nav-item" } do %>
+          <% link_to "Pipelines", pipelines_path, class: "nav-link" %>
+        <% end %>
         <%= nav_link controller: "workflows", html_options: { class: "nav-item" } do %>
           <% link_to "Workflow", workflows_path, class: "nav-link" %>
         <% end %>
         <%= nav_link controller: "instances", html_options: { class: "nav-item" } do %>
           <% link_to "Instance", instances_path, class: "nav-link" %>
-        <% end %>
-        <%= nav_link controller: %i[leaves leave_approvals], html_options: { class: "nav-item" } do %>
-          <% link_to "Leave Demo", leaves_path, class: "nav-link" %>
         <% end %>
       </ul>
       <ul class="navbar-nav mt-2 mt-md-0">

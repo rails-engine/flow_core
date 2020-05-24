@@ -5,13 +5,15 @@
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
       <% if @instance.created? %>
-        <%= link_to "Activate", activate_instance_path(@instance), method: :patch, class: "btn btn-sm btn-primary" %>
+        <%= link_to "Activate", activate_instance_path(@instance), method: :patch, class: "btn btn-primary mr-2" %>
       <% end %>
+      <%= link_to "Definition", workflow_path(@instance.workflow), class: "btn btn-primary" %>
     </div>
   </div>
 
   <p>
-    <%= @instance.workflow.to_graph(instance: @instance).output(svg: String).html_safe %>
+    <%#= io = StringIO.new; @pipeline.to_graphviz.dump_graph(io); io.string %>
+    <%= Graphviz::output(@instance.workflow.to_graphviz(instance: @instance), format: "svg").html_safe %>
   </p>
 
   <table class="table">
@@ -19,6 +21,7 @@
     <tr>
       <th>ID</th>
       <th>Status</th>
+      <th>Creator</th>
       <th>Created at</th>
       <th>Activated at</th>
       <th>Finished at</th>
@@ -28,6 +31,7 @@
     <tr>
       <td><%= @instance.id %></td>
       <td><%= @instance.stage %></td>
+      <td><%= @instance.creator.try(:name) %></td>
       <td><%= @instance.created_at %></td>
       <td><%= time_tag @instance.activated_at if @instance.activated_at %></td>
       <td><%= time_tag @instance.finished_at if @instance.finished_at %></td>
@@ -35,7 +39,66 @@
     </tbody>
   </table>
 
-  <h2>Tasks:</h2>
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      Payload
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+    </div>
+  </div>
+
+  <p>
+    <code>
+      <%= @instance.payload %>
+    </code>
+  </p>
+
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      Todo
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+    </div>
+  </div>
+
+  <table class="table table-borderless">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Transition</th>
+      <th>Assignee</th>
+      <th>Created at</th>
+      <th>Finished at</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <% @human_tasks.each do |task| %>
+      <tr>
+        <td><%= task.id %></td>
+        <td><%= task.task.transition.name %></td>
+        <td><%= task.assignable.try(:name) %></td>
+        <td><%= time_tag task.created_at %></td>
+        <td><%= time_tag task.finished_at if task.finished_at %></td>
+        <td>
+          <% if task.finished? %>
+            <%= link_to "Show", human_task_path(task) %>
+          <% else %>
+            <%= link_to "Finish", human_task_path(task) %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      Tasks
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+    </div>
+  </div>
 
   <table class="table table-borderless">
     <thead>

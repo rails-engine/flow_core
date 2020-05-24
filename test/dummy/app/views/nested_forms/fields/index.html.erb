@@ -1,0 +1,68 @@
+<div class="container">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h2>
+      Nested form fields
+    </h2>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <%= link_to "New field", new_nested_form_field_path(@nested_form), class: "btn btn-primary mr-2" %>
+      <%= link_to "Back", smart_form_fields_path(@nested_form.attachable.form), class: "btn btn-primary" %>
+    </div>
+  </div>
+
+  <table class="table table-borderless table-striped fields">
+    <thead>
+    <tr>
+      <th>Key</th>
+      <th>Name</th>
+      <th>Type</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @fields.sort_by(&:position).each do |field| %>
+      <tr class="ui-state-default" data-id="<%= field.id %>">
+        <td><%= field.name %></td>
+        <td><%= field.name %></td>
+        <td><%= field.class.model_name.human %></td>
+        <td>
+          <% if field.attached_choices? %>
+            <%= link_to "Choices", field_choices_path(field) %> |
+          <% end %>
+          <% if field.validations_configurable? %>
+            <%= link_to "Validations", edit_field_validations_path(field) %> |
+          <% end %>
+          <% if field.options_configurable? %>
+            <%= link_to "Options", edit_field_options_path(field) %> |
+          <% end %>
+          <% if field.attached_data_source? %>
+            <%= link_to "Data source", edit_field_data_source_options_path(field) %> |
+          <% end %>
+          <% if field.attached_nested_form? %>
+            <%= link_to "Fields", nested_form_fields_path(field.nested_form) %> |
+          <% end %>
+          <%= link_to "Edit", edit_nested_form_field_path(@nested_form, field) %> |
+          <%= link_to "Destroy", nested_form_field_path(@nested_form, field), method: :delete, data: {confirm: "Are you sure?"} %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+
+  <script>
+    document.addEventListener("turbolinks:load", function() {
+      $(".form-section > tbody").sortable({
+        axis: "y",
+        update: function(e, ui) {
+          const id = ui.item.attr("data-id");
+          const position = ui.item.index() + 1;
+          Rails.ajax({
+            url: '<%= move_nested_form_fields_path(@nested_form) %>',
+            type: "PUT",
+            data: "field_id=" + id + "&" + "position=" + position,
+          });
+        }
+      });
+    });
+  </script>
+</div>
+

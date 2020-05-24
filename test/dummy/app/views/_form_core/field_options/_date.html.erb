@@ -1,0 +1,101 @@
+<h4>Begin from</h4>
+
+<div class="form-row align-items-center mb-2">
+  <div class="col-auto">
+    <div class="form-check">
+      <%= f.radio_button :begin_from, "unlimited", id: "begin_from_unlimited", class: "form-check-input" %>
+      <%= f.label :begin_from, "Unlimited", for: "begin_from_unlimited", class: "form-check-label" %>
+    </div>
+  </div>
+</div>
+
+<div class="form-row align-items-center mb-2">
+  <div class="col-auto">
+    <div class="form-check">
+      <%= f.radio_button :begin_from, "today", id: "begin_from_today", class: "form-check-input" %>
+      <%= f.label :begin_from, "Today with offset", for: "begin_from_today", class: "form-check-label" %>
+    </div>
+  </div>
+  <div class="col-auto">
+    <%= f.number_field :begin_from_today_days_offset, class: "form-control", step: 1, class_for_error: "is-invalid" %>
+    <%= f.error_message :begin_from_today_days_offset, class: "invalid-feedback" %>
+  </div>
+</div>
+
+<div class="form-row align-items-center mb-2">
+  <div class="col-auto">
+    <div class="form-check mb-2">
+      <%= f.radio_button :begin_from, "date", id: "begin_from_date", class: "form-check-input" %>
+      <%= f.label :begin_from, "Date", for: "begin_from_date", class: "form-check-label" %>
+    </div>
+  </div>
+  <div class="col-auto">
+    <%= f.number_field :begin, class: "form-control", step: 1, class_for_error: "is-invalid" %>
+    <%= f.error_message :begin, class: "invalid-feedback" %>
+  </div>
+</div>
+
+<div class="form-row align-items-center mb-2">
+  <div class="col-auto">
+    <div class="form-check mb-2">
+      <%= f.radio_button :begin_from, "days_before_end", id: "begin_from_days_before_end", class: "form-check-input" %>
+      <%= f.label :begin_from, "Days before end", for: "begin_from_days_before_end", class: "form-check-label" %>
+    </div>
+  </div>
+  <div class="col-auto">
+    <%= f.number_field :days_before_end, class: "form-control", class_for_error: "is-invalid", min: 1, step: 1 %>
+    <%= f.error_message :days_before_end, class: "invalid-feedback" %>
+  </div>
+</div>
+
+<h4>
+  End to
+</h4>
+
+<div class="form-row align-items-center mb-2">
+  <div class="col-auto">
+    <div class="form-check mb-2">
+      <%= f.radio_button :end_to, "unlimited", id: "end_to_unlimited", class: "form-check-input" %>
+      <%= f.label :end_to, "Unlimited", for: "end_to_unlimited", class: "form-check-label" %>
+    </div>
+  </div>
+</div>
+
+<div class="form-row align-items-center mb-2">
+  <div class="col-auto">
+    <div class="form-check">
+      <%= f.radio_button :end_to, "today", id: "end_to_today", class: "form-check-input" %>
+      <%= f.label :end_to, "Today with offset", for: "end_to_today", class: "form-check-label" %>
+    </div>
+  </div>
+  <div class="col-auto">
+    <%= f.number_field :end_to_today_days_offset, class: "form-control", step: 1, class_for_error: "is-invalid" %>
+    <%= f.error_message :end_to_today_days_offset, class: "invalid-feedback" %>
+  </div>
+</div>
+
+<div class="form-row align-items-center mb-2">
+  <div class="col-auto">
+    <div class="form-check mb-2">
+      <%= f.radio_button :end_to, "date", id: "end_to_date", class: "form-check-input" %>
+      <%= f.label :end_to, "Date", for: "end_to_date", class: "form-check-label" %>
+    </div>
+  </div>
+  <div class="col-auto">
+    <%= f.number_field :end, class: "form-control", step: 1, class_for_error: "is-invalid" %>
+    <%= f.error_message :end, class: "invalid-feedback" %>
+  </div>
+</div>
+
+<div class="form-row align-items-center mb-2">
+  <div class="col-auto">
+    <div class="form-check mb-2">
+      <%= f.radio_button :end_to, "days_since_begin", id: "end_to_days_since_begin", class: "form-check-input" %>
+      <%= f.label :end_to, "Days since begin", for: "end_to_days_since_begin", class: "form-check-label" %>
+    </div>
+  </div>
+  <div class="col-auto">
+    <%= f.number_field :days_since_begin, class: "form-control", class_for_error: "is-invalid", min: 1, step: 1 %>
+    <%= f.error_message :days_since_begin, class: "invalid-feedback" %>
+  </div>
+</div>

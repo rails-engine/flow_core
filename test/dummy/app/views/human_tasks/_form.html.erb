@@ -1,0 +1,15 @@
+<%= form_with(model: human_task, scope: :human_task, url: human_task_path(human_task), method: :patch, local: true) do |f| %>
+  <%= f.fields_for :form_record, human_task.form_record do |ff| %>
+    <% fields = human_task.workflow.form.fields.order(position: :asc).map { |field| present(field, target: human_task.form_record) }.reject(&:access_hidden?) %>
+
+    <% fields.each do |field| %>
+      <%= render "_form_core/fields/#{field.type_key}", f: ff, field: field %>
+    <% end %>
+  <% end %>
+
+  <% unless human_task.finished? %>
+    <div class="form-group">
+      <%= f.submit class: "btn btn-primary" %>
+    </div>
+  <% end %>
+<% end %>

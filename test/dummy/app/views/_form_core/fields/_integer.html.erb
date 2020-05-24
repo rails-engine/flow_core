@@ -1,0 +1,12 @@
+<div class="form-group row">
+  <%= f.label field.key, field.key, class: 'col-sm-2 col-form-label' %>
+  <div class="col-sm-10">
+    <%= f.number_field field.key, class: 'form-control', id: field.id, required: field.required, disabled: field.disabled?, class_for_error: "is-invalid", **field.to_builder_options %>
+    <%= f.error_message field.key, class: "invalid-feedback" %>
+    <% if field.hint.present? %>
+      <span class="form-text text-muted">
+        <%= field.hint %>
+      </span>
+    <% end %>
+  </div>
+</div>

@@ -5,8 +5,8 @@ FlowCore::Workflow.class_eval do
     false
   end
 
-  def to_graph(instance: nil)
-    graph = GraphViz.new(name, type: :digraph, rankdir: "LR", splines: true, ratio: :auto)
+  def to_graphviz(instance: nil)
+    graph = Graphviz::Graph.new(rankdir: "LR", splines: :spline, ratio: :auto)
     free_token_places =
       if instance
         instance.tokens.where(stage: %i[free locked]).map(&:place_id)
@@ -27,18 +27,20 @@ FlowCore::Workflow.class_eval do
         shape     = :circle
       end
 
+      node_name = "workflow_#{id}_place_#{p.id}"
       token_count = free_token_places.count(p.id)
       label = token_count.positive? ? "&bull;" * token_count : ""
-      xlabel = p.name
+      xlabel = p.name || ""
 
-      pg = graph.add_nodes p.name, xlabel: xlabel, label: label, shape: shape, fixedsize: true, style: :filled, fillcolor: fillcolor
-      pg_mapping[p] = pg
+      node = Graphviz::Node.new node_name, graph, xlabel: xlabel, label: label, shape: shape, fixedsize: true, style: :filled, fillcolor: fillcolor
+      pg_mapping[p] = node
     end
 
     tg_mapping = {}
     transitions.each do |t|
-      tg = graph.add_nodes t.name, label: t.name, shape: :box, style: :filled, fillcolor: :lightblue
-      tg_mapping[t] = tg
+      node_name = "workflow_#{id}_transition_#{t.id}"
+      node = Graphviz::Node.new node_name, graph, label: t.name, shape: :box, style: :filled, fillcolor: :lightblue
+      tg_mapping[t] = node
     end
 
     arcs.order("direction desc").each do |arc|
@@ -48,120 +50,22 @@ FlowCore::Workflow.class_eval do
         else
           ""
         end
+      style = ""
+
       if arc.in?
-        graph.add_edges(
-          pg_mapping[arc.place],
-          tg_mapping[arc.transition],
-          label: label,
-          weight: 1,
-          labelfloat: false,
-          labelfontcolor: :red,
-          arrowhead: :vee
-        )
+        from = pg_mapping.fetch(arc.place)
+        to = tg_mapping.fetch(arc.transition)
       else
-        graph.add_edges(
-          tg_mapping[arc.transition],
-          pg_mapping[arc.place],
-          label: label,
-          weight: 1,
-          labelfloat: false,
-          labelfontcolor: :red,
-          arrowhead: :vee
-        )
-      end
-    end
-    graph
-  end
-
-  def to_graph2(instance: nil)
-    graph = GraphViz.new(name, type: :digraph, rankdir: "LR", splines: true, ratio: :auto)
-    free_token_places =
-      if instance
-        instance.tokens.where(stage: %i[free locked]).map(&:place_id)
-      else
-        []
-      end
-
-    pg_mapping = {}
-    [start_place, end_place].compact.each do |p|
-      if p.start?
-        fillcolor = :yellow
-        shape     = :doublecircle
-      elsif p.end? && p.input_arcs.any?
-        fillcolor = :green
-        shape     = :doublecircle
-      else
-        next
-      end
-
-      token_count = free_token_places.count(p.id)
-      label = token_count.positive? ? "&bull;" * token_count : ""
-      name = p.name || "P_#{p.id}"
-      xlabel = p.name || "P_#{p.id}"
-
-      pg = graph.add_nodes name, xlabel: xlabel, label: label, shape: shape, fixedsize: true, style: :filled, fillcolor: fillcolor # href: Rails.routes.url_helpers.edit_workflow_place_path(self, p)
-      pg_mapping[p] = pg
-    end
-
-    tg_mapping = {}
-    transitions.each do |t|
-      name = t.name || "T_#{t.id}"
-      label = t.name || "T_#{t.id}"
-      tg = graph.add_nodes name, label: label, shape: :box, style: :filled, fillcolor: :lightblue # href: Rails.routes.url_helpers.edit_workflow_transition_path(self, t)
-      tg_mapping[t] = tg
-    end
-
-    arcs.order("direction desc").each do |arc|
-      label =
-        if arc.guards.size.positive?
-          arc.guards.map(&:description).join(" & ")
-        else
-          ""
+        from = tg_mapping.fetch(arc.transition)
+        to = pg_mapping.fetch(arc.place)
+        if arc.transition.match_one_or_fallback_strategy? && arc.fallback_arc?
+          style = "bold"
         end
-      if arc.place.start?
-        from = arc.in? ? pg_mapping[arc.place] : tg_mapping[arc.transition]
-        to = arc.in? ? tg_mapping[arc.transition] : pg_mapping[arc.place]
-
-        graph.add_edges(
-          from,
-          to,
-          label: label,
-          weight: 1,
-          labelfloat: false,
-          labelfontcolor: :red,
-          arrowhead: :vee
-          # href: Rails.routes.url_helpers.edit_workflow_arc_path(self, arc)
-        )
-      elsif arc.place.end?
-        next unless pg_mapping[arc.place]
-
-        graph.add_edges(
-          tg_mapping[arc.transition],
-          pg_mapping[arc.place],
-          label: label,
-          weight: 1,
-          labelfloat: false,
-          labelfontcolor: :red,
-          arrowhead: :vee
-          # href: Rails.routes.url_helpers.edit_workflow_arc_path(self, arc)
-        )
-      elsif arc.out?
-        arc.place.output_transitions.each do |output_transition|
-          graph.add_edges(
-            tg_mapping[arc.transition],
-            tg_mapping[output_transition],
-            label: label,
-            weight: 1,
-            labelfloat: false,
-            labelfontcolor: :red,
-            arrowhead: :vee
-            # href: Rails.routes.url_helpers.edit_workflow_arc_path(self, arc)
-          )
-        end
-      else
-        next
       end
+
+      from.connect to, label: label, labelfloat: false, labelfontcolor: :red, arrowhead: :vee, style: style
     end
+
     graph
   end
 end

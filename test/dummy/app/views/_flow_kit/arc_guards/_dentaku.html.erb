@@ -1,0 +1,21 @@
+<%= f.fields_for :configuration, guard.configuration do |ff| %>
+  <div class="form-group">
+    <%= ff.label :name %>
+    <%= ff.text_field :name, required: "required", class: "form-control", class_for_error: "is-invalid" %>
+    <%= ff.error_message :name, class: "invalid-feedback" %>
+  </div>
+
+  <div class="form-group">
+    <%= ff.label :expression %>
+    <%= ff.text_field :expression, required: "required", class: "form-control", class_for_error: "is-invalid" %>
+    <%= ff.error_message :expression, class: "invalid-feedback" %>
+    <span class="form-text text-muted">
+      See <a href="https://github.com/rubysolo/dentaku" rel="nofollow" target="_blank">rubysolo/dentaku</a> to learn how to use Dentaku.
+      <br>
+      Use field's key to access it, all field are <code>String</code>,
+      Use convert functions <code>to_i</code>, <code>to_f</code>,<code>to_d</code>,
+      <br>
+      e.g. <code>to_i(age) > 18</code>.
+    </span>
+  </div>
+<% end %>

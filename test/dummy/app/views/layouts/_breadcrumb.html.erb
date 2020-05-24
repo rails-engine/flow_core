@@ -1,0 +1,29 @@
+<div class="container header-secondary">
+  <div class="has-toolbar">
+    <ol class="breadcrumb round-0 bg-white mb-0 px-sm-0 mr-auto">
+      <% breadcrumbs[0..-2].each do |breadcrumb| %>
+        <li class="breadcrumb-item">
+          <% if breadcrumb[:link].present? %>
+            <%= link_to breadcrumb[:text], breadcrumb[:link] %>
+          <% else %>
+            <%= breadcrumb[:text] %>
+          <% end %>
+        </li>
+      <% end %>
+      <% if breadcrumbs[-1] %>
+        <% breadcrumb = breadcrumbs[-1] %>
+        <li class="breadcrumb-item active" aria-current="page">
+          <% if breadcrumb[:link].present? %>
+            <%= link_to breadcrumb[:text], breadcrumb[:link] %>
+          <% else %>
+            <%= breadcrumb[:text] %>
+          <% end %>
+        </li>
+      <% end %>
+    </ol>
+
+    <div class="btn-toolbar mb-0 align-items-center">
+      <%= yield :breadcrumb_menu %>
+    </div>
+  </div>
+</div>

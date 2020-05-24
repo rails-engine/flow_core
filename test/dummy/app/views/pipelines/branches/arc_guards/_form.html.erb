@@ -1,0 +1,12 @@
+<% url = arc_guard.new_record? ? pipeline_branch_arc_guards_path(pipeline, branch) : pipeline_branch_arc_guard_path(pipeline, branch, arc_guard)  %>
+<%= form_with(model: arc_guard, scope: :arc_guard, url: url, local: true) do |f| %>
+  <%= f.hidden_field :type %>
+
+  <% if arc_guard.configurable? %>
+    <%= render partial: "_flow_kit/arc_guards/#{arc_guard.type_key}", locals: { f: f, guard: arc_guard } %>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.submit class: "btn btn-primary" %>
+  </div>
+<% end %>

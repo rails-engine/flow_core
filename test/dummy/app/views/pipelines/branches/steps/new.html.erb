@@ -1,0 +1,13 @@
+<div class="container">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      New Step
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <%= link_to "<<", pipeline_path(@pipeline), class: "btn btn-primary mr-2" %>
+      <%= link_to "Back", pipeline_branch_path(@pipeline, @branch), class: "btn btn-primary" %>
+    </div>
+  </div>
+
+  <%= render "form", pipeline: @pipeline, branch: @branch, step: @step %>
+</div>

@@ -4,7 +4,7 @@ class WorkflowsController < ApplicationController
   before_action :set_workflow, only: %i[show edit update destroy verify]
 
   def index
-    @workflows = FlowCore::Workflow.all
+    @workflows = FlowCore::Workflow.all.includes(:generated_by)
   end
 
   def show; end
@@ -19,7 +19,7 @@ class WorkflowsController < ApplicationController
     @workflow = FlowCore::Workflow.new(workflow_params)
 
     if @workflow.save
-      redirect_to workflow_path(@workflow), notice: "Workflows was successfully created."
+      redirect_to workflow_url(@workflow), notice: "Workflows was successfully created."
     else
       render :new
     end
@@ -27,7 +27,7 @@ class WorkflowsController < ApplicationController
 
   def update
     if @workflow.update(workflow_params)
-      redirect_to workflow_path(@workflow), notice: "Workflows was successfully updated."
+      redirect_to workflow_url(@workflow), notice: "Workflows was successfully updated."
     else
       render :edit
     end
@@ -40,7 +40,7 @@ class WorkflowsController < ApplicationController
 
   def verify
     @workflow.verify!
-    redirect_to workflow_path(@workflow)
+    redirect_to workflow_url(@workflow)
   end
 
   private

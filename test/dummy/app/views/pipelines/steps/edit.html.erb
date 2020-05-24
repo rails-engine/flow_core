@@ -1,0 +1,130 @@
+<div class="container">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      Editing Step
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <%= link_to "Back", pipeline_path(@pipeline), class: "btn btn-primary mr-2" %>
+      <%= link_to "Destroy", pipeline_step_path(@pipeline, @step), method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure?" } %>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <%= render "form", pipeline: @pipeline, step: @step %>
+  </div>
+
+  <% if @step.redirection_configurable? %>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <h4>
+        Redirection
+      </h4>
+      <div class="btn-toolbar mb-2 mb-md-0">
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <%= render "pipelines/steps/redirections/form", pipeline: @pipeline, step: @step %>
+    </div>
+  <% end %>
+
+  <% if @step.transition_trigger_attachable? %>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <h4>
+        Trigger
+      </h4>
+      <div class="btn-toolbar mb-2 mb-md-0">
+        <% if @step.transition_trigger %>
+          <%= link_to "Destroy", pipeline_step_transition_trigger_path(@pipeline, @step), method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure?" } %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <% if @step.transition_trigger %>
+        <%= render "pipelines/steps/transition_triggers/form", pipeline: @pipeline, step: @step, transition_trigger: @step.transition_trigger %>
+      <% else %>
+        <%= form_with url: new_pipeline_step_transition_trigger_path(@pipeline, @step), method: :get, local: true do |f| %>
+          <div class="form-group">
+            <%= f.label :type %>
+            <%= f.select :type, trigger_types_options_for_select, {}, class: "form-control" %>
+          </div>
+
+          <%= f.submit "Next", class: "btn btn-primary" %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if @step.transition_callback_attachable? %>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <h4>
+        Callbacks
+      </h4>
+      <div class="btn-toolbar mb-2 mb-md-0">
+        <%= link_to "New", new_pipeline_step_transition_callback_path(@pipeline, @step), class: "btn btn-primary" %>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <table class="table table-borderless table-hover">
+        <thead>
+        <tr>
+          <th>Type</th>
+          <th>On</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <% @step.transition_callbacks.each do |callback| %>
+          <tr>
+            <td><%= callback.model_name.human %></td>
+            <td><%= callback.on %></td>
+            <td>
+              <%= link_to "Edit", edit_pipeline_step_transition_callback_path(@pipeline, @step, callback) %> |
+              <%= link_to "Destroy", pipeline_step_transition_callback_path(@pipeline, @step, callback), method: :delete, data: { confirm: "Are you sure?" } %>
+            </td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+
+  <% if @step.multi_branch_step? %>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <h2>
+        Branches
+      </h2>
+      <div class="btn-toolbar mb-2 mb-md-0">
+        <%= link_to 'New', new_pipeline_step_branch_path(@pipeline, @step), class: "btn btn-primary mr-2" %>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <table class="table table-borderless table-hover" id="steps-table">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <% @step.branches.each do |branch| %>
+          <tr>
+            <td><%= branch.id %></td>
+            <td><%= branch.name %></td>
+            <td>
+              <%= link_to "Steps", pipeline_branch_path(@pipeline, branch) %> |
+              <%= link_to "Edit", edit_pipeline_branch_path(@pipeline, branch) %>
+              <% if branch.user_destroyable? %>
+                | <%= link_to "Destroy", pipeline_branch_path(@pipeline, branch), method: :delete, data: { confirm: "Are you sure?" } %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,12 @@
+<% url = pipeline_step_transition_trigger_path(pipeline, step) %>
+<%= form_with(model: transition_trigger, scope: :transition_trigger, url: url, local: true) do |f| %>
+  <%= f.hidden_field :type %>
+
+  <% if transition_trigger.configurable? %>
+    <%= render partial: "_flow_kit/transition_triggers/#{transition_trigger.type_key}", locals: { f: f, trigger: transition_trigger } %>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.submit class: "btn btn-primary" %>
+  </div>
+<% end %>

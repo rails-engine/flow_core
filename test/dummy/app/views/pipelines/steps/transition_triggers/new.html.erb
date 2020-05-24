@@ -1,0 +1,24 @@
+<div class="container">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      New trigger
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <%= link_to "<<", pipeline_path(@pipeline), class: "btn btn-primary mr-2" %>
+      <%= link_to 'Back', edit_pipeline_step_path(@pipeline, @step), class: "btn btn-primary" %>
+    </div>
+  </div>
+
+  <% if @transition_trigger %>
+    <%= render "form", pipeline: @pipeline, step: @step, transition_trigger: @transition_trigger %>
+  <% else %>
+    <%= form_with url: new_pipeline_step_transition_trigger_path(@pipeline, @step), method: :get, local: true do |f| %>
+      <div class="form-group">
+        <%= f.label :type %>
+        <%= f.select :type, trigger_types_options_for_select, {}, class: "form-control" %>
+      </div>
+
+      <%= f.submit "Next", class: "btn btn-block btn-primary" %>
+    <% end %>
+  <% end %>
+</div>

@@ -15,12 +15,12 @@
 
   <body class="d-flex flex-column h-100">
     <%= render "layouts/header" %>
-
+    <%= yield(:custom_header) if content_for?(:custom_header) %>
+    <%= render_breadcrumbs %>
+    <%= render "layouts/alert" %>
     <main role="main" class="flex-shrink-0">
-      <%= render "layouts/alert" %>
-      <%= yield %>
+      <%= content_for?(:content) ? yield(:content) : yield %>
     </main>
-
     <%= render "layouts/footer" %>
   </body>
 </html>

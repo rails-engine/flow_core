@@ -10,16 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_16_160434) do
+ActiveRecord::Schema.define(version: 2020_05_23_233226) do
 
   create_table "flow_core_arc_guards", force: :cascade do |t|
-    t.integer "workflow_id", null: false
-    t.integer "arc_id", null: false
+    t.integer "workflow_id"
+    t.integer "arc_id"
     t.text "configuration"
     t.string "type"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "pipeline_id"
+    t.integer "branch_id"
     t.index ["arc_id"], name: "index_flow_core_arc_guards_on_arc_id"
+    t.index ["branch_id"], name: "index_flow_core_arc_guards_on_branch_id"
+    t.index ["pipeline_id"], name: "index_flow_core_arc_guards_on_pipeline_id"
     t.index ["workflow_id"], name: "index_flow_core_arc_guards_on_workflow_id"
   end
 
@@ -28,11 +32,23 @@ ActiveRecord::Schema.define(version: 2020_02_16_160434) do
     t.integer "transition_id", null: false
     t.integer "place_id", null: false
     t.integer "direction", default: 0, null: false
+    t.boolean "fallback_arc", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["place_id"], name: "index_flow_core_arcs_on_place_id"
     t.index ["transition_id"], name: "index_flow_core_arcs_on_transition_id"
     t.index ["workflow_id"], name: "index_flow_core_arcs_on_workflow_id"
+  end
+
+  create_table "flow_core_branches", force: :cascade do |t|
+    t.integer "pipeline_id", null: false
+    t.integer "step_id", null: false
+    t.string "name"
+    t.boolean "fallback_branch", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["pipeline_id"], name: "index_flow_core_branches_on_pipeline_id"
+    t.index ["step_id"], name: "index_flow_core_branches_on_step_id"
   end
 
   create_table "flow_core_instances", force: :cascade do |t|
@@ -47,10 +63,20 @@ ActiveRecord::Schema.define(version: 2020_02_16_160434) do
     t.text "payload"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "creator_type"
     t.integer "creator_id"
-    t.index ["creator_id"], name: "index_flow_core_instances_on_creator_id"
+    t.index ["creator_type", "creator_id"], name: "index_flow_core_instances_on_creator_type_and_creator_id"
     t.index ["tag"], name: "index_flow_core_instances_on_tag", unique: true
     t.index ["workflow_id"], name: "index_flow_core_instances_on_workflow_id"
+  end
+
+  create_table "flow_core_pipelines", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "type"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "form_id"
+    t.index ["form_id"], name: "index_flow_core_pipelines_on_form_id"
   end
 
   create_table "flow_core_places", force: :cascade do |t|
@@ -61,6 +87,23 @@ ActiveRecord::Schema.define(version: 2020_02_16_160434) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["workflow_id"], name: "index_flow_core_places_on_workflow_id"
+  end
+
+  create_table "flow_core_steps", force: :cascade do |t|
+    t.integer "pipeline_id", null: false
+    t.string "ancestry"
+    t.integer "position", null: false
+    t.string "name"
+    t.string "type"
+    t.boolean "verified", default: false, null: false
+    t.integer "redirect_to_step_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "branch_id"
+    t.index ["ancestry"], name: "index_flow_core_steps_on_ancestry"
+    t.index ["branch_id"], name: "index_flow_core_steps_on_branch_id"
+    t.index ["pipeline_id"], name: "index_flow_core_steps_on_pipeline_id"
+    t.index ["redirect_to_step_id"], name: "index_flow_core_steps_on_redirect_to_step_id"
   end
 
   create_table "flow_core_tasks", force: :cascade do |t|
@@ -114,23 +157,31 @@ ActiveRecord::Schema.define(version: 2020_02_16_160434) do
   end
 
   create_table "flow_core_transition_callbacks", force: :cascade do |t|
-    t.integer "workflow_id", null: false
-    t.integer "transition_id", null: false
+    t.integer "workflow_id"
+    t.integer "transition_id"
     t.string "configuration"
     t.string "type"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "pipeline_id"
+    t.integer "step_id"
+    t.index ["pipeline_id"], name: "index_flow_core_transition_callbacks_on_pipeline_id"
+    t.index ["step_id"], name: "index_flow_core_transition_callbacks_on_step_id"
     t.index ["transition_id"], name: "index_flow_core_transition_callbacks_on_transition_id"
     t.index ["workflow_id"], name: "index_flow_core_transition_callbacks_on_workflow_id"
   end
 
   create_table "flow_core_transition_triggers", force: :cascade do |t|
-    t.integer "workflow_id", null: false
-    t.integer "transition_id", null: false
+    t.integer "workflow_id"
+    t.integer "transition_id"
     t.text "configuration"
     t.string "type"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "pipeline_id"
+    t.integer "step_id"
+    t.index ["pipeline_id"], name: "index_flow_core_transition_triggers_on_pipeline_id"
+    t.index ["step_id"], name: "index_flow_core_transition_triggers_on_step_id"
     t.index ["transition_id"], name: "index_flow_core_transition_triggers_on_transition_id"
     t.index ["workflow_id"], name: "index_flow_core_transition_triggers_on_workflow_id"
   end
@@ -139,8 +190,12 @@ ActiveRecord::Schema.define(version: 2020_02_16_160434) do
     t.integer "workflow_id", null: false
     t.string "name"
     t.string "tag"
+    t.integer "output_token_create_strategy", default: 0, null: false
+    t.integer "auto_finish_strategy", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "generated_by_step_id"
+    t.index ["generated_by_step_id"], name: "index_flow_core_transitions_on_generated_by_step_id"
     t.index ["workflow_id"], name: "index_flow_core_transitions_on_workflow_id"
   end
 
@@ -152,30 +207,76 @@ ActiveRecord::Schema.define(version: 2020_02_16_160434) do
     t.string "type"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "generated_by_pipeline_id"
+    t.integer "form_id"
+    t.index ["form_id"], name: "index_flow_core_workflows_on_form_id"
+    t.index ["generated_by_pipeline_id"], name: "index_flow_core_workflows_on_generated_by_pipeline_id"
   end
 
-  create_table "human_tasks", force: :cascade do |t|
-    t.string "workflow_tag"
-    t.string "transition_tag"
-    t.integer "assignee_id"
+  create_table "flow_kit_assignee_candidates", force: :cascade do |t|
+    t.string "assignable_type", null: false
+    t.integer "assignable_id", null: false
+    t.integer "trigger_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["assignable_type", "assignable_id"], name: "index_flow_kit_assignee_candidates_on_assignable"
+    t.index ["trigger_id"], name: "index_flow_kit_assignee_candidates_on_trigger_id"
+  end
+
+  create_table "flow_kit_human_tasks", force: :cascade do |t|
+    t.integer "workflow_id", null: false
+    t.integer "instance_id", null: false
+    t.string "status", null: false
+    t.string "assignable_type"
+    t.integer "assignable_id"
+    t.datetime "assigned_at"
+    t.datetime "form_filled_at"
     t.datetime "finished_at"
     t.string "type"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["assignee_id"], name: "index_human_tasks_on_assignee_id"
+    t.index ["assignable_type", "assignable_id"], name: "index_form_kit_human_tasks_assignable"
+    t.index ["instance_id"], name: "index_flow_kit_human_tasks_on_instance_id"
+    t.index ["workflow_id"], name: "index_flow_kit_human_tasks_on_workflow_id"
   end
 
-  create_table "leaves", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.date "start_date"
-    t.date "end_date"
-    t.string "reason"
-    t.string "stage"
-    t.integer "workflow_instance_id"
+  create_table "form_kit_choices", force: :cascade do |t|
+    t.integer "form_id", null: false
+    t.integer "field_id", null: false
+    t.text "label", null: false
+    t.integer "position", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id"], name: "index_leaves_on_user_id"
-    t.index ["workflow_instance_id"], name: "index_leaves_on_workflow_instance_id"
+    t.index ["field_id"], name: "index_form_kit_choices_on_field_id"
+    t.index ["form_id"], name: "index_form_kit_choices_on_form_id"
+  end
+
+  create_table "form_kit_fields", force: :cascade do |t|
+    t.integer "form_id", null: false
+    t.string "name"
+    t.string "hint"
+    t.string "key", null: false
+    t.text "validations"
+    t.text "options"
+    t.text "default_value"
+    t.integer "position", default: 0, null: false
+    t.string "type", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["form_id", "key"], name: "index_form_kit_fields_on_form_id_and_key", unique: true
+    t.index ["form_id"], name: "index_form_kit_fields_on_form_id"
+  end
+
+  create_table "form_kit_forms", force: :cascade do |t|
+    t.string "attachable_type"
+    t.integer "attachable_id"
+    t.string "name"
+    t.string "key", null: false
+    t.string "type", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["attachable_type", "attachable_id"], name: "index_form_kit_forms_on_attachable_type_and_attachable_id"
+    t.index ["key"], name: "index_form_kit_forms_on_key", unique: true
   end
 
   create_table "notifications", force: :cascade do |t|
@@ -194,13 +295,20 @@ ActiveRecord::Schema.define(version: 2020_02_16_160434) do
   end
 
   add_foreign_key "flow_core_arc_guards", "flow_core_arcs", column: "arc_id"
+  add_foreign_key "flow_core_arc_guards", "flow_core_branches", column: "branch_id"
+  add_foreign_key "flow_core_arc_guards", "flow_core_pipelines", column: "pipeline_id"
   add_foreign_key "flow_core_arc_guards", "flow_core_workflows", column: "workflow_id"
   add_foreign_key "flow_core_arcs", "flow_core_places", column: "place_id"
   add_foreign_key "flow_core_arcs", "flow_core_transitions", column: "transition_id"
   add_foreign_key "flow_core_arcs", "flow_core_workflows", column: "workflow_id"
+  add_foreign_key "flow_core_branches", "flow_core_pipelines", column: "pipeline_id"
+  add_foreign_key "flow_core_branches", "flow_core_steps", column: "step_id"
   add_foreign_key "flow_core_instances", "flow_core_workflows", column: "workflow_id"
-  add_foreign_key "flow_core_instances", "users", column: "creator_id"
+  add_foreign_key "flow_core_pipelines", "form_kit_forms", column: "form_id"
   add_foreign_key "flow_core_places", "flow_core_workflows", column: "workflow_id"
+  add_foreign_key "flow_core_steps", "flow_core_branches", column: "branch_id"
+  add_foreign_key "flow_core_steps", "flow_core_pipelines", column: "pipeline_id"
+  add_foreign_key "flow_core_steps", "flow_core_steps", column: "redirect_to_step_id"
   add_foreign_key "flow_core_tasks", "flow_core_instances", column: "instance_id"
   add_foreign_key "flow_core_tasks", "flow_core_tokens", column: "created_by_token_id"
   add_foreign_key "flow_core_tasks", "flow_core_transitions", column: "transition_id"
@@ -210,13 +318,23 @@ ActiveRecord::Schema.define(version: 2020_02_16_160434) do
   add_foreign_key "flow_core_tokens", "flow_core_tasks", column: "consumed_by_task_id"
   add_foreign_key "flow_core_tokens", "flow_core_tasks", column: "created_by_task_id"
   add_foreign_key "flow_core_tokens", "flow_core_workflows", column: "workflow_id"
+  add_foreign_key "flow_core_transition_callbacks", "flow_core_pipelines", column: "pipeline_id"
+  add_foreign_key "flow_core_transition_callbacks", "flow_core_steps", column: "step_id"
   add_foreign_key "flow_core_transition_callbacks", "flow_core_transitions", column: "transition_id"
   add_foreign_key "flow_core_transition_callbacks", "flow_core_workflows", column: "workflow_id"
+  add_foreign_key "flow_core_transition_triggers", "flow_core_pipelines", column: "pipeline_id"
+  add_foreign_key "flow_core_transition_triggers", "flow_core_steps", column: "step_id"
   add_foreign_key "flow_core_transition_triggers", "flow_core_transitions", column: "transition_id"
   add_foreign_key "flow_core_transition_triggers", "flow_core_workflows", column: "workflow_id"
+  add_foreign_key "flow_core_transitions", "flow_core_steps", column: "generated_by_step_id"
   add_foreign_key "flow_core_transitions", "flow_core_workflows", column: "workflow_id"
-  add_foreign_key "human_tasks", "users", column: "assignee_id"
-  add_foreign_key "leaves", "flow_core_instances", column: "workflow_instance_id"
-  add_foreign_key "leaves", "users"
+  add_foreign_key "flow_core_workflows", "flow_core_pipelines", column: "generated_by_pipeline_id"
+  add_foreign_key "flow_core_workflows", "form_kit_forms", column: "form_id"
+  add_foreign_key "flow_kit_assignee_candidates", "flow_core_transition_triggers", column: "trigger_id"
+  add_foreign_key "flow_kit_human_tasks", "flow_core_instances", column: "instance_id"
+  add_foreign_key "flow_kit_human_tasks", "flow_core_workflows", column: "workflow_id"
+  add_foreign_key "form_kit_choices", "form_kit_fields", column: "field_id"
+  add_foreign_key "form_kit_choices", "form_kit_forms", column: "form_id"
+  add_foreign_key "form_kit_fields", "form_kit_forms", column: "form_id"
   add_foreign_key "notifications", "users"
 end

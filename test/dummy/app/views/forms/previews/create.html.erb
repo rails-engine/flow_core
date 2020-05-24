@@ -1,0 +1,17 @@
+<% content_for :actions do %>
+  <%= link_to 'Back', form_preview_path(@form), class: "btn btn-primary" %>
+<% end %>
+
+<div class="container">
+  <%= render "forms/tabs" %>
+</div>
+
+<div class="container">
+  <%= render "_form_core/preview/form", form: @form, instance: @instance %>
+</div>
+
+<div class="container">
+  <code>
+    <%= @instance.dump %>
+  </code>
+</div>

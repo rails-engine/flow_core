@@ -26,9 +26,15 @@ gem "rubocop"
 gem "rubocop-performance"
 gem "rubocop-rails"
 
+gem "activeentity"
+gem "acts_as_list"
+gem "cocoon"
 gem "dentaku"
-gem "kaminari"
+gem "form_core"
 gem "validates_timeliness", "~> 5.0.0.alpha4"
+
+gem "faker"
+gem "kaminari"
 
 # Support ES6
 gem "babel-transpiler"
@@ -37,6 +43,9 @@ gem "sassc-rails"
 
 gem "bootstrap", "~> 4.4"
 gem "jquery-rails"
+gem "jquery-ui-rails"
 gem "turbolinks"
+gem "selectize-rails"
 
-gem "ruby-graphviz", require: "graphviz"
+# gem "ruby-graphviz", require: "graphviz"
+gem "graphviz"

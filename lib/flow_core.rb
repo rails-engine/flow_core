@@ -6,6 +6,9 @@ require "rgl/topsort"
 require "rgl/traversal"
 require "rgl/path"
 
+require "acts_as_list"
+require "ancestry"
+
 require "flow_core/engine"
 
 require "flow_core/errors"

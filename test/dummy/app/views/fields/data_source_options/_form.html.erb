@@ -1,0 +1,5 @@
+<%= form_with(model: options, scope: :options, url: field_data_source_options_path(field), method: :patch, local: true) do |f| %>
+  <%= render "_form_core/data_source_options/#{options.type_key}", f: f, options: options %>
+
+  <%= f.submit class: "btn btn-block btn-primary" %>
+<% end %>

@@ -1,6 +1,15 @@
 # frozen_string_literal: true
 
 module ApplicationHelper
+  def present(model, options = {})
+    klass = options.delete(:presenter_class) || "#{model.class}Presenter".constantize
+    presenter = klass.new(model, self, options)
+
+    yield(presenter) if block_given?
+
+    presenter
+  end
+
   def options_for_enum_select(klass, attribute, selected = nil)
     container = klass.public_send(attribute.to_s.pluralize).map do |k, v|
       v ||= k

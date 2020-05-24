@@ -1,0 +1,61 @@
+en:
+  activerecord:
+    models:
+      form_kit/fields/boolean: Boolean field
+      form_kit/fields/text: Text field
+      form_kit/fields/decimal: Decimal field
+      form_kit/fields/integer: Integer field
+      form_kit/fields/date: Date field
+      form_kit/fields/datetime: Datetime field
+      form_kit/fields/choice: Choice field
+      form_kit/fields/multiple_choice: Multiple choice field
+      form_kit/fields/select: Select field
+      form_kit/fields/multiple_select: Multiple select field
+      form_kit/fields/resource_select: Resource select field
+      form_kit/fields/multiple_resource_select: Multiple resource select field
+      form_kit/fields/nested_form: Nested form field
+      form_kit/fields/multiple_nested_form: Multiple nested form field
+      form_kit/fields/date_range: Date range field
+      form_kit/fields/datetime_range: Datetime range field
+    attributes:
+      form_kit/form:
+        name: Name
+        type: Type
+      form_kit/field:
+        name: Name
+        label: Label
+        hint: Hint
+        type: Type
+  active_entity:
+    attributes:
+      field_options:
+        presence: Required
+        acceptance: Acceptance
+        confirmation: Confirmation
+        exclusion: Exclusion
+        format: Format
+        inclusion: Inclusion
+        length: Length
+        numericality: Numericality
+        message: Message
+        with: Regexp
+        in: In
+        minimum: Minimum
+        maximum: Maximum
+        is: Equal
+        lower_bound_checks:
+          disabled: 'Off'
+          greater_than: '>'
+          greater_than_or_equal_to: '>='
+        upper_bound_checks:
+          disabled: 'Off'
+          less_than: '<'
+          less_than_or_equal_to: '<='
+        minimum_gap_checks:
+          unrestricted: 'unrestricted'
+          greater_than: '>'
+          greater_than_or_equal_to: '>='
+        maximum_gap_checks:
+          unrestricted: 'unrestricted'
+          less_than: '<'
+          less_than_or_equal_to: '<='

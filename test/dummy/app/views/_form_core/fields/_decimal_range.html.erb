@@ -1,0 +1,25 @@
+<% f.object.send("build_#{field.key}") unless f.object.send(field.key) %>
+
+<div class="form-group row">
+  <%= f.label field.key, field.key, class: 'label col-sm-2 col-form-label' %>
+  <div class="col-sm-10">
+    <div class="form-row align-items-center mb-2">
+      <%= f.fields_for field.key do |ff| %>
+        <div class="col-auto">
+          <%= ff.number_field :begin, class: 'form-control', id: "#{field.id}_begin", required: field.required, class_for_error: "is-invalid", **field.begin_options %>
+          <%= ff.error_message :begin, class: "invalid-feedback" %>
+        </div>
+        <div class="col-auto">
+          ~
+        </div>
+        <div class="col-auto">
+          <%= ff.number_field :end, class: 'form-control', id: "#{field.id}_end", class_for_error: "is-invalid", **field.end_options %>
+          <%= ff.error_message :end, class: "invalid-feedback" %>
+        </div>
+      <% end %>
+    </div>
+    <% if field.hint.present? %>
+      <p class="help"><%= field.hint %></p>
+    <% end %>
+  </div>
+</div>

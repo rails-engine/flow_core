@@ -80,15 +80,20 @@ module FlowCore
     def enable
       return false unless can_enable?
 
-      with_transaction_returning_status do
-        input_free_tokens.each(&:lock!)
-        update! stage: :enabled, enabled_at: Time.zone.now
+      status =
+        with_transaction_returning_status do
+          input_free_tokens.each(&:lock!)
+          update! stage: :enabled, enabled_at: Time.zone.now
 
-        transition.on_task_enable(self)
-        workflow.on_instance_task_enable(self)
+          transition.on_task_enable(self)
+          workflow.on_instance_task_enable(self)
 
-        true
-      end
+          true
+        end
+
+      try_auto_finish if status
+
+      status
     end
 
     def finish
@@ -170,7 +175,7 @@ module FlowCore
       return if output_token_created
 
       with_transaction_returning_status do
-        transition.create_tokens_for_output(task: self)
+        transition.create_output_tokens_for(self)
         update! output_token_created: true
 
         true
@@ -219,6 +224,14 @@ module FlowCore
 
       def same_origin_tasks
         instance.tasks.where(created_by_token: created_by_token)
+      end
+
+      def try_auto_finish
+        return unless can_finish?
+
+        if transition.auto_finish_strategy == "synchronously"
+          finish
+        end
       end
   end
 end

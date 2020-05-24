@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h2>
+      Forms
+    </h2>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <%= link_to "New form", new_form_path, class: "btn btn-primary mr-2" %>
+      <%= link_to "Generate random form", random_forms_path(@form), method: :post, class: "btn btn-primary" %>
+    </div>
+  </div>
+
+  <table class="table table-borderless">
+    <thead>
+    <tr>
+      <th>Key</th>
+      <th>Name</th>
+      <th>Updated at</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @forms.each do |form| %>
+      <tr>
+        <td><%= form.key %></td>
+        <td><%= form.name %></td>
+        <td><%= form.updated_at %></td>
+        <td>
+          <%= link_to "Show", form_path(form) %> |
+          <%= link_to "Edit", edit_form_path(form) %> |
+          <%= link_to "Destroy", form_path(form), method: :delete, data: { confirm: "Are you sure?" } %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>

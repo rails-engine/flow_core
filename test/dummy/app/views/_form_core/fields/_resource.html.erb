@@ -1,0 +1,23 @@
+<div class="form-group row">
+  <%= f.label field.key, field.key, class: 'col-sm-2 col-form-label' %>
+  <div class="col-sm-10">
+    <%= f.select field.key, field.options_for_select, {include_blank: field.include_blank?}, class: field.id, id: field.id, required: field.required, disabled: field.disabled? %>
+    <%= f.error_message field.key, class: "invalid-feedback" %>
+    <% if field.hint.present? %>
+      <span class="form-text text-muted">
+        <%= field.hint %>
+      </span>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  <% nesting ||= false %>
+  <% if nesting %>
+    $("select[class*='<%= field.id %>'][class!='selectized']").selectize();
+  <% else %>
+    document.addEventListener("turbolinks:load", function() {
+      $("select[class*='<%= field.id %>'][class!='selectized']").selectize();
+    });
+  <% end %>
+</script>

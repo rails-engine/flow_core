@@ -1,0 +1,21 @@
+<% url = pipeline.new_record? ? pipelines_path : pipeline_path(pipeline) %>
+<%= form_with(model: pipeline, scope: :pipeline, url: url, local: true) do |f| %>
+  <div class="form-group">
+    <%= f.label :name %>
+    <%= f.text_field :name, autofocus: true, required: "required", class: "form-control", class_for_error: "is-invalid" %>
+    <%= f.error_message :name, class: "invalid-feedback" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :form_id %>
+    <%= f.select :form_id, forms_options_for_select(selected: pipeline.form_id), { class_for_error: "is-invalid" }, disabled: pipeline.persisted?, class: "form-control" %>
+    <%= f.error_message :form_id, class: "invalid-feedback" %>
+    <span class="form-text text-muted">
+      <%= link_to "Create a new form", new_form_path %>
+    </span>
+  </div>
+
+  <div class="form-group">
+    <%= f.submit class: "btn btn-primary" %>
+  </div>
+<% end %>

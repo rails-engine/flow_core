@@ -1,0 +1,26 @@
+<% validations.build_length unless validations.length %>
+<% length = validations.length %>
+
+<h3>Length</h3>
+
+<%= f.fields_for :length, length do |ff| %>
+  <div class="form-group">
+    <%= ff.label :minimum %>
+    <%= ff.number_field :minimum, min: 0, step: 1, class: "form-control", class_for_error: "is-invalid" %>
+    <%= ff.error_message :minimum, class: "invalid-feedback" %>
+  </div>
+
+  <div class="form-group">
+    <%= ff.label :maximum %>
+    <%= ff.number_field :maximum, min: 0, step: 1, class: "form-control", class_for_error: "is-invalid" %>
+    <%= ff.error_message :maximum, class: "invalid-feedback" %>
+  </div>
+
+  <div class="form-group">
+    <%= ff.label :is %>
+    <%= ff.number_field :is, min: 0, step: 1, class: "form-control", class_for_error: "is-invalid" %>
+    <%= ff.error_message :is, class: "invalid-feedback" %>
+  </div>
+<% end %>
+
+<hr>

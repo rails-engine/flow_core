@@ -1,0 +1,5 @@
+<div class="form-group">
+  <%= f.label :step %>
+  <%= f.number_field :step, min: 0, step: 0.01, class: "form-control", class_for_error: "is-invalid" %>
+  <%= f.error_message :step, class: "invalid-feedback" %>
+</div>

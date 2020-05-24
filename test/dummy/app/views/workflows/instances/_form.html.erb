@@ -1,0 +1,13 @@
+<%= form_with(model: instance, scope: :instance, url: workflow_instances_path(workflow), method: :post, local: true) do |f| %>
+  <%= f.fields_for :payload, payload do |ff| %>
+    <% fields = workflow.form.fields.order(position: :asc).map { |field| present(field, target: payload) }.reject(&:access_hidden?) %>
+
+    <% fields.each do |field| %>
+      <%= render "_form_core/fields/#{field.type_key}", f: ff, field: field %>
+    <% end %>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.submit class: "btn btn-primary" %>
+  </div>
+<% end %>
