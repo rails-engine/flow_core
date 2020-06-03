@@ -67,7 +67,7 @@ module SerializableModel
       def load_from_yaml(yaml)
         return new if yaml.blank?
 
-        return new unless yaml.is_a?(String) && /^---/.match?(yaml)
+        return new unless yaml.is_a?(String) && yaml.start_with?("---")
 
         decoded = YAML.safe_load(yaml, WHITELIST_CLASSES)
         return new unless decoded.is_a? Hash
