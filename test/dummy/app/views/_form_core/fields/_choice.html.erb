@@ -1,5 +1,5 @@
 <div class="form-group row">
-  <%= f.label field.key, field.key, class: 'label col-sm-2 col-form-label' %>
+  <%= f.label field.key, field.name, class: 'label col-sm-2 col-form-label' %>
   <div class="col-sm-10">
       <%= f.collection_radio_buttons field.key, field.choices, :id, :label do |m| %>
         <div class="form-check form-check-inline">

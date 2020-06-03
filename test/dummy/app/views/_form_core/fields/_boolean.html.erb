@@ -3,7 +3,7 @@
   <div class="col-sm-10">
     <div class="form-check form-check-inline">
       <%= f.check_box field.key, class: "form-check-input", id: field.id, required: field.required, disabled: field.disabled?, class_for_error: "is-invalid" %>
-      <%= f.label field.key, field.key, class: "form-check-label", for: field.id %>
+      <%= f.label field.key, field.name, class: "form-check-label", for: field.id %>
     </div>
     <%= f.error_message field.key, class: "invalid-feedback" %>
     <% if field.hint.present? %>

@@ -1,5 +1,5 @@
 <div class="form-group nested_form_field row">
-  <%= f.label field.key, field.key, class: 'col-sm-2 col-form-label' %>
+  <%= f.label field.key, field.name, class: 'col-sm-2 col-form-label' %>
 
   <div class="col-sm-10">
     <%= tag.div id: field.key, class: "form-group collection" do %>
@@ -11,7 +11,7 @@
         <% if field.access_read_and_write? %>
           <%= link_to_add_association "Add", f, field.key,
                                       force_non_association_create: true,
-                                      class: "btn btn-link btn-sm",
+                                      class: "btn btn-sm btn-primary",
                                       partial: "_form_core/nested_form",
                                       render_options: {
                                         locals: {field: field, form: field.nested_form, nesting: true}

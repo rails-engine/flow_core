@@ -1,6 +1,6 @@
 <% nesting ||= false %>
 
-<div class="nested_form">
+<div class="nested_form pb-3">
   <% form.fields.sort_by(&:position).each do |field| %>
     <% field = present(field, target: f.object) %>
     <% unless field.access_hidden? %>
@@ -9,6 +9,6 @@
   <% end %>
 
   <% if field.access_read_and_write? %>
-    <%= link_to_remove_association "Remove", f, class: "btn btn-danger", wrapper_class: "nested_form" %>
+    <%= link_to_remove_association "Remove", f, class: "text-danger", wrapper_class: "nested_form" %>
   <% end %>
 </div>
