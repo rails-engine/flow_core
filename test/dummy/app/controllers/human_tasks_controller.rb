@@ -22,6 +22,6 @@ class HumanTasksController < ApplicationController
     end
 
     def human_task_params
-      params.require(:human_task).permit(form_record: {})
+      params.fetch(:human_task, {}).permit(form_record: {})
     end
 end

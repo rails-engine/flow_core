@@ -30,6 +30,6 @@ class Workflows::InstancesController < Workflows::ApplicationController
   private
 
     def instance_params
-      params.require(:instance).permit(payload: {})
+      params.fetch(:instance, {}).permit(payload: {})
     end
 end
