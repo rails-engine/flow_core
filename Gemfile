@@ -26,15 +26,18 @@ gem "rubocop"
 gem "rubocop-performance"
 gem "rubocop-rails"
 
-gem "activeentity"
+
 gem "acts_as_list"
 gem "cocoon"
-gem "dentaku"
-gem "form_core"
-gem "validates_timeliness", "~> 5.0.0.alpha4"
-
-gem "faker"
 gem "kaminari"
+gem "validates_timeliness", "~> 5.0.0.beta1"
+gem "faker"
+
+gem "script_core"
+gem "dentaku"
+
+gem "activeentity"
+gem "form_core"
 
 # Support ES6
 gem "babel-transpiler"

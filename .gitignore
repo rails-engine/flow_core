@@ -36,3 +36,5 @@ yarn-error.log
 .rakeTasks
 
 .env
+
+test/dummy/mruby/bin/
