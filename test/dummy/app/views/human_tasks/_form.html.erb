@@ -1,9 +1,23 @@
 <%= form_with(model: human_task, scope: :human_task, url: human_task_path(human_task), method: :patch, local: true) do |f| %>
-  <%= f.fields_for :form_record, human_task.form_record do |ff| %>
-    <% fields = human_task.workflow.form.fields.order(position: :asc).map { |field| present(field, target: human_task.form_record) }.reject(&:access_hidden?) %>
+  <% if human_task.form_attached? %>
+    <%= f.fields_for :form_attributes, human_task.form_record do |ff| %>
+      <% fields = human_task.form.fields.order(position: :asc).map { |field| present(field, target: human_task.form_record) }.reject(&:access_hidden?) %>
 
-    <% fields.each do |field| %>
-      <%= render "_form_core/fields/#{field.type_key}", f: ff, field: field %>
+      <% fields.each do |field| %>
+        <%= render "_form_core/fields/#{field.type_key}", f: ff, field: field %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <hr>
+
+  <% if human_task.attached_form_attached? %>
+    <%= f.fields_for :attached_form_attributes, human_task.attached_form_record do |ff| %>
+      <% fields = human_task.attached_form.fields.order(position: :asc).map { |field| present(field, target: human_task.attached_form_record) }.reject(&:access_hidden?) %>
+
+      <% fields.each do |field| %>
+        <%= render "_form_core/fields/#{field.type_key}", f: ff, field: field %>
+      <% end %>
     <% end %>
   <% end %>
 

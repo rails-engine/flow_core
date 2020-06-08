@@ -180,6 +180,8 @@ ActiveRecord::Schema.define(version: 2020_05_23_233226) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "pipeline_id"
     t.integer "step_id"
+    t.integer "attached_form_id"
+    t.index ["attached_form_id"], name: "index_flow_core_transition_triggers_on_attached_form_id"
     t.index ["pipeline_id"], name: "index_flow_core_transition_triggers_on_pipeline_id"
     t.index ["step_id"], name: "index_flow_core_transition_triggers_on_step_id"
     t.index ["transition_id"], name: "index_flow_core_transition_triggers_on_transition_id"
@@ -226,6 +228,7 @@ ActiveRecord::Schema.define(version: 2020_05_23_233226) do
   create_table "flow_kit_human_tasks", force: :cascade do |t|
     t.integer "workflow_id", null: false
     t.integer "instance_id", null: false
+    t.integer "attached_form_id"
     t.string "status", null: false
     t.string "assignable_type"
     t.integer "assignable_id"
@@ -236,6 +239,7 @@ ActiveRecord::Schema.define(version: 2020_05_23_233226) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["assignable_type", "assignable_id"], name: "index_form_kit_human_tasks_assignable"
+    t.index ["attached_form_id"], name: "index_flow_kit_human_tasks_on_attached_form_id"
     t.index ["instance_id"], name: "index_flow_kit_human_tasks_on_instance_id"
     t.index ["workflow_id"], name: "index_flow_kit_human_tasks_on_workflow_id"
   end
@@ -326,6 +330,7 @@ ActiveRecord::Schema.define(version: 2020_05_23_233226) do
   add_foreign_key "flow_core_transition_triggers", "flow_core_steps", column: "step_id"
   add_foreign_key "flow_core_transition_triggers", "flow_core_transitions", column: "transition_id"
   add_foreign_key "flow_core_transition_triggers", "flow_core_workflows", column: "workflow_id"
+  add_foreign_key "flow_core_transition_triggers", "form_kit_forms", column: "attached_form_id"
   add_foreign_key "flow_core_transitions", "flow_core_steps", column: "generated_by_step_id"
   add_foreign_key "flow_core_transitions", "flow_core_workflows", column: "workflow_id"
   add_foreign_key "flow_core_workflows", "flow_core_pipelines", column: "generated_by_pipeline_id"
@@ -333,6 +338,7 @@ ActiveRecord::Schema.define(version: 2020_05_23_233226) do
   add_foreign_key "flow_kit_assignee_candidates", "flow_core_transition_triggers", column: "trigger_id"
   add_foreign_key "flow_kit_human_tasks", "flow_core_instances", column: "instance_id"
   add_foreign_key "flow_kit_human_tasks", "flow_core_workflows", column: "workflow_id"
+  add_foreign_key "flow_kit_human_tasks", "form_kit_forms", column: "attached_form_id"
   add_foreign_key "form_kit_choices", "form_kit_fields", column: "field_id"
   add_foreign_key "form_kit_choices", "form_kit_forms", column: "form_id"
   add_foreign_key "form_kit_fields", "form_kit_forms", column: "form_id"

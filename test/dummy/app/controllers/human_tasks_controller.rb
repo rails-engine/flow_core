@@ -6,7 +6,7 @@ class HumanTasksController < ApplicationController
   def show; end
 
   def update
-    if @human_task.fill_form!(human_task_params.fetch(:form_record, {}))
+    if @human_task.fill_form!(human_task_params)
       @human_task.finish!
 
       redirect_to instance_url(@human_task.instance), notice: "Task finished."
@@ -22,6 +22,6 @@ class HumanTasksController < ApplicationController
     end
 
     def human_task_params
-      params.fetch(:human_task, {}).permit(form_record: {})
+      params.fetch(:human_task, {}).permit(form_attributes: {}, attached_form_attributes: {})
     end
 end

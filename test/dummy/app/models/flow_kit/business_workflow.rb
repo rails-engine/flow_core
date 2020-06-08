@@ -7,16 +7,11 @@ module FlowKit
     def on_instance_create_validation(instance)
       instance.errors.add :creator, :presence unless instance.creator
 
-      payload_record = payload_model.new instance.payload
-      instance.errors.add :payload, :invalid unless payload_record.valid?
+      form_record = form_model.new instance.payload.fetch(:form_attributes, {})
+      instance.errors.add :payload, :invalid unless form_record.valid?
     end
 
-    def on_instance_task_enable(task)
-      task.payload.merge! task.instance.payload
-      task.save!
-    end
-
-    def payload_model
+    def form_model
       @form_model ||= form.to_virtual_model
     end
   end

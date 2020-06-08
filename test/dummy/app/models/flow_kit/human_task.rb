@@ -9,6 +9,7 @@ module FlowKit
     belongs_to :workflow, class_name: "FlowCore::Workflow"
     belongs_to :instance, class_name: "FlowCore::Instance", autosave: true
 
+    belongs_to :attached_form, class_name: "FormKit::Form", optional: true
     belongs_to :assignable, polymorphic: true
 
     enum status: {
@@ -18,6 +19,7 @@ module FlowKit
       finished: "finished"
     }
 
+    delegate :form, to: :workflow
     delegate :payload, to: :task, prefix: :task, allow_nil: false, private: true
     delegate :payload, to: :instance, prefix: :instance, allow_nil: false, private: true
 
@@ -28,24 +30,101 @@ module FlowKit
       end
     end
 
-    def form_model
-      @form_model ||= workflow.form.to_virtual_model
+    def form_attributes
+      @instance_form_attributes ||=
+        begin
+          task_payload[:form_attributes] ||= {}
+          task_payload[:form_attributes]
+        end
     end
 
-    def form_record_coder
-      @_coder ||= FormCore.virtual_model_coder_class.new(form_model)
+    def attached_form_attributes
+      @attached_form_attributes ||=
+        begin
+          task_payload[:attached_form_attributes] ||= {}
+          task_payload[:attached_form_attributes]
+        end
+    end
+
+    def form_attached?
+      form.present?
+    end
+
+    def attached_form_attached?
+      attached_form.present?
+    end
+
+    def form_model
+      return unless form_attached?
+
+      @form_model ||= form.to_virtual_model
+    end
+
+    def attached_form_model
+      return unless attached_form_attached?
+
+      @task_form_model ||= attached_form.to_virtual_model
     end
 
     def form_record
-      @form_record ||= form_model.new instance_payload
+      return unless form_attached?
+
+      @form_record ||=
+        if form_filled?
+          form_model.new form_attributes
+        else
+          form_model.new(instance_payload[:form_attributes] || {})
+        end
     end
 
-    def form_record=(attributes)
+    def attached_form_record
+      return unless attached_form_attached?
+
+      @attached_form_record ||= attached_form_model.new attached_form_attributes
+    end
+
+    def form_record_valid?
+      return true unless form_attached?
+
+      form_record.valid?
+    end
+
+    def attached_form_record_valid?
+      return true unless attached_form_attached?
+
+      attached_form_record.valid?
+    end
+
+    def form_record_attributes=(attributes)
+      return unless form_attached?
+
       form_record.assign_attributes attributes
     end
 
+    def attached_form_record_attributes=(attributes)
+      return unless attached_form_attached?
+
+      attached_form_record.assign_attributes attributes
+    end
+
+    # def form_model
+    #   @form_model ||= workflow.form.to_virtual_model
+    # end
+    #
+    # def form_record_coder
+    #   @_coder ||= FormCore.virtual_model_coder_class.new(form_model)
+    # end
+    #
+    # def form_record
+    #   @form_record ||= form_model.new instance_payload
+    # end
+    #
+    # def form_record=(attributes)
+    #   form_record.assign_attributes attributes
+    # end
+
     def can_finish?
-      form_filled? && form_record.valid?
+      form_filled? && form_record_valid? && attached_form_record_valid?
     end
 
     def can_assign?
@@ -65,9 +144,20 @@ module FlowKit
     def fill_form!(attributes)
       return unless can_fill_form?
 
-      form_record.assign_attributes attributes
+      if form_attached?
+        form_record_attributes = attributes.fetch :form_attributes, {}
+        form_record.assign_attributes form_record_attributes
 
-      task_payload.merge! form_record.serializable_hash
+        form_attributes.merge! form_record.serializable_hash
+      end
+
+      if attached_form_attached?
+        attached_form_record_attributes = attributes.fetch :attached_form_attributes, {}
+        attached_form_record.assign_attributes attached_form_record_attributes
+
+        attached_form_attributes.merge! attached_form_record.serializable_hash
+      end
+
       self.status = :form_filled
       self.form_filled_at = Time.zone.now
 
@@ -77,15 +167,15 @@ module FlowKit
     def finish!
       return unless can_finish?
 
-      instance_payload.merge! task_payload
+      if form_attached?
+        instance_payload[:form_attributes] ||= {}
+        instance_payload[:form_attributes].merge! form_attributes
+      end
+
       self.status = :finished
       self.finished_at = Time.zone.now
 
       save!
-    end
-
-    def render_in(_view_context)
-      # noop
     end
   end
 end

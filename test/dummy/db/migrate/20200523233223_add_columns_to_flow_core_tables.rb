@@ -9,5 +9,9 @@ class AddColumnsToFlowCoreTables < ActiveRecord::Migration[6.0]
     change_table :flow_core_pipelines do |t|
       t.references :form, foreign_key: { to_table: :form_kit_forms }
     end
+
+    change_table :flow_core_transition_triggers do |t|
+      t.references :attached_form, foreign_key: { to_table: :form_kit_forms }
+    end
   end
 end

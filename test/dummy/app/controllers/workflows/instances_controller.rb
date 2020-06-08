@@ -8,19 +8,25 @@ class Workflows::InstancesController < Workflows::ApplicationController
       return
     end
 
+    unless current_user
+      redirect_to users_url
+      return
+    end
+
     @instance = @workflow.instances.new
     @payload_model = @workflow.form.to_virtual_model
     @payload = @payload_model.new
   end
 
   def create
-    @instance = @workflow.instances.new instance_params
+    @instance = @workflow.instances.new
+    @instance.payload[:form_attributes] = instance_params[:form_attributes].to_h
     @instance.creator = current_user
 
     @payload_model = @workflow.form.to_virtual_model
-    @payload = @payload_model.new @instance.payload
+    @payload = @payload_model.new @instance.payload[:form_attributes]
 
-    if @payload.valid? && @instance.save
+    if @payload.valid? && @instance.save!
       redirect_to instance_url(@instance), notice: "Instance created."
     else
       render :new
@@ -30,6 +36,6 @@ class Workflows::InstancesController < Workflows::ApplicationController
   private
 
     def instance_params
-      params.fetch(:instance, {}).permit(payload: {})
+      params.fetch(:instance, {}).permit(form_attributes: {})
     end
 end

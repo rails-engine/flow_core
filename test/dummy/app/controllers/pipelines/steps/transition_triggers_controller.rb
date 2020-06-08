@@ -45,6 +45,6 @@ class Pipelines::Steps::TransitionTriggersController < Pipelines::Steps::Applica
     end
 
     def transition_trigger_params
-      params.require(:transition_trigger).permit(:type, assignee_candidate_user_ids: [], configuration: {})
+      params.require(:transition_trigger).permit(:type, :attached_form_id, assignee_candidate_user_ids: [], configuration: {})
     end
 end

@@ -1,5 +1,5 @@
 <%= form_with(model: instance, scope: :instance, url: workflow_instances_path(workflow), method: :post, local: true) do |f| %>
-  <%= f.fields_for :payload, payload do |ff| %>
+  <%= f.fields_for :form_attributes, payload do |ff| %>
     <% fields = workflow.form.fields.order(position: :asc).map { |field| present(field, target: payload) }.reject(&:access_hidden?) %>
 
     <% fields.each do |field| %>

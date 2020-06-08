@@ -6,7 +6,10 @@ module FlowKit::ArcGuards
 
     def permit?(task)
       result = ScriptEngine.run_inline script, payload: task.payload
-      # TODO: May error
+      if result.errors.any?
+        raise "Script has errored"
+      end
+
       result.output
     end
 
