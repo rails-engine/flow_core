@@ -9,16 +9,31 @@ module FlowCore::Steps
 
       input_place = find_or_create_input_place(workflow, input_transition)
       exclusive_choice_transition =
-        input_place.output_transitions.create! workflow: workflow,
-                                               name: name,
-                                               output_token_create_strategy: :match_one_or_fallback,
-                                               auto_finish_strategy: "synchronously",
-                                               generated_by_step_id: id
+        if transition_trigger
+          t = input_place.output_transitions.create! workflow: workflow,
+                                                     name: name,
+                                                     output_token_create_strategy: :match_one_or_fallback,
+                                                     generated_by_step_id: id
+          copy_transition_trigger_to t
+          copy_transition_callbacks_to t
+          t
+        else
+          input_place.output_transitions.create! workflow: workflow,
+                                                 name: name,
+                                                 output_token_create_strategy: :match_one_or_fallback,
+                                                 auto_finish_strategy: "synchronously",
+                                                 generated_by_step_id: id
+        end
+
       simple_merge_place = workflow.places.create! workflow: workflow
 
       deploy_branches_to(workflow, exclusive_choice_transition, simple_merge_place)
 
       simple_merge_place
+    end
+
+    def transition_trigger_attachable?
+      true
     end
 
     def branch_arc_guard_attachable?

@@ -10,7 +10,10 @@
     <%= ff.text_area :script, rows: 10, class: "form-control", class_for_error: "is-invalid" %>
     <%= ff.error_message :script, class: "invalid-feedback" %>
     <span class="form-text text-muted">
-      MRuby Script
+      Ruby code here,
+      you can use <code>Input[:attached_form_attributes]["FORM_FIELD_KEY"]</code> to get attached form field value,
+      use <code>Input[:form_attributes]["FORM_FIELD_KEY"]</code> to get form field value.
+      return value should be a bool.
     </span>
   </div>
 <% end %>

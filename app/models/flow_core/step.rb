@@ -77,7 +77,7 @@ module FlowCore
     end
 
     def transition_trigger_attachable?
-      !multi_branch_step?
+      !multi_branch_step? && !redirection_step?
     end
 
     def transition_callback_attachable?
@@ -132,17 +132,17 @@ module FlowCore
       return [] if redirectable_steps.empty?
 
       # if the redirection step is the first step of a branch,
-      # avoiding redirect to parent and ancestors which are first step (of a branch),
+      # avoiding redirect to parent and ancestors which are first step (of a branch) and without a transition trigger,
       # because it will lead infinite loop,
       # 如果重定向步骤是分支的第一步，那么父步骤和其他也是处于（分支）第一步的祖先，也都要避免跳转，因为会导致死循环
       if position == 1 && redirectable_steps.any?
-        if redirectable_steps.first.multi_branch_step?
+        if redirectable_steps.first.multi_branch_step? && !redirectable_steps.first.transition_trigger
           redirectable_steps.shift
         end
 
         while redirectable_steps.any?
           step = redirectable_steps.first
-          if step.multi_branch_step?
+          if step.multi_branch_step? && !redirectable_steps.first.transition_trigger
             redirectable_steps.shift
 
             if step.position > 1

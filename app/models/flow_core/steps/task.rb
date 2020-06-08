@@ -16,6 +16,10 @@ module FlowCore::Steps
       def creatable?
         true
       end
+
+      def transition_trigger_required?
+        true
+      end
     end
   end
 end

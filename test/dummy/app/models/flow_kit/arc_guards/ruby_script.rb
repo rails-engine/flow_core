@@ -5,7 +5,7 @@ module FlowKit::ArcGuards
     serialize :configuration, Configuration
 
     def permit?(task)
-      result = ScriptEngine.run_inline script, payload: task.payload
+      result = ScriptEngine.run_inline configuration.script, payload: task.payload
       if result.errors.any?
         raise "Script has errored"
       end
