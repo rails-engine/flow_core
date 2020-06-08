@@ -88,7 +88,7 @@ FlowCore::Step.class_eval do
         _sub_graph, first_node, last_node = branch.to_graphviz(graph)
         node.connect first_node, arrowhead: :none, style: branch.fallback_branch? ? "bold" : ""
 
-        if last_node
+        if last_node&.connections&.size&.zero?
           end_node_connected = true
           last_node.connect end_node, arrowhead: :none
         end
