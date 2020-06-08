@@ -162,11 +162,11 @@ module FlowCore
       # It's also safe to redirect to any of children steps,
       # just avoid current branch which the redirection step belongs to.
       # 跳转到任何步骤的分支也都是安全的，就是要避免分支是当前跳转步骤的祖先步骤
-      redirectable_steps.map! do |step|
-        if step.parent_of? self
-          [step].concat step.children.where.not(branch_id: branch_id)
+      redirectable_steps.map! do |s|
+        if s.parent_of? self
+          [s].concat s.children.where.not(branch_id: branch_id)
         else
-          [step].concat step.children
+          [s].concat s.children
         end
       end
       redirectable_steps.flatten!
@@ -303,7 +303,6 @@ module FlowCore
             step.update! redirect_to_step: nil
           end
         end
-
       end
 
       def update_parent

@@ -11,7 +11,7 @@ AllCops:
     - bin/**/*
     - test/dummy/bin/**/*
     - test/dummy/db/schema.rb
-    - test/dummy/config/routes.rb
+    - test/dummy/mruby/**/*
 
 #Metrics/AbcSize:
 #  Max: 30
