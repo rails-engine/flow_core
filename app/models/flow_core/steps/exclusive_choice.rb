@@ -25,7 +25,7 @@ module FlowCore::Steps
       true
     end
 
-    def must_has_a_fallback_branch?
+    def fallback_branch_required?
       true
     end
 

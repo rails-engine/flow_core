@@ -88,8 +88,12 @@ module FlowCore
       false
     end
 
-    def must_has_a_fallback_branch?
+    def fallback_branch_required?
       false
+    end
+
+    def transition_trigger_required?
+      self.class.transition_trigger_required?
     end
 
     def barrier_step?
@@ -193,6 +197,10 @@ module FlowCore
       end
 
       def branch_configurable?
+        false
+      end
+
+      def transition_trigger_required?
         false
       end
     end

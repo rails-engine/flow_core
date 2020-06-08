@@ -26,7 +26,7 @@ module FlowCore
     end
 
     def user_destroyable?
-      !fallback_branch || (fallback_branch? && !step.must_has_a_fallback_branch?)
+      !fallback_branch || (fallback_branch? && !step.fallback_branch_required?)
     end
 
     def arc_guard_attachable?
