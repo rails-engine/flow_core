@@ -174,6 +174,7 @@ module FlowCore
         end
       end
       redirectable_steps.flatten!
+      redirectable_steps.uniq!
       redirectable_steps.reject!(&:redirection_step?)
 
       redirectable_steps
@@ -208,7 +209,7 @@ module FlowCore
     private
 
       def update_verified
-        self.verified = errors.empty?
+        self.verified = valid?
       end
 
       def find_or_create_input_place(workflow, input_place_or_transition)

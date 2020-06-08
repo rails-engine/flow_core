@@ -13,6 +13,7 @@
     <thead>
     <tr>
       <th>Label</th>
+      <th>Value</th>
       <th></th>
     </tr>
     </thead>
@@ -20,6 +21,7 @@
     <% @field.choices.each do |choice| %>
       <tr>
         <td><%= choice.label %></td>
+        <td><%= choice.id %></td>
         <td>
           <%= link_to "Edit", edit_field_choice_path(@field, choice) %> |
           <%= link_to "Destroy", field_choice_path(@field, choice), method: :delete, data: {confirm: "Are you sure?"} %>

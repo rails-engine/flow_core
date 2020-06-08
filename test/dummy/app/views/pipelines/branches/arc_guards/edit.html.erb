@@ -5,7 +5,7 @@
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
       <%= link_to "<<", pipeline_path(@pipeline), class: "btn btn-primary mr-2" %>
-      <%= link_to "Back", edit_pipeline_branch_path(@pipeline, @branch), class: "btn btn-primary" %>
+      <%= link_to "Back", edit_pipeline_branch_path(@pipeline, @branch), class: "btn btn-primary mr-2" %>
       <%= link_to "Destroy", pipeline_branch_arc_guard_path(@pipeline, @branch, @arc_guard), method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure?" } %>
     </div>
   </div>

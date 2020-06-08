@@ -4,7 +4,7 @@ module FlowKit::TransitionTriggers
   class HumanTask < FlowCore::TransitionTrigger
     belongs_to :attached_form, class_name: "FormKit::Form", optional: true
 
-    has_many :assignee_candidates, foreign_key: :trigger_id, inverse_of: :trigger
+    has_many :assignee_candidates, foreign_key: :trigger_id, inverse_of: :trigger, dependent: :delete_all
     has_many :assignee_candidate_users, through: :assignee_candidates, source: :assignable, source_type: "User"
 
     serialize :configuration, Configuration

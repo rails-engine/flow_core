@@ -33,7 +33,7 @@ module FlowCore::Steps
     private
 
       def update_verified
-        self.verified = errors.empty? && redirect_to_step_id.present?
+        self.verified = valid? && redirect_to_step_id.present?
       end
   end
 end

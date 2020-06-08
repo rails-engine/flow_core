@@ -11,6 +11,13 @@ module FlowKit
       instance.errors.add :payload, :invalid unless form_record.valid?
     end
 
+    def on_instance_task_finish(task)
+      unless task.executable
+        task.payload[:form_attributes] = task.instance.payload.fetch(:form_attributes, {})
+        task.save!
+      end
+    end
+
     def form_model
       @form_model ||= form.to_virtual_model
     end
