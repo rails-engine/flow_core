@@ -92,6 +92,13 @@ Import sample workflow
 $ bin/rails db:seed
 ```
 
+Build Script Core
+
+```sh
+$ bin/rails app:script_core:engine:build
+$ bin/rails app:script_core:engine:compile_lib
+```
+
 Start the Rails server
 
 ```sh
