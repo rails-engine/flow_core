@@ -89,7 +89,6 @@ GEM
     cocoon (1.2.14)
     concurrent-ruby (1.1.6)
     crass (1.0.6)
-    dentaku (3.3.4)
     erubi (1.9.0)
     execjs (2.7.0)
     faker (2.12.0)
@@ -268,7 +267,6 @@ DEPENDENCIES
   bootstrap (~> 4.4)
   byebug
   cocoon
-  dentaku
   faker
   flow_core!
   form_core
