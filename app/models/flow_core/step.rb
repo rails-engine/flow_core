@@ -60,6 +60,7 @@ module FlowCore
     before_save :update_verified
 
     after_create :reorder_by_append_to_on_create
+    after_destroy :recheck_redirection_steps_on_destroy
 
     attr_accessor :append_to
 
@@ -104,17 +105,63 @@ module FlowCore
     end
 
     def redirectable_steps
+      return [] unless redirection_step?
+
       redirectable_steps = []
 
+      # Barrier step is the stop point, beyond if can't ensure the workflow valid
+      # e.g. consider there's a redirection step in one of branch of a parallel branch step,
+      # the parallel branch step is the barrier step, if redirect beyond the barrier step,
+      # it will multiplex all branches again and again
+      # Barrier step 是保障流程的边界，如果重定向到边界外的节点，就无法保证流程合法，
+      # 一个例子是假设并发分支步骤的某个分支里有一个重定向节点，并发分支步骤就是一个 Barrier Step，
+      # 如果可以重定向到并发分支步骤外，重定向到步骤后会重新执行这个并发分支步骤，导致其他分支的步骤会被无限重复执行
       ancestors.reverse_each do |step|
         break if step.barrier_step?
 
         redirectable_steps << step
       end
 
-      if redirectable_steps.reject!(&:root?)
-        redirectable_steps.concat pipeline.steps
+      # return an empty array if there's no safe ancestor,
+      # redirect to steps which in current branch in not safe, because it will infinite loop
+      # 如果一个安全的祖先步骤都没有，就返回空集，跳到当前分支的步骤会导致死循环或者死代码，没有意义
+      return [] if redirectable_steps.empty?
+
+      # if the redirection step is the first step of a branch,
+      # avoiding redirect to parent and ancestors which are first step (of a branch),
+      # because it will lead infinite loop,
+      # 如果重定向步骤是分支的第一步，那么父步骤和其他也是处于（分支）第一步的祖先，也都要避免跳转，因为会导致死循环
+      if position == 1 && redirectable_steps.any?
+        if redirectable_steps.first.multi_branch_step?
+          redirectable_steps.shift
+        end
+
+        while redirectable_steps.any?
+          step = redirectable_steps.first
+          if step.multi_branch_step?
+            redirectable_steps.shift
+
+            if step.position > 1
+              break
+            end
+          else
+            break
+          end
+        end
       end
+
+      # It's safe to redirect to any top level (or main branch) steps,
+      # just avoiding the redirect step's ancestor, because it may lead infinite loop
+      # 跳到顶层（或者说主干）步骤都是安全的，只是要去掉跳转步骤的祖先，因为会导致死循环
+      if redirectable_steps.reject!(&:root?)
+        redirectable_steps.concat(pipeline.steps)
+      elsif redirectable_steps.empty?
+        redirectable_steps.concat(pipeline.steps - ancestors)
+      end
+
+      # It's also safe to redirect to any of children steps,
+      # just avoid current branch which the redirection step belongs to.
+      # 跳转到任何步骤的分支也都是安全的，就是要避免分支是当前跳转步骤的祖先步骤
       redirectable_steps.map! do |step|
         if step.parent_of? self
           [step].concat step.children.where.not(branch_id: branch_id)
@@ -123,7 +170,7 @@ module FlowCore
         end
       end
       redirectable_steps.flatten!
-      redirectable_steps.delete self
+      redirectable_steps.reject!(&:redirection_step?)
 
       redirectable_steps
     end
@@ -246,6 +293,17 @@ module FlowCore
         return unless append_to_step && append_to_step.branch_id == branch_id
 
         insert_at(append_to_step.position + 1)
+      end
+
+      def recheck_redirection_steps_on_destroy
+        return unless branch
+
+        branch.steps.to_a.select(&:redirection_step?).each do |step|
+          unless step.redirectable_steps.include? step.redirect_to_step
+            step.update! redirect_to_step: nil
+          end
+        end
+
       end
 
       def update_parent
