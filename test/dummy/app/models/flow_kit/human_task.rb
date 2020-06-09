@@ -107,22 +107,6 @@ module FlowKit
       attached_form_record.assign_attributes attributes
     end
 
-    # def form_model
-    #   @form_model ||= workflow.form.to_virtual_model
-    # end
-    #
-    # def form_record_coder
-    #   @_coder ||= FormCore.virtual_model_coder_class.new(form_model)
-    # end
-    #
-    # def form_record
-    #   @form_record ||= form_model.new instance_payload
-    # end
-    #
-    # def form_record=(attributes)
-    #   form_record.assign_attributes attributes
-    # end
-
     def can_finish?
       form_filled? && form_record_valid? && attached_form_record_valid?
     end
