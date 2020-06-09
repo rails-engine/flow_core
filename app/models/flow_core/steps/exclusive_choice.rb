@@ -53,6 +53,10 @@ module FlowCore::Steps
         true
       end
 
+      def transition_callback_attachable?
+        true
+      end
+
       def branch_configurable?
         true
       end

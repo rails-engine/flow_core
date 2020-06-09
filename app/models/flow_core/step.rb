@@ -76,28 +76,28 @@ module FlowCore
       self.class.multi_branch_step?
     end
 
+    def barrier_step?
+      self.class.barrier_step?
+    end
+
     def transition_trigger_attachable?
-      !multi_branch_step? && !redirection_step?
+      self.class.transition_trigger_attachable?
     end
 
     def transition_callback_attachable?
-      !multi_branch_step?
+      self.class.transition_callback_attachable?
     end
 
     def branch_arc_guard_attachable?
-      false
+      self.class.branch_arc_guard_attachable?
     end
 
     def fallback_branch_required?
-      false
+      self.class.fallback_branch_required?
     end
 
     def transition_trigger_required?
       self.class.transition_trigger_required?
-    end
-
-    def barrier_step?
-      self.class.barrier_step?
     end
 
     def redirection_configurable?
@@ -193,6 +193,18 @@ module FlowCore
         false
       end
 
+      def transition_trigger_attachable?
+        !multi_branch_step? && !redirection_step?
+      end
+
+      def transition_callback_attachable?
+        !multi_branch_step?
+      end
+
+      def branch_arc_guard_attachable?
+        false
+      end
+
       def redirection_configurable?
         false
       end
@@ -202,6 +214,10 @@ module FlowCore
       end
 
       def transition_trigger_required?
+        false
+      end
+
+      def fallback_branch_required?
         false
       end
     end
