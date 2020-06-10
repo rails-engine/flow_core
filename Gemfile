@@ -26,7 +26,6 @@ gem "rubocop"
 gem "rubocop-performance"
 gem "rubocop-rails"
 
-gem "acts_as_list"
 gem "cocoon"
 gem "kaminari"
 gem "validates_timeliness", "~> 5.0.0.beta1"

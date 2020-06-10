@@ -72,7 +72,7 @@ GEM
       activerecord (>= 4.2)
     ancestry (3.0.7)
       activerecord (>= 3.2.0)
-    ast (2.4.0)
+    ast (2.4.1)
     autoprefixer-rails (9.7.6)
       execjs
     babel-source (5.8.35)
@@ -99,7 +99,7 @@ GEM
       rails (>= 6.0.0.rc1, < 7)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
-    graphviz (1.1.0)
+    graphviz (1.2.0)
       process-pipeline
     i18n (1.8.3)
       concurrent-ruby (~> 1.0)
@@ -146,9 +146,9 @@ GEM
     parser (2.7.1.3)
       ast (~> 2.4.0)
     popper_js (1.16.0)
-    process-group (1.2.1)
+    process-group (1.2.3)
       process-terminal (~> 0.2.0)
-    process-pipeline (1.0.1)
+    process-pipeline (1.0.2)
       process-group
     process-terminal (0.2.0)
       ffi
@@ -262,7 +262,6 @@ PLATFORMS
 
 DEPENDENCIES
   activeentity
-  acts_as_list
   babel-transpiler
   bootstrap (~> 4.4)
   byebug
