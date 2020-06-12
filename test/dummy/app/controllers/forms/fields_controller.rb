@@ -66,6 +66,6 @@ class Forms::FieldsController < Forms::ApplicationController
     end
 
     def field_params
-      params.fetch(:field, {}).permit(:key, :name, :hint, :type)
+      params.fetch(:field, {}).permit(:key, :name, :hint, :accessibility, :type)
     end
 end

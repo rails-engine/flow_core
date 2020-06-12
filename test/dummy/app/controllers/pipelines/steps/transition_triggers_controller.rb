@@ -4,7 +4,7 @@ class Pipelines::Steps::TransitionTriggersController < Pipelines::Steps::Applica
   before_action :set_transition_trigger, only: %i[show edit update destroy]
 
   def new
-    trigger_type = FlowCore::TransitionTrigger.descendants.map(&:to_s).include?(params[:type]) ? params[:type] : nil
+    trigger_type = FlowKit::TransitionTriggers.all_types.map(&:to_s).include?(params[:type]) ? params[:type] : nil
     if trigger_type
       @transition_trigger = @step.build_transition_trigger type: trigger_type
     end
@@ -45,6 +45,6 @@ class Pipelines::Steps::TransitionTriggersController < Pipelines::Steps::Applica
     end
 
     def transition_trigger_params
-      params.require(:transition_trigger).permit(:type, :attached_form_id, assignee_candidate_user_ids: [], configuration: {})
+      params.require(:transition_trigger).permit(:type, :attached_form_id, :form_override_id, assignee_candidate_user_ids: [], configuration: {})
     end
 end

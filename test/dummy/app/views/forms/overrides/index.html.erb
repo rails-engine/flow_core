@@ -1,0 +1,31 @@
+<% content_for :actions do %>
+  <%= link_to "New override", new_form_override_path(@form), class: "btn btn-primary mr-2" %>
+  <%= link_to "Back", forms_path, class: "btn btn-primary" %>
+<% end %>
+
+<div class="container">
+  <%= render "forms/tabs" %>
+</div>
+
+<div class="container">
+  <table class="table table-borderless table-striped fields">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @overrides.each do |override| %>
+      <tr>
+        <td><%= override.name %></td>
+        <td>
+          <%= link_to "Edit", edit_form_override_path(@form, override) %> |
+          <%= link_to "Destroy", form_override_path(@form, override), method: :delete, data: { confirm: "Are you sure?" } %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>

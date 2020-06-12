@@ -10,7 +10,7 @@
 
   <div class="form-group">
     <%= f.label :type %>
-    <%= f.select :type, options_for_select(Steps.creatable_types.map { |klass| [klass.model_name.human, klass.to_s] }, step.type), {}, required: "required", disabled: step.persisted?, class: "form-control", class_for_error: "is-invalid" %>
+    <%= f.select :type, options_for_select(FlowKit::Steps.all_types.map { |klass| [klass.model_name.human, klass.to_s] }, step.type), {}, required: "required", disabled: step.persisted?, class: "form-control", class_for_error: "is-invalid" %>
     <%= f.error_message :type, class: "invalid-feedback" %>
   </div>
 

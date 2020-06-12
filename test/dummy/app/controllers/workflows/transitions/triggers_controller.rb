@@ -4,7 +4,7 @@ class Workflows::Transitions::TriggersController < Workflows::Transitions::Appli
   before_action :set_trigger, only: %i[edit update destroy]
 
   def new
-    trigger_type = FlowCore::TransitionTrigger.descendants.map(&:to_s).include?(params[:type]) ? params[:type] : nil
+    trigger_type = FlowKit::TransitionTriggers.all_types.map(&:to_s).include?(params[:type]) ? params[:type] : nil
     if trigger_type
       @trigger = @transition.build_trigger type: trigger_type
     end

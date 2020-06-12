@@ -3,6 +3,9 @@
     <li class="nav-item">
       <%= nav_link_to({ controller: 'forms/fields', action: :index }, "Fields", form_fields_path(@form), class: "nav-link") %>
     </li>
+    <li class="nav-item">
+      <%= nav_link_to({ controller: 'forms/overrides', action: :index }, "Overrides", form_overrides_path(@form), class: "nav-link") %>
+    </li>
     <% unless @form.attachable_id.present? %>
       <li class="nav-item">
         <%= nav_link_to({controller: 'forms', action: :edit}, "Edit", edit_form_path(@form), class: "nav-link") %>

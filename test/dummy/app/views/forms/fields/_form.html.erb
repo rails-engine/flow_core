@@ -4,6 +4,9 @@
     <%= f.label :key %>
     <%= f.text_field :key, required: "required", disabled: field.persisted?, class: "form-control", class_for_error: "is-invalid" %>
     <%= f.error_message :key, class: "invalid-feedback" %>
+    <span class="form-text text-muted">
+      Must be a valid Ruby variable name, and unique in the form, use for get the field's value in script.
+    </span>
   </div>
 
   <div class="form-group">
@@ -16,6 +19,21 @@
     <%= f.label :hint %>
     <%= f.text_field :hint, class: "form-control", class_for_error: "is-invalid" %>
     <%= f.error_message :hint, class: "invalid-feedback" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :accessibility %>
+    <div class="form-group mb-0">
+      <% FormKit::Field.accessibilities.each do |k, _| %>
+        <div class="form-check form-check-inline">
+          <%= f.radio_button :accessibility, k, class: "form-check-input", id: "field_accessibility_#{k}" %>
+          <%= f.label :accessibility, FormKit::Field.human_enum_value(:accessibility, k), class: "form-check-label", for: "field_accessibility_#{k}" %>
+        </div>
+      <% end %>
+    </div>
+    <span class="form-text text-muted">
+      Default accessibility
+    </span>
   </div>
 
   <div class="form-group">

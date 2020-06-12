@@ -1,0 +1,12 @@
+<div class="container">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h2>
+      Edit Override
+    </h2>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <%= link_to 'Back', form_overrides_path(@form), class: "btn btn-primary" %>
+    </div>
+  </div>
+
+  <%= render "form", form: @form, override: @override %>
+</div>

@@ -4,7 +4,7 @@ class Pipelines::Branches::ArcGuardsController < Pipelines::Branches::Applicatio
   before_action :set_arc_guard, only: %i[show edit update destroy]
 
   def new
-    guard_type = FlowCore::ArcGuard.descendants.map(&:to_s).include?(params[:type]) ? params[:type] : nil
+    guard_type = FlowKit::ArcGuards.all_types.map(&:to_s).include?(params[:type]) ? params[:type] : nil
     if guard_type
       @arc_guard = @branch.arc_guards.new type: guard_type
     end

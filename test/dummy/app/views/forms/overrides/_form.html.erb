@@ -1,0 +1,29 @@
+<%- url = override.new_record? ? form_overrides_path(form) : form_override_path(form, override) %>
+<%= form_with(model: override, scope: :form_override, url: url, local: true) do |f| %>
+  <div class="form-group">
+    <%= f.label :name %>
+    <%= f.text_field :name, required: "required", class: "form-control", class_for_error: "is-invalid" %>
+    <%= f.error_message :name, class: "invalid-feedback" %>
+  </div>
+
+  <% form.fields.each do |field| %>
+    <% field_override = override.field_overrides.find { |fo| fo.field_id == field.id } || override.field_overrides.build(field: field, accessibility: field.accessibility) %>
+    <%= f.fields_for :field_overrides, field_override do |ff| %>
+      <%= ff.hidden_field :id %>
+      <%= ff.hidden_field :field_id %>
+      <div class="form-group">
+        <%= label_tag field.key, field.name %>
+        <div class="form-group">
+          <% FormKit::Field.accessibilities.each do |k, _| %>
+            <div class="form-check form-check-inline">
+              <%= ff.radio_button :accessibility, k, class: "form-check-input", id: "field_accessibility_#{k}" %>
+              <%= ff.label :accessibility, FormKit::Field.human_enum_value(:accessibility, k), class: "form-check-label", for: "field_accessibility_#{k}" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+
+  <%= f.submit class: "btn btn-block btn-primary" %>
+<% end %>

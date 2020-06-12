@@ -222,7 +222,7 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    script_core (0.2.5)
+    script_core (0.2.6)
       msgpack (~> 1.0)
       rake-compiler (~> 1.0)
     selectize-rails (0.12.6)

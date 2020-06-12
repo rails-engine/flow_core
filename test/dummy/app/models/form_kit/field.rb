@@ -4,6 +4,8 @@ module FormKit
   class Field < ApplicationRecord
     self.table_name = "form_kit_fields"
 
+    has_many :overrides, class_name: "FormKit::FieldOverride", foreign_key: "field_id", inverse_of: :field_override, dependent: :delete_all
+
     belongs_to :form, class_name: "FormKit::MetalForm", touch: true
 
     # Only use for specific fields
@@ -12,6 +14,9 @@ module FormKit
              dependent: :destroy, autosave: true
     has_one :nested_form,
             class_name: "FormKit::NestedForm", as: :attachable, dependent: :destroy
+
+    enum accessibility: { read_and_write: 0, readonly: 1, hidden: 2 },
+         _prefix: :access
 
     acts_as_list
 
@@ -24,14 +29,19 @@ module FormKit
 
     validates :name,
               presence: true
+    validates :accessibility,
+              presence: true
     validates :type,
               inclusion: {
-                in: ->(_) { FormKit::Field.descendants.map(&:to_s) }
+                in: ->(_) { FormKit::Fields.all_types.map(&:to_s) }
               },
               allow_blank: false
 
     default_value_for :key,
                       ->(_) { "field_#{SecureRandom.hex(3)}" },
+                      allow_nil: false
+    default_value_for :accessibility,
+                      :read_and_write,
                       allow_nil: false
 
     def self.type_key
@@ -60,7 +70,7 @@ module FormKit
     def interpret_to(model, overrides: {})
       check_model_validity!(model)
 
-      accessibility = overrides.fetch(:accessibility, :read_and_write)
+      accessibility = overrides.fetch(:accessibility, self.accessibility).to_sym
       return model if accessibility == :hidden
 
       interpret_attribute_to model, accessibility, overrides
@@ -121,5 +131,3 @@ module FormKit
       end
   end
 end
-
-require_dependency "form_kit/fields"

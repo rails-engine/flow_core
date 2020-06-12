@@ -3,6 +3,7 @@
 module FlowKit::TransitionTriggers
   class HumanTask < FlowCore::TransitionTrigger
     belongs_to :attached_form, class_name: "FormKit::Form", optional: true
+    belongs_to :form_override, class_name: "FormKit::FormOverride", optional: true
 
     has_many :assignee_candidates, foreign_key: :trigger_id, inverse_of: :trigger, dependent: :delete_all
     has_many :assignee_candidate_users, through: :assignee_candidates, source: :assignable, source_type: "User"
@@ -29,7 +30,7 @@ module FlowKit::TransitionTriggers
             raise "Invalid `assign_to` value - #{configuration.assign_to}"
           end
 
-        human_task = task_class.new task: task, attached_form: attached_form
+        human_task = task_class.new task: task, attached_form: attached_form, form_override: form_override
         if assignee
           human_task.assignable = assignee
           human_task.status = :assigned

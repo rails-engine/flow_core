@@ -6,6 +6,8 @@ module FormKit
 
     has_many :fields, class_name: "FormKit::Field", foreign_key: "form_id", inverse_of: :form, dependent: :destroy
 
+    has_many :overrides, class_name: "FormKit::FormOverride", foreign_key: "form_id", dependent: :destroy
+
     validates :key,
               presence: true,
               uniqueness: true
@@ -31,7 +33,7 @@ module FormKit
 
       global_overrides = overrides.fetch(:_global, {})
       fields_scope.call(fields).each do |f|
-        f.interpret_to model, overrides: global_overrides.merge(overrides.fetch(f.name, {}))
+        f.interpret_to model, overrides: global_overrides.merge(overrides.fetch(f.key, {}))
       end
 
       model

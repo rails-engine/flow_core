@@ -10,6 +10,7 @@ module FlowKit
     belongs_to :instance, class_name: "FlowCore::Instance", autosave: true
 
     belongs_to :attached_form, class_name: "FormKit::Form", optional: true
+    belongs_to :form_override, class_name: "FormKit::FormOverride", optional: true
     belongs_to :assignable, polymorphic: true
 
     enum status: {
@@ -57,7 +58,7 @@ module FlowKit
     def form_model
       return unless form_attached?
 
-      @form_model ||= form.to_virtual_model
+      @form_model ||= form.to_virtual_model(overrides: form_override&.to_overrides_options || {})
     end
 
     def attached_form_model
@@ -71,9 +72,9 @@ module FlowKit
 
       @form_record ||=
         if form_filled?
-          form_model.new form_attributes
+          form_model.load form_attributes
         else
-          form_model.new(instance_payload[:form_attributes] || {})
+          form_model.load(instance_payload[:form_attributes] || {})
         end
     end
 

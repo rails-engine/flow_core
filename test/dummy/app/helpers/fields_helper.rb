@@ -2,7 +2,7 @@
 
 module FieldsHelper
   def options_for_field_types(form, selected: nil)
-    fields = FormKit::Field.descendants
+    fields = FormKit::Fields.all_types
     if form.attachable_id.present?
       fields -= [FormKit::Fields::NestedForm, FormKit::Fields::MultipleNestedForm]
     end

@@ -19,6 +19,18 @@
   </div>
 
   <div class="form-group">
+    <%= f.label :accessibility %>
+    <div class="form-group mb-0">
+      <% FormKit::Field.accessibilities.each do |k, _| %>
+        <div class="form-check form-check-inline">
+          <%= f.radio_button :accessibility, k, class: "form-check-input", id: "field_accessibility_#{k}" %>
+          <%= f.label :accessibility, FormKit::Field.human_enum_value(:accessibility, k), class: "form-check-label", for: "field_accessibility_#{k}" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="form-group">
     <%= f.label :type %>
     <%= f.select :type, options_for_field_types(form, selected: field.class.to_s), { class_for_error: "is-invalid" }, disabled: field.persisted?, class: "form-control" %>
     <%= f.error_message :type, class: "invalid-feedback" %>

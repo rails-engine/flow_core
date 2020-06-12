@@ -75,6 +75,7 @@ Rails.application.routes.draw do
           put "move"
         end
       end
+      resources :overrides, except: %i[show]
     end
   end
 

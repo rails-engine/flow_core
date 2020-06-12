@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module FormKit
-  class Choice < ApplicationRecord
+  class Choice < FormKit::ApplicationRecord
     self.table_name = "form_kit_choices"
 
     belongs_to :form, class_name: "FormKit::MetalForm"

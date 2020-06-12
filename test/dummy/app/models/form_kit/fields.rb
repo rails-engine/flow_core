@@ -1,19 +1,28 @@
 # frozen_string_literal: true
 
 module FormKit::Fields
-  %w[
-    text boolean decimal integer
-    date datetime
-    choice multiple_choice
-    select multiple_select
-    integer_range decimal_range date_range datetime_range
-    nested_form multiple_nested_form
-
-    resource_select multiple_resource_select
-    resource multiple_resource
-  ].each do |type|
-    require_dependency "form_kit/fields/#{type}"
+  def self.all_types
+    @all_types ||= [
+      FormKit::Fields::Text,
+      FormKit::Fields::Boolean,
+      FormKit::Fields::Decimal,
+      FormKit::Fields::Integer,
+      FormKit::Fields::Date,
+      FormKit::Fields::Datetime,
+      FormKit::Fields::Choice,
+      FormKit::Fields::MultipleChoice,
+      FormKit::Fields::Select,
+      FormKit::Fields::MultipleSelect,
+      FormKit::Fields::IntegerRange,
+      FormKit::Fields::DecimalRange,
+      FormKit::Fields::DateRange,
+      FormKit::Fields::DatetimeRange,
+      FormKit::Fields::NestedForm,
+      FormKit::Fields::MultipleNestedForm,
+      # FormKit::Fields::ResourceSelect,
+      # FormKit::Fields::MultipleResourceSelect,
+      # FormKit::Fields::Resource,
+      # FormKit::Fields::MultipleResource,
+    ]
   end
-
-  MAP = Hash[*FormKit::Field.descendants.map { |f| [f.type_key, f] }.flatten]
 end

@@ -9,4 +9,12 @@
   </div>
 
   <%= render "form", human_task: @human_task %>
+
+  <% if @human_task.finished? %>
+    <hr>
+
+    <code>
+      <%= @human_task.task.payload %>
+    </code>
+  <% end %>
 </div>

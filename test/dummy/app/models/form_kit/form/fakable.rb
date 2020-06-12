@@ -40,7 +40,7 @@ class FormKit::Form
 
     module ClassMethods
       DEFAULT_TYPE_KEY_SEQ =
-        FormKit::Field.descendants.map(&:type_key) -
+        FormKit::Fields.all_types.map(&:type_key) -
         %i[nested_form multiple_nested_form] -
         %i[attachment multiple_attachment] -
         %i[resource_select multiple_resource_select] -

@@ -6,6 +6,10 @@ module WorkflowsHelper
     options_from_collection_for_select(forms, :id, :name, selected)
   end
 
+  def form_overrides_for_select(form, selected: nil)
+    options_from_collection_for_select(form.overrides, :id, :name, selected)
+  end
+
   def trigger_types_options_for_select(selected: nil)
     types = FlowKit::TransitionTriggers.all_types
     options_for_select(types.map { |klass| [klass.model_name.human, klass.to_s] }, selected)

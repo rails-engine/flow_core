@@ -4,7 +4,7 @@ class Pipelines::Steps::TransitionCallbacksController < Pipelines::Steps::Applic
   before_action :set_transition_callback, only: %i[show edit update destroy]
 
   def new
-    callback_type = FlowCore::TransitionCallback.descendants.map(&:to_s).include?(params[:type]) ? params[:type] : nil
+    callback_type = FlowKit::TransitionCallbacks.all_types.map(&:to_s).include?(params[:type]) ? params[:type] : nil
     if callback_type
       @transition_callback = @step.transition_callbacks.new type: callback_type
     end
