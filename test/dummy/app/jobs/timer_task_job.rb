@@ -8,10 +8,6 @@ class TimerTaskJob < ApplicationJob
     return unless task.enabled?
     return if task.errored? || task.suspended?
 
-    if task.executable
-      task.executable.run!
-    else
-      task.finish!
-    end
+    task.finish!
   end
 end

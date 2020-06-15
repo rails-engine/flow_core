@@ -11,24 +11,15 @@ module FlowCore
       after_save :notify_workflow_task_finished!, if: :implicit_notify_workflow_task_finished
     end
 
-    # For automatic task
-    def run!
-      raise NotImplementedError
-    end
-
     def finished?
       raise NotImplementedError
     end
 
-    def implicit_notify_workflow_task_finished
-      true
-    end
+    private
 
-    def auto_finishable?
-      false
-    end
-
-    protected
+      def implicit_notify_workflow_task_finished
+        true
+      end
 
       def notify_workflow_task_finished!
         task.finish! if finished?
