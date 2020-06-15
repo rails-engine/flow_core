@@ -9,8 +9,9 @@ module FlowKit
     belongs_to :workflow, class_name: "FlowCore::Workflow"
     belongs_to :instance, class_name: "FlowCore::Instance", autosave: true
 
-    belongs_to :attached_form, class_name: "FormKit::Form", optional: true
+    belongs_to :form, class_name: "FormKit::Form"
     belongs_to :form_override, class_name: "FormKit::FormOverride", optional: true
+    belongs_to :attached_form, class_name: "FormKit::Form", optional: true
     belongs_to :assignable, polymorphic: true
 
     enum status: {
@@ -20,7 +21,6 @@ module FlowKit
       finished: "finished"
     }
 
-    delegate :form, to: :workflow
     delegate :payload, to: :task, prefix: :task, allow_nil: false, private: true
     delegate :payload, to: :instance, prefix: :instance, allow_nil: false, private: true
 

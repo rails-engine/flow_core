@@ -230,19 +230,20 @@ ActiveRecord::Schema.define(version: 2020_05_23_233226) do
   create_table "flow_kit_human_tasks", force: :cascade do |t|
     t.integer "workflow_id", null: false
     t.integer "instance_id", null: false
-    t.integer "attached_form_id"
+    t.integer "form_id"
     t.integer "form_override_id"
-    t.string "status", null: false
+    t.integer "attached_form_id"
     t.string "assignable_type"
     t.integer "assignable_id"
+    t.string "status", null: false
     t.datetime "assigned_at"
     t.datetime "form_filled_at"
     t.datetime "finished_at"
-    t.string "type"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["assignable_type", "assignable_id"], name: "index_form_kit_human_tasks_assignable"
     t.index ["attached_form_id"], name: "index_flow_kit_human_tasks_on_attached_form_id"
+    t.index ["form_id"], name: "index_flow_kit_human_tasks_on_form_id"
     t.index ["form_override_id"], name: "index_flow_kit_human_tasks_on_form_override_id"
     t.index ["instance_id"], name: "index_flow_kit_human_tasks_on_instance_id"
     t.index ["workflow_id"], name: "index_flow_kit_human_tasks_on_workflow_id"
@@ -365,6 +366,7 @@ ActiveRecord::Schema.define(version: 2020_05_23_233226) do
   add_foreign_key "flow_kit_human_tasks", "flow_core_workflows", column: "workflow_id"
   add_foreign_key "flow_kit_human_tasks", "form_kit_form_overrides", column: "form_override_id"
   add_foreign_key "flow_kit_human_tasks", "form_kit_forms", column: "attached_form_id"
+  add_foreign_key "flow_kit_human_tasks", "form_kit_forms", column: "form_id"
   add_foreign_key "form_kit_choices", "form_kit_fields", column: "field_id"
   add_foreign_key "form_kit_choices", "form_kit_forms", column: "form_id"
   add_foreign_key "form_kit_field_overrides", "form_kit_fields", column: "field_id"

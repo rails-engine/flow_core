@@ -14,6 +14,8 @@ module FlowKit::TransitionTriggers
               length: { minimum: 1 },
               if: ->(r) { r.configuration.assign_to_candidate? }
 
+    delegate :form, to: :workflow, allow_nil: false
+
     def configurable?
       true
     end
@@ -30,7 +32,7 @@ module FlowKit::TransitionTriggers
             raise "Invalid `assign_to` value - #{configuration.assign_to}"
           end
 
-        human_task = task_class.new task: task, attached_form: attached_form, form_override: form_override
+        human_task = task_class.new task: task, form: form, attached_form: attached_form, form_override: form_override
         if assignee
           human_task.assignable = assignee
           human_task.status = :assigned
