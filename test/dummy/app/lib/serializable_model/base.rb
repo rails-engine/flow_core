@@ -17,6 +17,11 @@ module SerializableModel
       self.class.type_key
     end
 
+    def serializable_hash(options = {})
+      options = (options || {}).reverse_merge include: self.class._embeds_reflections.keys
+      super options
+    end
+
     class << self
       def _embeds_reflections
         _reflections.select { |_, v| v.is_a? ActiveEntity::Reflection::EmbeddedAssociationReflection }

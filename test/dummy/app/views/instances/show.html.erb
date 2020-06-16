@@ -31,7 +31,7 @@
     <tr>
       <td><%= @instance.id %></td>
       <td><%= @instance.stage %></td>
-      <td><%= @instance.creator.try(:name) %></td>
+      <td><%= @instance.try(:creator).try(:name) %></td>
       <td><%= @instance.created_at %></td>
       <td><%= time_tag @instance.activated_at if @instance.activated_at %></td>
       <td><%= time_tag @instance.finished_at if @instance.finished_at %></td>

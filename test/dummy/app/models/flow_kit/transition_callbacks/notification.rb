@@ -3,7 +3,7 @@
 module FlowKit::TransitionCallbacks
   class Notification < FlowCore::TransitionCallback
     # Should in
-    # :created, :enabled, :finished, :terminated,
+    # :enabled, :finished, :terminated,
     # :errored, :rescued :suspended, :resumed
     def on
       %i[enabled]

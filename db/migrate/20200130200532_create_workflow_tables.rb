@@ -62,6 +62,8 @@ class CreateWorkflowTables < ActiveRecord::Migration[6.0]
 
       t.text :payload
 
+      t.string :type
+
       t.timestamps
     end
 

@@ -16,7 +16,6 @@ require "flow_core/arc_guardable"
 require "flow_core/transition_triggerable"
 require "flow_core/transition_callbackable"
 require "flow_core/task_executable"
-require "flow_core/workflow_callbacks"
 
 require "flow_core/definition"
 require "flow_core/violations"

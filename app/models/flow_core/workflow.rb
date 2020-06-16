@@ -21,14 +21,16 @@ module FlowCore
 
     class_attribute :force_workflow_verified_on_create_instance, default: false
 
-    include FlowCore::WorkflowCallbacks
-
     def build_instance(attributes = {})
       if force_workflow_verified_on_create_instance && invalid?
         raise FlowCore::UnverifiedWorkflow, "Workflow##{id} didn't do soundness check yet."
       end
 
-      instances.build attributes.with_indifferent_access.except(FlowCore::Instance::FORBIDDEN_ATTRIBUTES)
+      instance = instances.new type: instance_class
+      on_build_instance(instance)
+      instance.assign_attributes attributes.except(FlowCore::Instance::FORBIDDEN_ATTRIBUTES)
+
+      instance
     end
 
     def create_instance(attributes = {})
@@ -211,6 +213,12 @@ module FlowCore
         end
 
         graph
+      end
+
+      def on_build_instance(_instance); end
+
+      def instance_class
+        FlowCore::Instance
       end
   end
 end

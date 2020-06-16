@@ -14,5 +14,10 @@ class AddColumnsToFlowCoreTables < ActiveRecord::Migration[6.0]
       t.references :attached_form, foreign_key: { to_table: :form_kit_forms }
       t.references :form_override, foreign_key: { to_table: :form_kit_form_overrides }
     end
+
+    change_table :flow_core_instances do |t|
+      t.references :creator, polymorphic: true
+      t.references :form, foreign_key: { to_table: :form_kit_forms }
+    end
   end
 end

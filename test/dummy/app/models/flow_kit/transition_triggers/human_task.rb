@@ -32,7 +32,7 @@ module FlowKit::TransitionTriggers
             raise "Invalid `assign_to` value - #{configuration.assign_to}"
           end
 
-        human_task = task_class.new task: task, form: form, attached_form: attached_form, form_override: form_override
+        human_task = task_class.new task: task, attached_form: attached_form, form_override: form_override
         if assignee
           human_task.assignable = assignee
           human_task.status = :assigned
@@ -41,7 +41,6 @@ module FlowKit::TransitionTriggers
           human_task.status = :unassigned
         end
         human_task.save!
-        task.update! executable: human_task
       end
     end
 

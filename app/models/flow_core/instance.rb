@@ -27,8 +27,6 @@ module FlowCore
     scope :errored, -> { where.not(errored_at: nil) }
     scope :suspended, -> { where.not(suspended_at: nil) }
 
-    validate :on_create_validation, on: :create
-
     after_initialize do
       self.payload ||= {}
     end
@@ -58,7 +56,6 @@ module FlowCore
 
       with_transaction_returning_status do
         update! stage: :canceled, canceled_at: Time.zone.now
-        workflow.on_instance_cancel(self)
 
         true
       end
@@ -69,7 +66,6 @@ module FlowCore
 
       with_transaction_returning_status do
         update! stage: :activated, activated_at: Time.zone.now
-        workflow.on_instance_activate(self)
 
         tokens.create! place: workflow.start_place
 
@@ -87,7 +83,6 @@ module FlowCore
           task.terminate! reason: "Instance finished"
         end
         tokens.where(stage: %i[free locked]).find_each(&:terminate!)
-        workflow.on_instance_finish(self)
 
         true
       end
@@ -99,7 +94,6 @@ module FlowCore
       with_transaction_returning_status do
         tasks.enabled.each { |task| task.terminate! reason: "Instance terminated" }
         update! stage: :terminated, terminated_at: Time.zone.now, terminate_reason: reason
-        workflow.on_instance_terminate(self)
 
         true
       end
@@ -120,11 +114,5 @@ module FlowCore
     def terminate!(reason:)
       terminate(reason: reason) || raise(FlowCore::InvalidTransition, "Can't terminate Instance##{id}")
     end
-
-    private
-
-      def on_create_validation
-        workflow.on_instance_create_validation(self)
-      end
   end
 end

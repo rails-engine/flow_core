@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_23_233226) do
+ActiveRecord::Schema.define(version: 2020_05_23_233225) do
 
   create_table "flow_core_arc_guards", force: :cascade do |t|
     t.integer "workflow_id"
@@ -61,11 +61,14 @@ ActiveRecord::Schema.define(version: 2020_05_23_233226) do
     t.datetime "terminated_at"
     t.string "terminate_reason"
     t.text "payload"
+    t.string "type"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "creator_type"
     t.integer "creator_id"
+    t.integer "form_id"
     t.index ["creator_type", "creator_id"], name: "index_flow_core_instances_on_creator_type_and_creator_id"
+    t.index ["form_id"], name: "index_flow_core_instances_on_form_id"
     t.index ["tag"], name: "index_flow_core_instances_on_tag", unique: true
     t.index ["workflow_id"], name: "index_flow_core_instances_on_workflow_id"
   end
@@ -230,7 +233,6 @@ ActiveRecord::Schema.define(version: 2020_05_23_233226) do
   create_table "flow_kit_human_tasks", force: :cascade do |t|
     t.integer "workflow_id", null: false
     t.integer "instance_id", null: false
-    t.integer "form_id"
     t.integer "form_override_id"
     t.integer "attached_form_id"
     t.string "assignable_type"
@@ -243,7 +245,6 @@ ActiveRecord::Schema.define(version: 2020_05_23_233226) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["assignable_type", "assignable_id"], name: "index_form_kit_human_tasks_assignable"
     t.index ["attached_form_id"], name: "index_flow_kit_human_tasks_on_attached_form_id"
-    t.index ["form_id"], name: "index_flow_kit_human_tasks_on_form_id"
     t.index ["form_override_id"], name: "index_flow_kit_human_tasks_on_form_override_id"
     t.index ["instance_id"], name: "index_flow_kit_human_tasks_on_instance_id"
     t.index ["workflow_id"], name: "index_flow_kit_human_tasks_on_workflow_id"
@@ -333,6 +334,7 @@ ActiveRecord::Schema.define(version: 2020_05_23_233226) do
   add_foreign_key "flow_core_branches", "flow_core_pipelines", column: "pipeline_id"
   add_foreign_key "flow_core_branches", "flow_core_steps", column: "step_id"
   add_foreign_key "flow_core_instances", "flow_core_workflows", column: "workflow_id"
+  add_foreign_key "flow_core_instances", "form_kit_forms", column: "form_id"
   add_foreign_key "flow_core_pipelines", "form_kit_forms", column: "form_id"
   add_foreign_key "flow_core_places", "flow_core_workflows", column: "workflow_id"
   add_foreign_key "flow_core_steps", "flow_core_branches", column: "branch_id"
@@ -366,7 +368,6 @@ ActiveRecord::Schema.define(version: 2020_05_23_233226) do
   add_foreign_key "flow_kit_human_tasks", "flow_core_workflows", column: "workflow_id"
   add_foreign_key "flow_kit_human_tasks", "form_kit_form_overrides", column: "form_override_id"
   add_foreign_key "flow_kit_human_tasks", "form_kit_forms", column: "attached_form_id"
-  add_foreign_key "flow_kit_human_tasks", "form_kit_forms", column: "form_id"
   add_foreign_key "form_kit_choices", "form_kit_fields", column: "field_id"
   add_foreign_key "form_kit_choices", "form_kit_forms", column: "form_id"
   add_foreign_key "form_kit_field_overrides", "form_kit_fields", column: "field_id"
