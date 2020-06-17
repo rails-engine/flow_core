@@ -13,6 +13,9 @@ gemspec
 # Git. Remember to move these dependencies to your gemspec before releasing
 # your gem to rubygems.org.
 
+gem "sqlite3", "~> 1.4"
+# gem "pg", "~> 1.2"
+
 # To use a debugger
 gem "byebug", group: %i[development test]
 

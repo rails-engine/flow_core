@@ -94,6 +94,7 @@ ActiveRecord::Schema.define(version: 2020_05_23_233225) do
 
   create_table "flow_core_steps", force: :cascade do |t|
     t.integer "pipeline_id", null: false
+    t.integer "branch_id"
     t.string "ancestry"
     t.integer "position", null: false
     t.string "name"
@@ -102,7 +103,6 @@ ActiveRecord::Schema.define(version: 2020_05_23_233225) do
     t.integer "redirect_to_step_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "branch_id"
     t.index ["ancestry"], name: "index_flow_core_steps_on_ancestry"
     t.index ["branch_id"], name: "index_flow_core_steps_on_branch_id"
     t.index ["pipeline_id"], name: "index_flow_core_steps_on_pipeline_id"

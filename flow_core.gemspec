@@ -24,6 +24,4 @@ Gem::Specification.new do |spec|
   spec.add_dependency "ancestry", "~> 3.0"
   spec.add_dependency "rails", "~> 6.0"
   spec.add_dependency "rgl", "~> 0.5"
-
-  spec.add_development_dependency "sqlite3", "~> 1.4"
 end

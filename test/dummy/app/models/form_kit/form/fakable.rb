@@ -9,12 +9,12 @@ class FormKit::Form
         type_key_seq.each do |type_key|
           if type_key.is_a? Hash
             type_key.each do |k, v|
-              klass = FormKit::Fields::MAP[k]
+              klass = FormKit::Fields.all_types.find { |f| f.type_key == k }
               unless k.attached_nested_form?
                 raise ArgumentError, "Only nested form types can be key"
               end
 
-              field = fields.build type: FormKit::Fields::MAP[type_key].to_s
+              field = fields.build type: FormKit::Fields.all_types.find { |f| f.type_key == type_key }.to_s
               field.name = "#{klass.model_name.name.demodulize.titleize} #{field.name.to_s.split('_').last}"
               field.save!
               klass.configure_fake_options_to field
@@ -23,12 +23,12 @@ class FormKit::Form
               field.save!
             end
           else
-            klass = FormKit::Fields::MAP[type_key]
+            klass = FormKit::Fields.all_types.find { |f| f.type_key == type_key }
             unless klass
               raise ArgumentError, "Can't reflect field class by #{type_key}"
             end
 
-            field = fields.build type: FormKit::Fields::MAP[type_key].to_s
+            field = fields.build type: klass.to_s
             field.name = "#{klass.model_name.name.demodulize.titleize} #{field.name.to_s.split('_').last}"
             field.save!
             klass.configure_fake_options_to field
