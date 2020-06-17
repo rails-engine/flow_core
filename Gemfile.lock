@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    flow_core (0.0.5)
+    flow_core (0.0.6)
       acts_as_list (~> 1.0)
       ancestry (~> 3.0)
       rails (~> 6.0)
