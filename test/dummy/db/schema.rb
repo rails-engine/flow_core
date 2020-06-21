@@ -159,21 +159,6 @@ ActiveRecord::Schema.define(version: 2020_05_23_233225) do
     t.index ["workflow_id"], name: "index_flow_core_tokens_on_workflow_id"
   end
 
-  create_table "flow_core_transition_callbacks", force: :cascade do |t|
-    t.integer "workflow_id"
-    t.integer "transition_id"
-    t.string "configuration"
-    t.string "type"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.integer "pipeline_id"
-    t.integer "step_id"
-    t.index ["pipeline_id"], name: "index_flow_core_transition_callbacks_on_pipeline_id"
-    t.index ["step_id"], name: "index_flow_core_transition_callbacks_on_step_id"
-    t.index ["transition_id"], name: "index_flow_core_transition_callbacks_on_transition_id"
-    t.index ["workflow_id"], name: "index_flow_core_transition_callbacks_on_workflow_id"
-  end
-
   create_table "flow_core_transition_triggers", force: :cascade do |t|
     t.integer "workflow_id"
     t.integer "transition_id"
@@ -349,10 +334,6 @@ ActiveRecord::Schema.define(version: 2020_05_23_233225) do
   add_foreign_key "flow_core_tokens", "flow_core_tasks", column: "consumed_by_task_id"
   add_foreign_key "flow_core_tokens", "flow_core_tasks", column: "created_by_task_id"
   add_foreign_key "flow_core_tokens", "flow_core_workflows", column: "workflow_id"
-  add_foreign_key "flow_core_transition_callbacks", "flow_core_pipelines", column: "pipeline_id"
-  add_foreign_key "flow_core_transition_callbacks", "flow_core_steps", column: "step_id"
-  add_foreign_key "flow_core_transition_callbacks", "flow_core_transitions", column: "transition_id"
-  add_foreign_key "flow_core_transition_callbacks", "flow_core_workflows", column: "workflow_id"
   add_foreign_key "flow_core_transition_triggers", "flow_core_pipelines", column: "pipeline_id"
   add_foreign_key "flow_core_transition_triggers", "flow_core_steps", column: "step_id"
   add_foreign_key "flow_core_transition_triggers", "flow_core_transitions", column: "transition_id"

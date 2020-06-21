@@ -67,16 +67,6 @@ class CreateWorkflowTables < ActiveRecord::Migration[6.0]
       t.timestamps
     end
 
-    create_table :flow_core_transition_callbacks do |t|
-      t.references :workflow, foreign_key: false
-      t.references :transition, foreign_key: false
-
-      t.string :configuration
-      t.string :type
-
-      t.timestamps
-    end
-
     create_table :flow_core_transition_triggers do |t|
       t.references :workflow, foreign_key: false
       t.references :transition, foreign_key: false
@@ -163,11 +153,6 @@ class CreateWorkflowTables < ActiveRecord::Migration[6.0]
 
     change_table :flow_core_instances do |t|
       t.foreign_key :flow_core_workflows, column: :workflow_id
-    end
-
-    change_table :flow_core_transition_callbacks do |t|
-      t.foreign_key :flow_core_workflows, column: :workflow_id
-      t.foreign_key :flow_core_transitions, column: :transition_id
     end
 
     change_table :flow_core_transition_triggers do |t|

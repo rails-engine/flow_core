@@ -55,41 +55,6 @@
     </div>
   <% end %>
 
-  <% if @step.transition_callback_attachable? %>
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-      <h4>
-        Callbacks
-      </h4>
-      <div class="btn-toolbar mb-2 mb-md-0">
-        <%= link_to "New", new_pipeline_step_transition_callback_path(@pipeline, @step), class: "btn btn-primary" %>
-      </div>
-    </div>
-
-    <div class="mb-3">
-      <table class="table table-borderless table-hover">
-        <thead>
-        <tr>
-          <th>Type</th>
-          <th>On</th>
-          <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <% @step.transition_callbacks.each do |callback| %>
-          <tr>
-            <td><%= callback.model_name.human %></td>
-            <td><%= callback.on %></td>
-            <td>
-              <%= link_to "Edit", edit_pipeline_step_transition_callback_path(@pipeline, @step, callback) %> |
-              <%= link_to "Destroy", pipeline_step_transition_callback_path(@pipeline, @step, callback), method: :delete, data: { confirm: "Are you sure?" } %>
-            </td>
-          </tr>
-        <% end %>
-        </tbody>
-      </table>
-    </div>
-  <% end %>
-
   <% if @step.multi_branch_step? %>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
       <h2>

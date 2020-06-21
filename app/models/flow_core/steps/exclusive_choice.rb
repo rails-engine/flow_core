@@ -15,7 +15,6 @@ module FlowCore::Steps
                                                      output_token_create_strategy: :match_one_or_fallback,
                                                      generated_by_step_id: id
           copy_transition_trigger_to t
-          copy_transition_callbacks_to t
           t
         else
           input_place.output_transitions.create! workflow: workflow,
@@ -50,10 +49,6 @@ module FlowCore::Steps
       end
 
       def multi_branch_step?
-        true
-      end
-
-      def transition_callback_attachable?
         true
       end
 

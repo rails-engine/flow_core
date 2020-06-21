@@ -87,10 +87,6 @@ module FlowCore::Definition
             transition_records[td.tag].create_trigger! td.trigger.compile
           end
 
-          td.callbacks.each do |cb|
-            transition_records[td.tag].callbacks.create! cb.compile
-          end
-
           td.input_tags.each do |place_tag|
             workflow.arcs.in.create! transition: transition_records[td.tag],
                                      place: place_records[place_tag]

@@ -11,7 +11,7 @@ module FlowKit
 
     belongs_to :form_override, class_name: "FormKit::FormOverride", optional: true
     belongs_to :attached_form, class_name: "FormKit::Form", optional: true
-    belongs_to :assignable, polymorphic: true
+    belongs_to :assignable, polymorphic: true, optional: true
 
     enum status: {
       unassigned: "unassigned",
@@ -127,8 +127,12 @@ module FlowKit
 
     def assign!(assignee)
       return unless can_assign?
+      return unless assignee
 
-      update! assignee: assignee, status: :assigned, assigned_at: Time.zone.now
+      transaction do
+        update! assignable: assignee, status: :assigned, assigned_at: Time.zone.now
+        assignee.notifications.create! task: task
+      end
     end
 
     def fill_form!(attributes)

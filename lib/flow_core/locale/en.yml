@@ -7,7 +7,6 @@ en:
       flow_core/end_place: End Place
       flow_core/transition: Transition
       # flow_core/transition_trigger: Transition Trigger
-      # flow_core/transition_callback: Transition Callback
       flow_core/arc: Arc
       # flow_core/arc_guard: Arc Guard
       flow_core/instance: Instance
@@ -25,7 +24,6 @@ en:
       unreachable: "Unreachable from start place"
       impassable: "Impassable to end place"
       trigger_unconfigure: "Trigger not configured yet"
-      callback_unconfigure: "Callback not configured yet"
     pipeline:
       synchronization_transition_name: "Synchronization"
       fallback_branch_name: "Default branch"

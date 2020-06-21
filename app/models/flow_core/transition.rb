@@ -22,7 +22,6 @@ module FlowCore
     has_many :output_places, through: :output_arcs, class_name: "FlowCore::Place", source: :place
 
     has_one :trigger, class_name: "FlowCore::TransitionTrigger", dependent: :delete
-    has_many :callbacks, class_name: "FlowCore::TransitionCallback", dependent: :delete_all
 
     enum output_token_create_strategy: {
       petri_net: 0,
@@ -111,37 +110,30 @@ module FlowCore
 
     def on_task_enable(task)
       trigger&.on_task_enable(task)
-      callbacks.each { |callback| callback.call task }
     end
 
     def on_task_finish(task)
       trigger&.on_task_finish(task)
-      callbacks.each { |callback| callback.call task }
     end
 
     def on_task_terminate(task)
       trigger&.on_task_terminate(task)
-      callbacks.each { |callback| callback.call task }
     end
 
     def on_task_errored(task, error)
       trigger&.on_task_errored(task, error)
-      callbacks.each { |callback| callback.call task, error }
     end
 
     def on_task_rescue(task)
       trigger&.on_task_rescue(task)
-      callbacks.each { |callback| callback.call task }
     end
 
     def on_task_suspend(task)
       trigger&.on_task_suspend(task)
-      callbacks.each { |callback| callback.call task }
     end
 
     def on_task_resume(task)
       trigger&.on_task_resume(task)
-      callbacks.each { |callback| callback.call task }
     end
 
     def can_destroy?

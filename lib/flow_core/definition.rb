@@ -5,7 +5,6 @@ require "flow_core/definition/transition"
 require "flow_core/definition/net"
 require "flow_core/definition/trigger"
 require "flow_core/definition/guard"
-require "flow_core/definition/callback"
 
 module FlowCore::Definition
   class << self

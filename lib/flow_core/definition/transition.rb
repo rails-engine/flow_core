@@ -2,7 +2,7 @@
 
 module FlowCore::Definition
   class Transition
-    attr_reader :net, :tag, :attributes, :trigger, :callbacks, :input_tags, :output_tags
+    attr_reader :net, :tag, :attributes, :trigger, :input_tags, :output_tags
 
     private :net
 
@@ -14,7 +14,6 @@ module FlowCore::Definition
       @tag = tag
       @input_tags = []
       @output_tags = []
-      @callbacks = []
 
       input = attributes.delete(:input)
       output = attributes.delete(:output)
@@ -29,11 +28,6 @@ module FlowCore::Definition
           FlowCore::Definition::Trigger.new trigger
         end
 
-      callbacks = []
-      callbacks.concat Array.wrap(attributes.delete(:with_callbacks))
-      callbacks.concat Array.wrap(attributes.delete(:with_callback))
-      @callbacks = callbacks.compact.map { |cb| FlowCore::Definition::Callback.new cb }
-
       @attributes = attributes.with_indifferent_access.except(FlowCore::Transition::FORBIDDEN_ATTRIBUTES)
       @attributes[:name] ||= tag.to_s
       @attributes[:tag] ||= tag.to_s
@@ -43,16 +37,6 @@ module FlowCore::Definition
 
     def with_trigger(type, attributes = {})
       @trigger = FlowCore::Definition::Trigger.new attributes.merge(type: type)
-    end
-
-    def with_callback(type, attributes = {})
-      @callbacks << FlowCore::Definition::Callback.new(attributes.merge(type: type))
-    end
-
-    def with_callbacks(*callbacks)
-      callbacks.each do |cb|
-        with_callback(*cb)
-      end
     end
 
     def input(tag, attributes = {})
@@ -110,7 +94,6 @@ module FlowCore::Definition
         tag: @tag,
         attributes: @attributes,
         trigger: @trigger&.compile,
-        callbacks: @callbacks.map(&:compile),
         input_tags: @input_tags,
         output_tags: @output_tags.map { |output| { tag: output[:tag], guards: output[:guards].map(&:compile) } }
       }

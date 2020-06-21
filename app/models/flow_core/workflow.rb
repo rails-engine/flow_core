@@ -141,7 +141,7 @@ module FlowCore
         yield new_workflow if block_given?
         new_workflow.save!
 
-        new_transitions = transitions.includes(:trigger, :callbacks).map do |t|
+        new_transitions = transitions.includes(:trigger).map do |t|
           new_transition = t.dup
           new_transition.workflow = new_workflow
           new_transition.save!
@@ -151,13 +151,6 @@ module FlowCore
             new_trigger.workflow = new_workflow
             new_trigger.transition = new_transition
             new_trigger.save!
-          end
-
-          t.callbacks.find_each do |cb|
-            new_cb = cb.dup
-            new_cb.workflow = new_workflow
-            new_cb.transition = new_transition
-            new_cb.save!
           end
 
           [t.id, new_transition.id]

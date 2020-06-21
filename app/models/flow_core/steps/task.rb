@@ -7,7 +7,6 @@ module FlowCore::Steps
 
       transition = input_place.output_transitions.create! workflow: workflow, name: name, generated_by_step_id: id
       copy_transition_trigger_to transition
-      copy_transition_callbacks_to transition
 
       transition
     end

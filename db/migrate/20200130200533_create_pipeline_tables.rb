@@ -51,11 +51,6 @@ class CreatePipelineTables < ActiveRecord::Migration[6.0]
       t.references :step, foreign_key: { to_table: :flow_core_steps }
     end
 
-    change_table :flow_core_transition_callbacks do |t|
-      t.references :pipeline, foreign_key: { to_table: :flow_core_pipelines }
-      t.references :step, foreign_key: { to_table: :flow_core_steps }
-    end
-
     change_table :flow_core_arc_guards do |t|
       t.references :pipeline, foreign_key: { to_table: :flow_core_pipelines }
       t.references :branch, foreign_key: { to_table: :flow_core_branches }

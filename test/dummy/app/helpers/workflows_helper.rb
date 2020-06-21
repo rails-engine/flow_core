@@ -15,11 +15,6 @@ module WorkflowsHelper
     options_for_select(types.map { |klass| [klass.model_name.human, klass.to_s] }, selected)
   end
 
-  def callback_types_options_for_select(selected: nil)
-    types = FlowKit::TransitionCallbacks.all_types
-    options_for_select(types.map { |klass| [klass.model_name.human, klass.to_s] }, selected)
-  end
-
   def guard_types_options_for_select(selected: nil)
     types = FlowKit::ArcGuards.all_types
     options_for_select(types.map { |klass| [klass.model_name.human, klass.to_s] }, selected)

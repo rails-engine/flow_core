@@ -14,7 +14,6 @@ module FlowCore
     has_many :branches, class_name: "FlowCore::Branch", inverse_of: :step, dependent: :destroy
     belongs_to :redirect_to_step, class_name: "FlowCore::Step", optional: true
     has_one :transition_trigger, class_name: "FlowCore::TransitionTrigger", dependent: :destroy
-    has_many :transition_callbacks, class_name: "FlowCore::TransitionCallback", dependent: :destroy
 
     extend Ancestry::HasAncestry
     has_ancestry orphan_strategy: :restrict
@@ -82,10 +81,6 @@ module FlowCore
 
     def transition_trigger_attachable?
       self.class.transition_trigger_attachable?
-    end
-
-    def transition_callback_attachable?
-      self.class.transition_callback_attachable?
     end
 
     def branch_arc_guard_attachable?
@@ -197,10 +192,6 @@ module FlowCore
         !multi_branch_step? && !redirection_step?
       end
 
-      def transition_callback_attachable?
-        !multi_branch_step?
-      end
-
       def branch_arc_guard_attachable?
         false
       end
@@ -250,18 +241,6 @@ module FlowCore
         trigger.step = nil
 
         trigger.save!
-      end
-
-      def copy_transition_callbacks_to(transition)
-        return unless transition_callback_attachable?
-
-        transition_callbacks.find_each do |cb|
-          new_cb = cb.dup
-          new_cb.transition = transition
-          new_cb.pipeline = nil
-          new_cb.step = nil
-          new_cb.save!
-        end
       end
 
       def deploy_branches_to(workflow, input_transition, append_to_place_or_transition)

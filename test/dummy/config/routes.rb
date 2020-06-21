@@ -11,7 +11,6 @@ Rails.application.routes.draw do
       resources :steps, except: %i[index] do
         scope module: :steps do
           resources :branches, only: %i[new create]
-          resources :transition_callbacks, except: %i[index]
           resource :transition_trigger, except: %i[index]
           resource :redirection, only: %i[show edit update]
         end
