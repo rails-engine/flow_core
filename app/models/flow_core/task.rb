@@ -86,6 +86,7 @@ module FlowCore
           update! stage: :enabled, enabled_at: Time.zone.now
 
           transition.on_task_enable(self)
+          instance.on_task_enable(self)
 
           true
         end
@@ -108,6 +109,7 @@ module FlowCore
         update! stage: :finished, finished_at: Time.zone.now
 
         transition.on_task_finish(self)
+        instance.on_task_finish(self)
 
         true
       end
@@ -120,7 +122,9 @@ module FlowCore
 
       with_transaction_returning_status do
         update! stage: :terminated, terminated_at: Time.zone.now, terminate_reason: reason
+
         transition.on_task_terminate(self)
+        instance.on_task_terminate(self)
 
         true
       end
@@ -129,7 +133,9 @@ module FlowCore
     def error(error)
       update! errored_at: Time.zone.now, error_reason: error.message
       instance.update! errored_at: Time.zone.now
+
       transition.on_task_errored(self, error)
+      instance.on_task_errored(self, error)
 
       true
     end
@@ -140,7 +146,9 @@ module FlowCore
       with_transaction_returning_status do
         update! errored_at: nil, rescued_at: Time.zone.now
         instance.update! errored_at: nil, rescued_at: Time.zone.now
+
         transition.on_task_rescue(self)
+        instance.on_task_rescue(self)
 
         true
       end
@@ -149,7 +157,9 @@ module FlowCore
     def suspend
       with_transaction_returning_status do
         update! suspended_at: Time.zone.now
+
         transition.on_task_suspend(self)
+        instance.on_task_suspend(self)
 
         true
       end
@@ -158,7 +168,9 @@ module FlowCore
     def resume
       with_transaction_returning_status do
         update! suspended_at: nil, resumed_at: Time.zone.now
+
         transition.on_task_resume(self)
+        instance.on_task_resume(self)
 
         true
       end

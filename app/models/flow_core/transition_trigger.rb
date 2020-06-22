@@ -28,6 +28,8 @@ module FlowCore
       self.pipeline ||= step&.pipeline
     end
 
+    include FlowCore::TaskCallbacks
+
     def configurable?
       false
     end
@@ -35,7 +37,5 @@ module FlowCore
     def type_key
       self.class.to_s.split("::").last.underscore
     end
-
-    include FlowCore::TransitionTriggerable
   end
 end

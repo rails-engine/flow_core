@@ -31,6 +31,8 @@ module FlowCore
       self.payload ||= {}
     end
 
+    include FlowCore::TaskCallbacks
+
     def errored?
       tasks.where.not(errored_at: nil).exists?
     end
