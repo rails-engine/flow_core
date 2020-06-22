@@ -59,10 +59,6 @@ module FlowCore
       output_arcs.size == 1
     end
 
-    def verify(violations:)
-      trigger&.on_verify(self, violations)
-    end
-
     def create_task_if_needed(token:)
       instance = token.instance
       candidate_tasks = instance.tasks.created.where(transition: self)

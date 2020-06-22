@@ -4,8 +4,6 @@ module FlowCore
   module TransitionTriggerable
     extend ActiveSupport::Concern
 
-    def on_verify(_transition, _violations); end
-
     def on_task_enable(_task); end
 
     def on_task_finish(_task); end

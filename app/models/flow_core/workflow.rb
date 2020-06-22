@@ -102,8 +102,6 @@ module FlowCore
         unless rgl.path?(transition_code, end_place_code)
           violations.add t, :impassable
         end
-
-        t.verify violations: violations
       end
 
       violations.empty?
