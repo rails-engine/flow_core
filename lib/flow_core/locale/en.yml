@@ -23,7 +23,6 @@ en:
       format: "%{model} %{name} %{message}"
       unreachable: "Unreachable from start place"
       impassable: "Impassable to end place"
-      trigger_unconfigure: "Trigger not configured yet"
     pipeline:
       synchronization_transition_name: "Synchronization"
       fallback_branch_name: "Default branch"
