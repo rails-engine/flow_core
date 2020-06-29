@@ -15,6 +15,12 @@ module FlowCore
       raise NotImplementedError
     end
 
+    def on_flow_core_task_terminate(_task); end
+
+    def on_flow_core_task_suspend(_task); end
+
+    def on_flow_core_task_resume(_task); end
+
     private
 
       def implicit_notify_workflow_task_finished

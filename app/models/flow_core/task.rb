@@ -123,6 +123,7 @@ module FlowCore
       with_transaction_returning_status do
         update! stage: :terminated, terminated_at: Time.zone.now, terminate_reason: reason
 
+        executable&.on_flow_core_task_terminate(self)
         transition.on_task_terminate(self)
         instance.on_task_terminate(self)
 
@@ -158,6 +159,7 @@ module FlowCore
       with_transaction_returning_status do
         update! suspended_at: Time.zone.now
 
+        executable&.on_flow_core_task_suspend(self)
         transition.on_task_suspend(self)
         instance.on_task_suspend(self)
 
@@ -169,6 +171,7 @@ module FlowCore
       with_transaction_returning_status do
         update! suspended_at: nil, resumed_at: Time.zone.now
 
+        executable&.on_flow_core_task_resume(self)
         transition.on_task_resume(self)
         instance.on_task_resume(self)
 
