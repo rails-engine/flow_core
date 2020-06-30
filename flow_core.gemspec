@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.authors     = ["jasl"]
   spec.email       = ["jasl9187@hotmail.com"]
   spec.homepage    = "https://github.com/rails-engine/flow_core"
-  spec.summary     = "A multi purpose, extendable, Workflow-net-based workflow engine for Rails applications"
+  spec.summary     = "FlowCore is a Rails engine to help you build your automation or business process application."
   spec.description = "A multi purpose, extendable, Workflow-net-based workflow engine for Rails applications, focusing on workflow definition and scheduling."
   spec.license     = "MIT"
 

@@ -4,11 +4,19 @@ Flow Core
 > FlowCore is ready for open reviewing, but it haven't tested in production yet,
 > any help are most welcome, breaking change is acceptable.
 
-A multi purpose, extendable, Workflow-net-based workflow engine for Rails applications.
+[中文介绍](README.zh-CN.md)
 
-FlowCore is an open source Rails engine provides core workflow functionalities,
-including workflow definition and workflow instance scheduling.
-Easily making automation (including CI, CD, Data processing, etc.) and BPM applications or help you solve parts which changing frequently.
+FlowCore is a Rails engine to help you build your automation or business process application.
+
+FlowCore modeling workflow with WorkflowNet (a special case of PetriNet) theory which is a generalisation of automata theory such that the concept of concurrently occurring events can be expressed.
+
+You should try FlowCore if you need:
+
+- Working on BPM, OA, CRM or other similar products
+- Working on Airflow-or-n8n-like automation product
+- Embeds in your Rails app, interact your codebase directly
+- User defined workflow
+- Jobs have dependent relationships, may running in different stages
 
 ## Features
 
@@ -21,7 +29,7 @@ All persistent data are present as ActiveRecord model and not use any DB-specifi
 FlowCore basically followed best practice of Rails engine,
 you can extend as [Rails Guides](https://guides.rubyonrails.org/engines.html#improving-engine-functionality) suggests.
 
-Your app-specific workflow triggers, callbacks and guards can be extended via [Single Table Inheritance](https://guides.rubyonrails.org/association_basics.html#single-table-inheritance)
+Your app-specific workflow triggers, and guards can be extended via [Single Table Inheritance](https://guides.rubyonrails.org/association_basics.html#single-table-inheritance)
 
 FlowCore also provides callbacks for triggers (which control behavior of a transition) covered whole task lifecycle.
 
@@ -111,7 +119,7 @@ Open your browser, and visit `http://localhost:3000`
 
 Architecture:
 
-![Architecture](doc/assets/architecture.png)
+![Architecture](guides/assets/architecture.en.svg)
 
 Basic design based on [An activity based Workflow Engine for PHP By Tony Marston](https://www.tonymarston.net/php-mysql/workflow.html).
 
@@ -127,7 +135,6 @@ Some notable:
 - TransitionTrigger: It controls the behavior of a Transition,
                      it's an base class that you can extend it for your own purpose,
                      best place for implementing business.
-- TransitionCallback: It can be registered to a Transition, and be triggered on specified lifecycle(s) of Task
 
 ### Lifecycle of Task
 
@@ -138,16 +145,7 @@ Some notable:
     - Require app task finished first (if bind)
 - `terminated` Task killed by instance (e.g Instance cancelled) or other race condition task
 
-![Life cycle of workflow instance](doc/assets/life_cycle_of_workflow_instance.png)
-
-### FlowKit
-
-Because FlowCore only care about essentials of workflow engine,
-I'm planning a gem based on FlowCore to provides BPM-oriented features, including:
-
-- Dynamic form
-- Approval Task with assignment
-- ExpressionGuard
+![Life cycle of workflow instance](guides/assets/instance_lifecycle.en.svg)
 
 ### Why "core"
 
@@ -173,40 +171,6 @@ and you shall have fully control and without any unnecessary abstraction.
 ## Usage
 
 > WIP
-
-### Deploy a workflow
-
-See [test/dummy/db/seeds.rb](test/dummy/db/seeds.rb) to learn the DSL, more complex sample see [test/dummy/app/models/internal_workflow.rb](test/dummy/app/models/internal_workflow.rb)
-
-### Running a workflow
-
-`workflow.create_instance!`
-
-### Implementing an ArcGuard
-
-[test/dummy/app/models/arc_guards/dentaku.rb](test/dummy/app/models/arc_guards/dentaku.rb) shows an expression guard which using [Dentaku](https://github.com/rubysolo/dentaku)
-
-### Implementing a TransitionTrigger
-
-[test/dummy/app/models/transition_triggers/timer.rb](test/dummy/app/models/transition_triggers/timer.rb) shows a delayed trigger which can be used for expires.
-
-[test/dummy/app/models/transition_triggers/user_task.rb](test/dummy/app/models/transition_triggers/user_task.rb) shows a simple user task with a simple assignment.
-
-### Implementing a TransitionCallback
-
-[test/dummy/app/models/transition_callbacks/notification.rb](test/dummy/app/models/transition_callbacks/notification.rb) shows a simple callback that notify the assignee when the task started
-
-### Implementing a TaskExecutable
-
-[test/dummy/app/models/user_task.rb](test/dummy/app/models/user_task.rb) shows a sample,
-[test/dummy/app/models/approval_task.rb](test/dummy/app/models/approval_task.rb) shows how to set payload to task that use for ArcGuard
-
-### Extending Workflow
-
-[test/dummy/app/models/internal_workflow.rb](test/dummy/app/models/internal_workflow.rb) shows how to use STI extending Workflow.
-
-[test/dummy/app/overrides/models/flow_core/workflow_override.rb](test/dummy/app/overrides/models/flow_core/workflow_override.rb) shows how to apply Rails override pattern to extend base model,
-here I add `to_graphviz` for dummy app visualize workflows.
 
 ## Requirement
 
