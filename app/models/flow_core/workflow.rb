@@ -35,18 +35,12 @@ module FlowCore
 
     def create_instance(attributes = {})
       instance = build_instance(attributes)
-      return unless instance
-
       instance.save
       instance
     end
 
     def create_instance!(attributes = {})
       instance = build_instance(attributes)
-      unless instance
-        raise RecordNotSaved.new("Failed to create workflow instance", instance)
-      end
-
       instance.save!
       instance
     end
