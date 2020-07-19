@@ -28,6 +28,10 @@ module FlowCore
       self.pipeline ||= step&.pipeline
     end
 
+    after_save do
+      step&.verify!
+    end
+
     include FlowCore::TaskCallbacks
 
     def configurable?

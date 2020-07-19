@@ -56,12 +56,28 @@ module FlowCore
     end
 
     before_save :update_parent
-    before_save :update_verified
+    before_save :verify
 
     after_create :reorder_by_append_to_on_create
     after_destroy :recheck_redirection_steps_on_destroy
 
     attr_accessor :append_to
+
+    def verify
+      self.verified = verify?
+    end
+
+    def verify?
+      return false unless valid?
+      return false if transition_trigger_required? && !transition_trigger
+      return false if fallback_branch_required? && !branches.find(&:fallback_branch?)
+
+      true
+    end
+
+    def verify!
+      update_attribute :verified, verify?
+    end
 
     def deploy_to_workflow!(_workflow, _input_place_or_transition)
       raise NotImplementedError
@@ -214,10 +230,6 @@ module FlowCore
     end
 
     private
-
-      def update_verified
-        self.verified = valid?
-      end
 
       def find_or_create_input_place(workflow, input_place_or_transition)
         if input_place_or_transition.is_a? FlowCore::Transition

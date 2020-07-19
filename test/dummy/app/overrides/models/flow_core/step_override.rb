@@ -14,7 +14,18 @@ FlowCore::Step.class_eval do
       label: name, style: :filled, fillcolor: :white
     }
     attrs[:shape] = multi_branch_step? ? :diamond : :box
-    attrs[:color] = verified? ? :black : :red
+    attrs[:color] =
+      if !interactive
+        :black
+      elsif !verified?
+        :red
+      elsif transition_trigger_attachable? && !transition_trigger
+        :orange
+      else
+        :black
+      end
+
+
     if interactive
       attrs[:href] = Rails.application.routes.url_helpers.edit_pipeline_step_path(pipeline, self)
     end

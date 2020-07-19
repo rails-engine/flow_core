@@ -16,6 +16,10 @@ module FlowCore::Steps
       nil
     end
 
+    def verify?
+      super && redirect_to_step_id.present?
+    end
+
     class << self
       def creatable?
         true
@@ -29,11 +33,5 @@ module FlowCore::Steps
         true
       end
     end
-
-    private
-
-      def update_verified
-        self.verified = valid? && redirect_to_step_id.present?
-      end
   end
 end
