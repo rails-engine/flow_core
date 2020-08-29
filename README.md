@@ -197,10 +197,16 @@ And then execute:
 $ bundle
 ```
 
-Or install it yourself as:
+And then execute:
 
 ```bash
-$ gem install flow_core
+$ rails flow_core_engine:install:migrations
+```
+
+And then execute:
+
+```bash
+$ rails db:migrate
 ```
 
 ## References
