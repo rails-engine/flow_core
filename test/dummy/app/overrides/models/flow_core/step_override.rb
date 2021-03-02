@@ -30,7 +30,7 @@ FlowCore::Step.class_eval do
       attrs[:href] = Rails.application.routes.url_helpers.edit_pipeline_step_path(pipeline, self)
     end
 
-    Graphviz::Node.new graphviz_name, graph, attrs
+    Graphviz::Node.new graphviz_name, graph, **attrs
   end
 
   def graphviz_node_for_append(graph)

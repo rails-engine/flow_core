@@ -10,7 +10,7 @@ FlowCore::Pipeline.class_eval do
       label: "Start", shape: :circle, style: :filled, fillcolor: :white
     }
 
-    Graphviz::Node.new "start", graph, attrs
+    Graphviz::Node.new "start", graph, **attrs
   end
 
   def end_graphviz_node(graph)
@@ -22,7 +22,7 @@ FlowCore::Pipeline.class_eval do
       label: "End", shape: :circle, style: :filled, fillcolor: :white
     }
 
-    Graphviz::Node.new "end", graph, attrs
+    Graphviz::Node.new "end", graph, **attrs
   end
 
   def to_designer_graphviz

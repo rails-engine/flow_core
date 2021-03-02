@@ -17,7 +17,7 @@ FlowCore::Branch.class_eval do
       attrs[:href] = Rails.application.routes.url_helpers.edit_pipeline_branch_path(pipeline, self)
     end
 
-    Graphviz::Node.new graphviz_name, graph, attrs
+    Graphviz::Node.new graphviz_name, graph, **attrs
   end
 
   def graphviz_node_for_append(graph)
@@ -40,7 +40,7 @@ FlowCore::Branch.class_eval do
       graph_attrs[:style] = :invis
     end
 
-    graph = Graphviz::Graph.new "cluster_#{graphviz_name}", parent_graph, graph_attrs
+    graph = Graphviz::Graph.new "cluster_#{graphviz_name}", parent_graph, **graph_attrs
 
     branch_node = graphviz_node(graph, interactive: true)
     append_to_branch_start_node = graphviz_node_for_append(graph)
@@ -71,7 +71,7 @@ FlowCore::Branch.class_eval do
       graph_attrs[:style] = :invis
     end
 
-    graph = Graphviz::Graph.new "cluster_#{graphviz_name}", parent_graph, graph_attrs
+    graph = Graphviz::Graph.new "cluster_#{graphviz_name}", parent_graph, **graph_attrs
 
     branch_node = graphviz_node(graph)
 

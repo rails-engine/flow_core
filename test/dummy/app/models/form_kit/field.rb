@@ -4,7 +4,7 @@ module FormKit
   class Field < ApplicationRecord
     self.table_name = "form_kit_fields"
 
-    has_many :overrides, class_name: "FormKit::FieldOverride", foreign_key: "field_id", inverse_of: :field_override, dependent: :delete_all
+    has_many :overrides, class_name: "FormKit::FieldOverride", foreign_key: "field_id", inverse_of: :field, dependent: :delete_all
 
     belongs_to :form, class_name: "FormKit::MetalForm", touch: true
 
