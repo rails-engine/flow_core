@@ -104,7 +104,7 @@ GEM
     generator (0.0.1)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
-    graphviz (1.2.0)
+    graphviz (1.2.1)
       process-pipeline
     i18n (1.8.9)
       concurrent-ruby (~> 1.0)
@@ -143,7 +143,7 @@ GEM
     mini_portile2 (2.5.0)
     minitest (5.14.4)
     msgpack (1.4.2)
-    nio4r (2.5.5)
+    nio4r (2.5.7)
     nokogiri (1.11.1)
       mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
@@ -157,7 +157,7 @@ GEM
       process-group
     process-terminal (0.2.0)
       ffi
-    puma (5.2.1)
+    puma (5.2.2)
       nio4r (~> 2.0)
     racc (1.5.2)
     rack (2.2.3)

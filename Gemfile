@@ -50,5 +50,4 @@ gem "jquery-ui-rails"
 gem "turbolinks"
 gem "selectize-rails"
 
-# gem "ruby-graphviz", require: "graphviz"
 gem "graphviz"
