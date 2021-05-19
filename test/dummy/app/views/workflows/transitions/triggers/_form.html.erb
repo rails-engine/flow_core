@@ -3,7 +3,7 @@
   <%= f.hidden_field :type %>
 
   <% if trigger.configurable? %>
-    <%= render partial: "_flow_kit/transition_triggers/#{trigger.type_key}", locals: { f: f, trigger: trigger } %>
+    <%= render partial: "_flow_kit/transition_triggers/#{trigger.type_key}", locals: { f: f, trigger: trigger, workflow: workflow } %>
   <% end %>
 
   <div class="form-group">
