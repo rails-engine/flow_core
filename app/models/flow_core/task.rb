@@ -34,10 +34,11 @@ module FlowCore
       self.workflow ||= instance&.workflow
     end
 
+    # 业务项目重构了FlowCore::TaskExecutable，重命名为 FlowCore::TaskExecutableOverride 了
     validate do
       next unless executable
 
-      unless executable.is_a? FlowCore::TaskExecutable
+      unless executable.is_a?(FlowCore::TaskExecutable) || executable.is_a?(FlowCore::TaskExecutableOverride)
         errors.add :executable, :invalid
       end
     end
