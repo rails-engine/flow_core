@@ -2,8 +2,8 @@
 
 module FormKit::Fields
   class DecimalRange < FormKit::Field
-    serialize :validations, Validations
-    serialize :options, Options
+    serialize :validations, coder: Validations
+    serialize :options, coder: Options
 
     protected
 

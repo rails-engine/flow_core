@@ -74,7 +74,7 @@ module SerializableModel
 
         return new unless yaml.is_a?(String) && yaml.start_with?("---")
 
-        decoded = YAML.safe_load(yaml, WHITELIST_CLASSES)
+        decoded = YAML.safe_load(yaml, permitted_classes: WHITELIST_CLASSES)
         return new unless decoded.is_a? Hash
 
         record = new decoded[root_key_for_serialization]

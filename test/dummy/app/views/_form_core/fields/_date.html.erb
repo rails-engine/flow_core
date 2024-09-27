@@ -1,7 +1,7 @@
 <div class="form-group row">
   <%= f.label field.key, field.name, class: 'col-sm-2 col-form-label' %>
   <div class="col-sm-10">
-    <%= f.date_field field.key, field.field_options.merge(class: 'form-control', id: field.id, required: field.required, disabled: field.disabled?, class_for_error: "is-invalid") %>
+    <%= f.date_field field.key, options: field.field_options.merge(class: 'form-control', id: field.id, required: field.required, disabled: field.disabled?, class_for_error: "is-invalid") %>
     <%= f.error_message field.key, class: "invalid-feedback" %>
     <% if field.hint.present? %>
       <span class="form-text text-muted">

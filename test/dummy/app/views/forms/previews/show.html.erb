@@ -2,6 +2,17 @@
   <%= render "forms/tabs" %>
 </div>
 
+<% if @instance.errors.any? %>
+  <div id="error_explanation" class="errors">
+    <h2><%= pluralize(@instance.errors.count, "error") %> prohibited this form from being saved:</h2>
+    <ul>
+      <% @instance.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
 <div class="container">
   <%= render "_form_core/render/form",
              form: @form, instance: @instance,

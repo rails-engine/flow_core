@@ -14,7 +14,7 @@ class Forms::PreviewsController < Forms::ApplicationController
     if @instance.valid?
       render :create
     else
-      render :show
+      render :show, status: :unprocessable_entity
     end
   end
 

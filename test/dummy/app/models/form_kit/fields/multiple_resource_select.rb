@@ -2,8 +2,8 @@
 
 module FormKit::Fields
   class MultipleResourceSelect < FormKit::Field
-    serialize :validations, Validations
-    serialize :options, Options
+    serialize :validations, coder: Validations
+    serialize :options, coder: Options
 
     def stored_type
       :string
