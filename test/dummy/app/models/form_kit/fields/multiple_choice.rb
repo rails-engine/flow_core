@@ -2,8 +2,8 @@
 
 module FormKit::Fields
   class MultipleChoice < FormKit::Field
-    serialize :validations, Validations
-    serialize :options, FormKit::NonConfigurable
+    serialize :validations, coder: Validations
+    serialize :options, coder: FormKit::NonConfigurable
 
     include Fakable
 

@@ -6,8 +6,8 @@ module FormKit::Fields
       build_nested_form.save!
     end
 
-    serialize :validations, Validations
-    serialize :options, FormKit::NonConfigurable
+    serialize :validations, coder: Validations
+    serialize :options, coder: FormKit::NonConfigurable
 
     def attached_nested_form?
       true

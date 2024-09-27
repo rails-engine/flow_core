@@ -12,7 +12,7 @@ module FlowCore
 
     belongs_to :executable, polymorphic: true, optional: true
 
-    serialize :payload
+    serialize :payload, coder: YAML
 
     delegate :payload, to: :instance, prefix: :instance, allow_nil: false
 

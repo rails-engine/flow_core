@@ -2,7 +2,7 @@
 
 module FlowKit::TransitionTriggers
   class Timer < FlowCore::TransitionTrigger
-    serialize :configuration, Configuration
+    serialize :configuration, coder: Configuration
 
     def configurable?
       true

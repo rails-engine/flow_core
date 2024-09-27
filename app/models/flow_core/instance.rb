@@ -14,7 +14,7 @@ module FlowCore
     has_many :tokens, class_name: "FlowCore::Token", dependent: :delete_all
     has_many :tasks, class_name: "FlowCore::Task", dependent: :delete_all
 
-    serialize :payload
+    serialize :payload, coder: YAML
 
     enum stage: {
       created: 0,

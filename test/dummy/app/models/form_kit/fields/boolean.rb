@@ -2,8 +2,8 @@
 
 module FormKit::Fields
   class Boolean < FormKit::Field
-    serialize :validations, Validations
-    serialize :options, FormKit::NonConfigurable
+    serialize :validations, coder: Validations
+    serialize :options, coder: FormKit::NonConfigurable
 
     def stored_type
       :boolean
