@@ -46,6 +46,7 @@ class CreateFormKitTables < ActiveRecord::Migration[6.0]
 
     create_table :form_kit_form_overrides do |t|
       t.references :form, null: false, foreign_key: { to_table: :form_kit_forms }
+      t.integer :position, null: false, default: 0
       t.string :name
 
       t.timestamps

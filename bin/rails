@@ -2,6 +2,12 @@
 # This command will automatically be run when you run "rails" with Rails gems
 # installed from the root of your application.
 
+# Set environment variables for debugging
+ENV['RUBY_DEBUG_OPEN'] ||= 'true'
+ENV['RUBY_DEBUG_LAZY'] ||= 'true'
+ENV['PORT'] ||= '3003'
+
+# Continue with the standard Rails startup
 ENGINE_ROOT = File.expand_path('..', __dir__)
 ENGINE_PATH = File.expand_path('../lib/flow_core/engine', __dir__)
 APP_PATH = File.expand_path('../test/dummy/config/application', __dir__)
